@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/imageview_spanel"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/addtoshopinglist_spanel"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_add_to_cart" />
+
+            <TextView
+                android:id="@+id/prod_sieze_spanel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="9dp"
+                android:text="TextView"
+                android:textColor="@color/tectColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/prod_name_spanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="9dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/prod_type_spanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:ellipsize="marquee"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+
+            android:scrollHorizontally="true"
+            android:singleLine="false"
+            android:text="TextView"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/prod_description_spanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageview_spanel" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButtonGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/prix_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Prix"
+                android:textAllCaps="false"
+                android:theme="@style/Button.OragneTrans" />
+
+            <Button
+                android:id="@+id/promotions_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Promotions"
+                android:textAllCaps="false"
+                android:theme="@style/Button.OragneTrans" />
+
+            <Button
+                android:id="@+id/bonus_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Bonus"
+                android:textAllCaps="false"
+                android:theme="@style/Button.OragneTrans" />
+
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/pricell"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/pricell1"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/fiestprice_imagevw_panel"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="3dp"
+                    app:srcCompat="@drawable/azizalogo" />
+
+                <ImageView
+                    android:id="@+id/secondprice_imagevw_panel"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="3dp"
+                    app:srcCompat="@drawable/logo_carrefour" />
+
+                <ImageView
+                    android:id="@+id/thirdprice_imagevw_panel"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="3dp"
+                    app:srcCompat="@drawable/ic_monoprix_logo" />
+
+                <ImageView
+                    android:id="@+id/fourthprice_imagevw_panel"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="3dp"
+                    app:srcCompat="@drawable/mglogo" />
+
+                <ImageView
+                    android:id="@+id/fifthprice_imagevw_panel"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="3dp"
+                    app:srcCompat="@drawable/geantlogo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pricell1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/pricell">
+
+                <TextView
+                    android:id="@+id/prod_firstprice_spanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/prod_secondprice_spanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/prod_thirdprice_spanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/prod_forthprice_spanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/prod_fifthprice_spanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_modify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="9dp"
+                android:layout_weight="2"
+                android:text="@string/Modifier"
+                android:textAllCaps="false"
+                android:textColor="@color/btnText_color"
+                android:theme="@style/Button.Bleu" />
+
+            <Button
+                android:id="@+id/btn_pricehistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Historique_des_prix"
+                android:textAllCaps="false"
+                android:textColor="@color/btnText_color"
+                android:theme="@style/Button.Bleu" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
+

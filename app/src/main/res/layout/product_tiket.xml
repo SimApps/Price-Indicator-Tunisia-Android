@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginBottom="6dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="3dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutHolder"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+
+
+        android:background="@android:color/transparent">
+
+
+        <ImageView
+            android:id="@+id/imageview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_photo"
+            tools:context="com.appsdeveloperblog.kotlinexample4.LoadGifFromURLUsingGlide" />
+
+
+        <TextView
+
+            android:id="@+id/name_txVw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="false"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:typeface="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline14"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <ImageView
+            android:id="@+id/magasin_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageview"
+            app:layout_constraintTop_toBottomOf="@id/name_txVw"
+            app:srcCompat="@drawable/ic_photo" />
+
+        <TextView
+            android:id="@+id/priceTxVw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="3dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/magasin_image"
+            app:layout_constraintTop_toBottomOf="@id/name_txVw" />
+
+        <ImageView
+            android:id="@+id/logoAnd_minus_imVw"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bestpriceAnd_quantity_txVw_layout"
+            app:layout_constraintStart_toEndOf="@id/guideline13"
+            app:srcCompat="@drawable/ic_minus" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bestpriceAnd_quantity_txVw_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="filled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/addtoshoplistAnd_plus_txVw"
+            app:layout_constraintStart_toEndOf="@id/logoAnd_minus_imVw">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bestpriceAnd_quantity_txVw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:text="1"
+                android:textAlignment="center"
+                android:textColor="@color/defaultcolor"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/addtoshoplistAnd_plus_txVw"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_plus" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent="0.63" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent="0.2" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

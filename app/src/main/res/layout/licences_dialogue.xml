@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/licenceContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ScrollView
+        android:id="@+id/ScrollViews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/androidxTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Androidx"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/barecode_scanerTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="ZXing Android Embedded"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/glideTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Glide"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/CircleImageViewTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Circle Image View"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/Android_SpinKitTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Android SpinKit"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/Google_Play_ServicesTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Google Play Services"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/Firebase_AndroidTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Firebase Android"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/flaticonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/flatIcontxview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/transparents"
+                    android:gravity="center_vertical"
+                    android:text="Flat Icon : Flaticon Basic License"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparents"
+                    android:gravity="center_vertical"
+                    android:text="Icon by Freepik, smashicons and  pixel-perfect from flaticon"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/net_connectionTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Connectivité Internet"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/image_freeTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="Vecteezy.com"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/EazeGraphTxtV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="EazeGraph"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lottiefilesTxV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="@color/transparents"
+                android:gravity="center_vertical"
+                android:text="LottieFiles"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <View
+        android:id="@+id/activitylicences_dialogue_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_below="@id/ScrollViews"
+        android:layout_marginLeft="3dp"
+
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="3dp"
+        android:background="@color/defaultcolor" />
+
+</RelativeLayout>

@@ -1,0 +1,324 @@
+<resources>
+    <string name="app_name">Prix en Tunisie</string>
+    <string name="app_version">0.115.05</string>
+    <string name="app_version_settings">Version : 0.115.05</string>
+    <string name="app_email">prix.en.tunisie@gmail.com</string>
+    <string name="pakege_name">com.amirami.simapp.priceindicatortunisia</string>
+    <string name="pakege_fileprovider">com.amirami.simapp.priceindicatortunisia.fileprovider</string>
+    <string name="Partager_image">Partage image (tiket,produit, etc)</string>
+    <string name="choisir_email">Choisir e-mail</string>
+
+    <string name="superUserOptions">true</string>
+    <string name="true_">true</string>
+
+    <string name="misejourshopinglist">Mettre à jour la liste des courses</string>
+    <string name="deleteshopinglist">Supprimer la liste des courses</string>
+    <string name="calculshopinglist">Calculer la liste des courses</string>
+    <string name="emptyshopinglist">La liste des courses est vide !</string>
+
+    <string name="propose_liste_produits">Je propose la photo de la liste des produits suivante \n \n %s \n \n Mon Identifiant : %s \n</string>
+
+    <string name="erreur_permission">Erreur permission camera</string>
+
+    <string name="pas_photos">Pas de photos!</string>
+    <string name="null_intent">Null intent !</string>
+
+    <string name="Pas_nom_produit">Pas de nom de produit !</string>
+    <string name="connecter_pour_modifier_produit">Il faut étre connecter pour modifier un produit !</string>
+
+
+    <string name="fill_edit_text_from_add_dialogue">fill edit text from add dialogue</string>
+    <string name="fill_edit_text_modify">fill edit text modify</string>
+    <string name="fill_edit_text_modify_fromShopLost">fill edit text modify fromShopLost</string>
+    <string name="Selectionn_un_produit">Selectionné un produit</string>
+
+    <string name="Voire_Historique_prix">Historique des prix</string>
+
+    <string name="evaluez_application">Évaluez l\'application</string>
+
+    <string name="more_application">Découvrez nos applications</string>
+
+    <string name="suivant">Suivant</string>
+    <string name="Terminer">Terminer</string>
+    <string name="Cartes_de_fidélitées">Cartes de fidélitées</string>
+
+    <string name="error_message">Erreur!</string>
+    <string name="no_match_found">Pas de résultat trouvé !</string>
+    <string name="search_hint">Saisissez votre recherche.</string>
+    <string name="product_saved">Produit enregistré</string>
+
+    <string name="product_saved_in_shoping_list">Produit enregistré dans la liste de courses.</string>
+
+    <string name="product_deleted_in_shoping_list">Produit supprimé dans la liste de courses.</string>
+    <string name="fidcard_deleted">Carte de fidélitée supprimé.</string>
+
+    <string name="Produit_déja_dans_l_list_de_course">Produit est déjà ajouté dans la liste de courses !</string>
+
+    <string name="Ajoutmodification_du_produit">Ajout/modification du produit</string>
+    <string name="Le_nom_du_produit_ne_doit_pas_etre_vide">Le nom du produit ne doit pas être vide.</string>
+    <string name="Le_type_du_produit_ne_doit_pas_etre_vide">Le type du produit ne doit pas être vide.</string>
+
+    <string name="Préparation_application_premiére_Veillez_Patienter">Préparation de l\'application pour la première fois . . . Veuillez Patienter</string>
+    <string name="Mise_a_jour_liste_des_nom">Mise à jour . . . Veuillez Patienter</string>
+    <string name="erreur_conexion">Erreur . . . Vérifier votre connexion %s</string>
+    <string name="erreurconexion">Erreur . . . Vérifier votre connexion</string>
+    <string name="permission_accordée">Permission accordée</string>
+    <string name="Permission_refusée">Permission refusée</string>
+    <string name="Selectionné_un_produit">Sélectionné un produit !</string>
+
+    <string name="Vous_devez_autoriser_laccès">Vous devez autoriser l\'accès.</string>
+    <string name="Sélectionner_une_option">Sélectionner une option</string>
+    <string name="ne_sont_pas_accepté">0 et 1 ne sont pas acceptés.</string>
+    <string name="aucune_radio_sélectionnée">Aucune option sélectionnée</string>
+    <string name="Entré_valeur_pour_taille_produit_valide">Entré une valeur pour la taille du produit valide</string>
+
+    <string name="Voulez_vous_suprimer_ce_produit">Voulez-vous supprimer ce produit ?</string>
+    <string name="Voulez_vous_vous_déconnecter">Voulez-vous déconnecter ?</string>
+
+
+    <string name="Ce_produit_nexiste_pas_Voulez_vous_ajoutez">Ce produit n\'existe pas ! Voulez-vous ajouter ce produit ?</string>
+    <string name="Voulez_vous_suprimer_toute_liste_courses">Voulez-vous supprimer toute la liste des courses ?</string>
+    <string name="toute_liste_courses_suprimer">La liste des courses est suprimer.</string>
+
+    <string name="Voulez_vous_suprimer_produit_liste_courses">Voulez-vous supprimer le produit de la liste des courses ?</string>
+
+    <string name="Voulez_vous_suprimer_cette_carte_fid">Voulez-vous supprimer cette carte fidélité ?</string>
+
+    <string name="Qu_est_ce_que_cette_application">Prix en Tunisie est un comparateur de prix indépendant que nous avons lancé en 2021 avec un objectif : vous permettre de comparer facilement les prix dans les magasins et grandes surfaces près de chez vous en fonction de votre liste de courses. Aujourd\'hui, notre application compare les prix de %s produits.</string>
+
+    <string name="Qu_est_ce_que_application">C\'est quoi "Prix en Tunisie" ?</string>
+
+    <string name="Sélectioné_une_unité_de_mésure">Sélectionné une unité de mesure</string>
+
+    <string name="add_product">Ajouter un produit</string>
+    <string name="ScanproductIdoradditmanually">Scanner le code-barres ou le saisir manuellement</string>
+
+    <string name="ajouter_promotions">Ajouter les promotions</string>
+
+    <string name="NA">N/A</string>
+    <string name="SousCatégories">Sous Catégories</string>
+    <string name="sousousCatégories">Sous sous Catégories</string>
+    <string name="Catégories">Catégories</string>
+    <string name="NomduproduitenArabe">Nom du produit en Arabe</string>
+    <string name="Nomduproduit">Nom du produit</string>
+
+    <string name="quantite">Quantité</string>
+
+    <string name="Volumepoidproduit">Volume/poid du produit</string>
+    <string name="Unite">Unité</string>
+    <string name="Liendimage">Lien de l\'image</string>
+
+    <string name="marques">Marques</string>
+    <string name="marquesenArabe">Marques en Arabe</string>
+    <string name="DescriptionduproduitenArabe">Description du produit en Arabe</string>
+    <string name="Descriptionduproduit">Description du produit</string>
+
+    <string name="Déconnecter">Déconnecter</string>
+    <string name="Connecter">Connecter</string>
+    <string name="licenses">Licences</string>
+    <string name="Connexion_réussie">Connexion réussie</string>
+    <string name="Déconnection_réussite">Déconnexion réussite</string>
+    <string name="Échec_connexion">Échec de la connexion</string>
+    <string name="paramètres">Paramètres</string>
+    <string name="guide_utilisation">Guide d\'utilisation</string>
+    <string name="Nous_Contacter">Nous Contacter</string>
+    <string name="Annulé">Annulé</string>
+    <string name="Nom">Nom :</string>
+    <string name="ajouterCarte">Ajouter Une Carte : </string>
+    <string name="modifierCarte">Modifier Une Carte : </string>
+    <string name="jai_un_probleme_message">Afin de nous améliorer nous serons à l\'écoute de toutes vos remarques et suggestions. Si malgré tous nos efforts vous avez rencontré une difficulté ou un problème technique, n\'hésitez pas à nous le signaler en étant le précis possible. Nous vous recontacterons et ferons le maximum pour améliorer votre expérience.</string>
+
+
+    <string name="No_Homepage">No homepage URL!</string>
+    <string name="définirSousCatégorie">Il faut définir la sous catégorie!</string>
+    <string name="ok">OK</string>
+    <string name="non">Non</string>
+    <string name="oui">Oui</string>
+    <string name="Fermer">Fermer</string>
+    <string name="Valider">Valider</string>
+
+    <string name="nous_contacter_par_email">Nous contacter par E-mail</string>
+
+    <string name="monoprix">Monoprix</string>
+    <string name="mg">Magasin Général</string>
+    <string name="azziza">Magasins Aziza</string>
+    <string name="carrefour">Carrefour</string>
+    <string name="Géant">Géant</string>
+
+    <string name="monoprix_prix">Monoprix prix</string>
+    <string name="mg_prix">Magasin Général prix</string>
+    <string name="azziza_prix">Magasins Aziza prix</string>
+    <string name="carrefour_prix">Carrefour prix</string>
+    <string name="Géant_prix">Géant prix</string>
+
+    <string name="promotion_monoprix">Promotion Monoprix</string>
+    <string name="promotion_mg">Promotion Magasin Général</string>
+    <string name="promotion_azziza">Promotion Magasins Aziza</string>
+    <string name="promotion_carrefour">Promotion Carrefour</string>
+    <string name="promotion_Géant">Promotion Géant</string>
+
+
+    <string name="monoprixpriceHistory">monoprixPriceHistory</string>
+    <string name="mgpriceHistory">mgpriceHistory</string>
+    <string name="azizaPriceHistory">azizaPriceHistory</string>
+    <string name="carrefourpriceHistory">carrefourPriceHistory</string>
+    <string name="geantPriceHistory">geantPriceHistory</string>
+
+
+
+
+    <string name="remisesurlaseuxiemme">- 50% sur la 2éme</string>
+    <string name="prixEnPromotion">Prix en promotion</string>
+
+    <string name="emegratuit">&#160;éme gratuit</string>
+    <string name="tiree">-</string>
+    <string name="pourcentage">&#160;%</string>
+    <string name="aveccartefid">&#160;TND avec la carte de fidélité</string>
+    <string name="est">&#160;est&#160;</string>
+    <string name="TND">&#160;TND</string>
+    <string name="pasderemarque">Pas de remarque</string>
+    <string name="Leprix">Le prix de&#160;</string>
+    <string name="entrer_une_valeur">Entrer une valeur !</string>
+    <string name="prix_invalid">Prix Invalid !</string>
+    <string name="valeur_invalid">Valeur Invalid !</string>
+    <string name="bonus_dans_la_carte_de_fidélité">&#160;TND Bonus dans la carte de fidélité&#160;</string>
+    <string name="Prix">Prix&#160;</string>
+
+    <string name="Historique_des_prix">Historique des prix&#160;</string>
+
+    <string name="Pas_produit_pour_effacer">Pas de produit pour effacer !</string>
+
+    <string name="Info_cartefid_activity">Gérez vos cartes de fidélité ici ! Ajoutez simplement une carte en scannant son code barre, et gardez la sur vous à chaque instant !</string>
+
+    <string name="Ajoutezcartefidelite">Ajoutez une carte fidélité</string>
+
+    <string name="prix_qui_manque">prix qui manque&#160;</string>
+    <string name="Prix_avec_promotion">Avec promotion</string>
+    <string name="Prix_sans_promotion">Sans promotion</string>
+
+
+    <string name="Promotions">Promotions</string>
+    <string name="Bonus">Bonus</string>
+
+    <string name="proposition_supression_produit">Je propose la suppression du produit ID: %s \n Nom du produit : %s \n \n Pour la ou les raison(s) suivante(s) \n \n \n \n \n \n \n Mon Identifiant :   %s \n</string>
+
+    <string name="produitestsuppriméplusdisponible">Le produit * %s * est  supprimé car il n\'est plus disponible</string>
+
+
+    <string name="proposition_ajouter_produit"> - Identifiant du produit %s \n - Nom du produit : %s \n - Nom du produit en Arabe : %s \n - Marque de produit : %s \n - Marque de produit en Arabe: %s \n - Catégorie de produit : %s \n - Sous Catégorie de produit : %s \n - Sous Sous Catégorie de produit : %s \n - Taille du produit : %s  \n - Description du produit : %s \n - Description du produit en Arabe : %s  \n \n \n - Prix dans Monoprix : %s TND\n - Monoprix Remarque: %s \n - Bonus dans la carte fidélité Monoprix : %s TND\n \n \n - Magasin géneral prix : %s TND\n - Magasin géneral remarque : %s \n - Bonus dans la carte fidélité Magasin géneral : %s TND\n \n \n - Carrefour prix : %s TND\n - Carrefour remarque : %s \n - Bonus dans la carte fidélité Carrefour : %s TND\n \n \n - Aziza prix : %s TND\n - Aziza remarque : %s \n - Bonus dans la carte fidélité Aziza : %s TND\n \n \n - Géant prix : %s TND\n - Géant remarque : %s \n - Bonus dans la carte fidélité Aziza : %s TND\n \n \n -  Mon Identifiant :   %s\n</string>
+
+    <string name="Lunitéest">L\'unité est : %s</string>
+
+    <string name="ID_Name">Code-barres: %s Nom : %s </string>
+
+
+    <string name="codebarre_ID">Code-barres : %s</string>
+    <string name="codebarre">Code-barres&#160;:&#160;</string>
+
+    <string name="identifiant_produit_nest_pas_nombre"> L\'identifiant du produit \'%s\' n\'est pas un nombre !</string>
+
+    <string name="NbrProduits">Total : %s produit(s)</string>
+    <string name="effacerlaliste">Effacer la liste</string>
+
+    <string name="facture">Facture</string>
+
+    <string name="Enregistrer">Enregistrer</string>
+    <string name="supprimer">Supprimer</string>
+
+    <string name="Listedecourse">Liste de courses</string>
+    <string name="nbrproducrtext">Notre base de données contient plus de  %s produits (plus ceux auxquels vous contribuerez).</string>
+
+    <string name="Nous_contacter_Email">Nous contacter par E-mail&#160;</string>
+    <string name="envoyer_info">Envoyer les informations du produit par&#160;</string>
+
+    <string name="erreur_supression">Erreur de suppression ! ! ! </string>
+    <string name="succe_produit">Produit supprimé avec succès.</string>
+
+    <string name="suggestion_supression_produit">Suggestion pour supprimer le produit&#160;</string>
+
+    <string name="avertissement_pour_donneacces">Pour utiliser cette application et analyser le code-barres, vous devez autoriser les autorisations d\'accès.</string>
+
+
+    <string name="bienvenue">Bienvenue sur l\'application Prix en Tunisie</string>
+
+    <string name="pour_commencer">Scanner le code-barres d\'un produit, Si le produit est dans la base de données, on vous propose son prix dans les différents magasins, sinon vous pouvez proposer de l\'ajouter.</string>
+
+
+    <string name="chercheravec_barre_derecherche">Vous pouvez aussi saisir le nom du produit ou le code-barres manuellement dans la barre de recherche.</string>
+
+    <string name="ajouter_liste_de_course">Vous pouvez aussi Ajouter les produit dans la liste des courses pour calculer la facture.</string>
+
+    <string name="Ajouter">Ajouter</string>
+    <string name="Modifier">Modifier</string>
+    <string name="si_pas_darticle">Vous pouvez aussi proposer un nouveau produit en cliquant sur : </string>
+
+    <string name="partager">Partager</string>
+
+    <string name="app_fonctionne_comminuatire">Prix en Tunisie fonctionne selon un système communautaire, vous avez la possibilité de proposer de nouveaux produits et de nouveaux prix de plusieurs façons : \n \n 1) En cliquant sur ce bouton pour envoyer votre ticket de caisse par e-mail :  </string>
+
+    <string name="modier_produit">2) En cliquant sur l\'image modifier pour proposer un nouveau prix : </string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tiketadvise">Essayez de prendre le ticket de caisse en intégralité, de sorte que la raison sociale en haut et la date en bas soient visibles.</string>
+
+    <string name="Commentaires">&#160;Commentaires</string>
+    <string name="Envoyer">Envoyer</string>
+    <string name="prendrephotos">Prendre une photo</string>
+    <string name="liste_de_courses">Liste de courses</string>
+
+
+
+
+    <string name="Produits_Frais">Produits Frais</string>
+
+    <string name="Placé_ligner_parallèle_numéro_code_barres_pour_scanner">Placé la ligne en parallèle avec le numéro du code-barres pour le scanner</string>
+
+
+    <string name="Il_faut_etre_connecter_modifier_produit">Il faut être connecté pour modifier un produit.</string>
+
+
+
+
+    <string name="title_activity_settings">SettingsActivity</string>
+
+
+    <string name="Cliquez_ICI_pour_mettre_jour_liste_nom_produits">Cliquez ICI pour mettre à jour la liste des noms des produits.</string>
+
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
+    <string name="banner_adUnitId">ca-app-pub-5900899997553420/3679228004</string> reel
+    <string name="TestIDRewardedInterstitialAd">ca-app-pub-5900899997553420/3840438126</string> real
+    <string name="Interstitial_adUnitId">ca-app-pub-5900899997553420/2621775474</string>
+
+    <!-- <string name="TestIDRewardedInterstitialAd">ca-app-pub-3940256099942544/5354046379</string>test
+     <string name="banner_adUnitId">ca-app-pub-3940256099942544/6300978111</string>// test
+     <string name="Interstitial_adUnitId">ca-app-pub-3940256099942544/1033173712</string>// test
+    -->
+
+
+    <string name="turn_on_flashlight">Turn on Flashlight</string>
+    <string name="turn_off_flashlight">Turn off Flashlight</string>
+
+    <string name="Il_faut_ajouter_un_nom">Il faut ajouter un nom !</string>
+    <string name="Il_faut_ajouter_code_barre_carte_fid">Il faut ajouter le code barre de la carte fid !</string>
+
+
+
+</resources>

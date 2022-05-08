@@ -1,0 +1,122 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/search_color"
+    android:fillViewport="true">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="9dp">
+
+            <TextView
+                android:id="@+id/version_txVw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"
+                android:text="@string/app_version_settings"
+                android:textAlignment="textEnd"
+                android:textColor="@color/defaultcolor"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/signin_out_itxVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/Connecter"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_signin" />
+
+        <TextView
+            android:id="@+id/problem_report_txVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/Nous_Contacter"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_send" />
+
+        <TextView
+            android:id="@+id/what_is_thisapp_tvVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/Qu_est_ce_que_application"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_disclaimer" />
+
+        <TextView
+            android:id="@+id/moreapp_tvVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/more_application"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_baseline_shop_24" />
+
+        <TextView
+            android:id="@+id/rate_tvVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/evaluez_application"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_rate" />
+
+        <TextView
+            android:id="@+id/licences_txVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="9dp"
+            android:drawablePadding="9dp"
+
+            android:text="@string/licenses"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_licenses" />
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

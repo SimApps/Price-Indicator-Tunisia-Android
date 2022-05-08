@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/MainFragment">
+
+    <fragment
+        android:id="@+id/MainFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.mainfragment.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+
+        <action
+            android:id="@+id/action_MainFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+
+        <action
+            android:id="@+id/action_MainFragment_to_barrecodeScannerFragment"
+            app:destination="@id/barrecodeScannerFragment" />
+
+
+        <action
+            android:id="@+id/action_MainFragment_to_myBottomSheetDialogFragment"
+            app:destination="@id/myBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_MainFragment_to_productTypesDialog"
+            app:destination="@id/productTypesDialog" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/AddProductFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.AddProductFragment"
+        android:label="AddProductFragment" >
+
+        <action
+            android:id="@+id/action_AddProductFragment_to_barrecodeScannerFragment"
+            app:destination="@id/barrecodeScannerFragment" />
+
+        <action
+            android:id="@+id/action_AddProductFragment_to_priceRemarqueFragment"
+            app:destination="@id/priceRemarqueDialogue" />
+        <action
+            android:id="@+id/action_AddProductFragment_to_DialogueFragment"
+            app:destination="@id/DialogueFragment" />
+
+        <action
+            android:id="@+id/action_AddProductFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+        <action
+            android:id="@+id/action_AddProductFragment_to_productTypesDialog"
+            app:destination="@id/productTypesDialog" />
+
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/ShopingFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.shoping.ShopingFragment"
+        android:label="fragment_shoping"
+        tools:layout="@layout/fragment_shoping" >
+
+        <action
+            android:id="@+id/action_ShopingFragment_to_myBottomSheetDialogFragment"
+            app:destination="@id/myBottomSheetDialogFragment" />
+
+        <action
+            android:id="@+id/action_ShopingFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/TiketFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.TiketFragment"
+        android:label="fragment_tiket"
+        tools:layout="@layout/fragment_tiket" />
+
+
+    <fragment
+        android:id="@+id/SettingFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_SettingFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+        <action
+            android:id="@+id/action_SettingFragment_to_licencesDialogFragment"
+            app:destination="@id/licencesDialogFragment" />
+    </fragment>
+
+
+
+
+
+
+    <fragment
+        android:id="@+id/barrecodeScannerFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.BarrecodeScannerFragment"
+        android:label="BarrecodeScannerFragment"
+        tools:layout="@layout/barecodescanner_view" />
+
+
+    <dialog
+        android:id="@+id/priceRemarqueDialogue"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.PriceRemarqueDialogue"
+        android:label="PriceRemarqueFragment" >
+
+
+        <argument
+            android:name="magasin"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="discount"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="bonusfid"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+    </dialog>
+
+
+    <dialog
+        android:id="@+id/myBottomSheetDialogFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.MyBottomSheetDialogFragment"
+        tools:layout="@layout/bottom_sheet_modal"
+        android:label="MyBottomSheetDialogFragment" >
+        <action
+            android:id="@+id/action_myBottomSheetDialogFragment_to_AddProductFragment"
+            app:destination="@id/AddProductFragment" />
+
+
+        <action
+            android:id="@+id/action_myBottomSheetDialogFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+        <action
+            android:id="@+id/action_myBottomSheetDialogFragment_to_pricesHistoryGraphFragment"
+            app:destination="@id/pricesHistoryGraphFragment" />
+
+    </dialog>
+
+
+    <fragment
+        android:id="@+id/fidCardFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.fidcard.FidCardFragment"
+        android:label="fragment_fid_card"
+        tools:layout="@layout/fragment_fid_card" >
+        <action
+            android:id="@+id/action_fidCardFragment_to_barrecodeScannerFragment"
+            app:destination="@id/barrecodeScannerFragment" />
+
+
+        <action
+            android:id="@+id/action_fidCardFragment_to_dialogFragment"
+            app:destination="@id/DialogueFragment" />
+        <action
+            android:id="@+id/action_fidCardFragment_to_imageFidCarDialogFragment"
+            app:destination="@id/imageFidCarDialogFragment" />
+
+
+    </fragment>
+
+
+    <dialog
+        android:id="@+id/DialogueFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.DialogueFragment"
+        android:label="DialogueFragment" >
+        <action
+            android:id="@+id/action_dialogFragment_to_AddProductFragment"
+            app:destination="@id/AddProductFragment" />
+
+
+        <argument
+            android:name="action"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="searchtext"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="barecodetype"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="barecodename"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+        <action
+            android:id="@+id/action_dialogFragment_to_fidCardFragment"
+            app:destination="@id/fidCardFragment"
+
+            app:popUpTo="@+id/ShopingFragment"
+            app:popUpToInclusive="false"/>
+        <action
+            android:id="@+id/action_dialogFragment_to_ShopingFragment"
+            app:destination="@id/ShopingFragment" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            android:defaultValue="Empty" />
+    </dialog>
+
+
+    <fragment
+        android:id="@+id/imageFidCarDialogFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.ImageFidCarDialogFragment"
+        android:label="ImageFidCarDialogFragment" >
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="value"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+
+        <argument
+            android:name="type"
+            app:argType="string"
+            android:defaultValue="Empty"/>
+    </fragment>
+
+
+    <dialog
+        android:id="@+id/licencesDialogFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.LicencesDialogFragment"
+        android:label="LicencesDialogFragment" />
+
+
+
+    <fragment
+        android:id="@+id/pricesHistoryGraphFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.ui.PricesHistoryGraphFragment"
+        android:label="fragment_prices_history_graph"
+        tools:layout="@layout/fragment_prices_history_graph" >
+        <action
+            android:id="@+id/action_pricesHistoryGraphFragment_self"
+            app:destination="@id/pricesHistoryGraphFragment"
+            app:popUpTo="@+id/MainFragment"
+            app:popUpToInclusive="false"
+            />
+
+    </fragment>
+    <dialog
+        android:id="@+id/productTypesDialog"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.ProductTypesDialog"
+        android:label="ProductTypesDialog" >
+
+    <argument
+    android:name="topCategorie"
+    app:argType="string"
+    android:defaultValue="Empty" />
+
+        <argument
+            android:name="fromType"
+            app:argType="string"
+            android:defaultValue="Empty" />
+</dialog>
+
+
+</navigation>

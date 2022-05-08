@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="subsubTypeArrayBoissons">
+        <item>Eaux</item>
+        <item>Eaux Gazéifiées</item>
+        <item>Boissons Gazeuses</item>
+        <item>Jus de Fruits</item>
+        <item>Nectar de Fruits</item>
+        <item>Fraîchement Pressés</item>
+        <item>Sirop</item>
+        <item>Énergétiques</item>
+        <item>Bière sans Alcool</item>
+        <item>Boissons Instantanée</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayProduitsLaitiers">
+        <item>Lait</item>
+        <item>Lait Concentré</item>
+        <item>Lait en Poudre</item>
+        <item>Ricotta</item>
+        <item>Boissons Lactées</item>
+        <item>Yaourts</item>
+        <item>Yaourts Nature</item>
+        <item>Yaourts à Boire</item>
+        <item>Yaourts Brassé</item>
+        <item>Yaourts à la Grecque</item>
+        <item>Lben</item>
+        <item>Rayeb</item>
+        <item>Beurres</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayÉpicerieSalée">
+        <item>Pâtes</item>
+        <item>Couscous</item>
+        <item>Riz</item>
+        <item>Farines</item>
+        <item>Semoules</item>
+
+        <item>Bouillons et Soupes</item>
+        <item>Tomates</item>
+        <item>Harissa</item>
+
+        <item>Thon</item>
+        <item>Sardines</item>
+        <item>Filets de Maquereaux</item>
+        <item>Saumons Fumés</item>
+        <item>Boutargues</item>
+        <item>Foie Gras</item>
+
+        <item>Moutarde</item>
+        <item>Ketchup</item>
+        <item>Vinaigres</item>
+        <item>Mayonnaise</item>
+        <item>Huiles Végétales</item>
+        <item>Huiles d\'olive</item>
+        <item>Cornichons, Olives et Condiments</item>
+
+
+        <item>Autres Conserves</item>
+        <item>Plats Cuisinés</item>
+        <item>Sauces Condiments et Assaisonnements</item>
+        <item>Sels</item>
+        <item>Épices</item>
+        <item>Herbes</item>
+        <item>Chips</item>
+        <item>Pop Corn</item>
+        <item>Biscuits Salés</item>
+        <!--voire carrefours <item>Apéritif</item>-->
+        <item>Fruits Secs</item>
+        <item>Légumes Secs</item>
+        <item>Malsouka</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayÉpicerieSucrée">
+
+        <item>Café</item>
+        <item>Café Solubles</item>
+        <item>Café Chicorées</item>
+        <item>Thé</item>
+        <item>Infusions</item>
+        <item>Sucres</item>
+        <item>Céréales</item>
+
+        <item>Chamia</item>
+        <item>Biscuits</item>
+        <item>Gauffrettes</item>
+        <item>Pâtes à Tartiner</item>
+        <item>Confitures</item>
+        <item>Miel</item>
+        <item>Chocolats</item>
+        <item>Chocolats Pâtissier</item>
+        <item>Chocolat en Poudre</item>
+        <item>Préparations Pâtisserie</item>
+        <item>Préparations Traditionnelles</item>
+        <item>Miel</item>
+        <item>Barres Biscuitées</item>
+        <item>Barres Céréalières</item>
+        <item>Cakes</item>
+        <item>Muffin\'s</item>
+        <item>Madeleines</item>
+        <item>Gâteaux</item>
+        <item>Bonbons et Confiserie</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayBiosansGlutenDiététique">
+        <item>Diététique</item>
+        <item>Sans Gluten</item>
+        <item>Pâtes Sans Gluten</item>
+        <item>Couscous Sans Gluten</item>
+        <item>Riz Sans Gluten</item>
+        <item>Farines Sans Gluten</item>
+        <item>Semoules Sans Gluten</item>
+        <item>Pains Sans Gluten</item>
+        <item>Autres Produits Bio</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCrèmerieetFromages">
+        <item>Margarines</item>
+        <item>Liégois</item>
+        <item>Crèmes Fraîches</item>
+        <item>Crèmes Chantilly</item>
+        <item>Crèmes Dessert</item>
+        <item>Mozzarella</item>
+        <item>Fromages Râpés et de Cuisson</item>
+        <item>Fromages Blancs</item>
+        <item>Fromages à Tartiner</item>
+        <item>Fromages en Portions</item>
+        <item>Fromages Fondu</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCharcuterie">
+        <item>Salami</item>
+        <item>Jambon</item>
+        <item>Saucisse</item>
+        <item>Porc</item>
+
+    </string-array>
+
+    <string-array name="subsubTypeArrayBoulangerieetPâtisserie">
+        <item>Pains</item>
+        <item>Pains de mie</item>
+        <item>Biscottes</item>
+        <item>Toast</item>
+        <item>Viennoiseries et Brioches</item>
+        <item>Pâtisserie</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayProduitsFrais">
+        <item>Fruits Frais</item>
+        <item>Légumes Frais</item>
+        <item>Produits de la Mer Frais</item>
+        <item>Volaille Frais</item>
+        <item>Boucherie Frais</item>
+    </string-array>
+
+    <string-array name="subsubTypeArraySurgelés">
+        <item>Fruits Surgelés</item>
+        <item>Légumes Surgelés</item>
+        <item>Viandes Surgelés</item>
+        <item>Volaille Surgelés</item>
+        <item>Produits de la Mer Surgelés</item>
+        <item>Glaces</item>
+        <item>Desserts</item>
+        <item>Gâteaux Surgelés</item>
+        <item>Plats Cuisinés</item>
+        <item>Pâtes Surgelés</item>
+        <item>Frites Surgelés</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayOeufs">
+        <item>Oeufs</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayProduitsMénagers">
+        <item>Produits Vaisselle</item>
+        <item>Savons et Multi-Usages</item>
+        <item>Sols et Surfaces</item>
+        <item>WC et Canalisations</item>
+        <item>Vitres et Meubles</item>
+        <item>Eau de javel</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayLessivesetSoinsduLinge">
+        <item>Main</item>
+        <item>Machine</item>
+        <item>Adoucissants</item>
+        <item>Détachants Ant-Décoloration et Teinture</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayDésodorisants">
+        <item>Désodrisants</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayInsecticides">
+        <item>Insecticides</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayPapieretLingettesNettoyantes">
+        <item>Lingettes Nettoyantes</item>
+        <item>Papier</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayAccessoiresMénagers">
+        <item>Balais Seaux et Bassines</item>
+        <item>Chamoisines Serpillères</item>
+        <item>Éponges</item>
+        <item>Gants</item>
+        <item>Sacs Poubelles</item>
+        <item>Poubelles</item>
+        <item>Accessoires Salle de Bain</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayRangementduLinge">
+        <item>Etendage</item>
+        <item>Repassage</item>
+        <item>Rangement</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayEntretiendesChaussures">
+        <item>Entretien des Chaussures</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCheveux">
+        <item>Shampooings</item>
+        <item>Masques et Soins Capillaires</item>
+        <item>Coloration</item>
+        <item>Gels Coiffant et Fixant</item>
+        <item>Brosses et Accessoires Cheveux</item>
+        <item>Après Shampooings</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCorpsetvisage">
+        <item>Gels Douche</item>
+        <item>Crèmes</item>
+        <item>Savons</item>
+        <item>Lingettes</item>
+        <item>Gels Nettoyants</item>
+        <item>Déodorants Femmes</item>
+        <item>Déodorants Hommes</item>
+        <item>Épilation et Rasage Femme</item>
+        <item>Rasage Hommes</item>
+        <item>Soins du visage</item>
+        <item>Hygiène Dentaire</item>
+        <item>Mains et Pieds</item>
+        <item>Crèmes Laits et Huiles Essentielles</item>
+        <item>Hygiène Intime</item>
+        <item>Soins Solaires</item>
+        <item>Eau de Cologne et Eau de Toilettes</item>
+        <item>Accessoires de Bain</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayPapieretCoton">
+        <item>Papier Toilette</item>
+        <item>Papier Mouchoir</item>
+        <item>Coton</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCouchesetLingettes">
+        <item>Couches</item>
+        <item>Lingettes Bébé</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayToilettesetSoins">
+
+        <item>Shampooing Bébé</item>
+        <item>Savons Bébé</item>
+        <item>Lait de Corp Bébé</item>
+        <item>Gel Douche Bébé</item>
+        <item>Lingettes Bébé</item>
+        <item>Crèmes Bébé</item>
+        <item>Soins</item>
+        <item>Eau de Cologne et Eau de Toilettes Bébé</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayRepas">
+        <item>Purées</item>
+        <item>Compote</item>
+        <item>Coulis</item>
+        <item>Repas</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayPuériculture">
+        <item>Puériculture</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayArtdelaTable">
+        <item>Assiettes et Services</item>
+        <item>Verres Thermos et Carafes</item>
+        <item>Couverts et Plateaux</item>
+        <item>Accessoires de la Table</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCuisson">
+        <item>Plats à Four</item>
+        <item>Poêles et Sauteuses</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayBoitesdeConservation">
+        <item>Boites de Conservation</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayUstensilesdeCuisine">
+        <item>Ustensiles de Cuisine</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayPapieretEmballagesAlimentaires">
+        <item>Papier et Emballages Alimentaires</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayRangementdelaCuisine">
+        <item>Rangement de la Cuisine</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayClimatisationetChauffage">
+        <item>Climatisation et Chauffage</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayRéfrigérateuretMiniBar">
+        <item>Réfrigérateur et Mini-Bar</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCongélateur">
+        <item>Congélateur</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayLaveLinge">
+        <item>Lave Linge</item>
+    </string-array>
+
+
+    <string-array name="subsubTypeArrayLaveVaisselle">
+        <item>Lave Vaisselle</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayCuisinièreetEncastrable">
+        <item>Cuisinière et Encastrable</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayMicroOndeetMiniFour">
+        <item>Micro-Onde et Mini-Four</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayPetitDéjeuner">
+        <item>Petit Déjeuner</item>
+    </string-array>
+
+
+    <string-array name="subsubTypeArrayPréparationCulinaire">
+        <item>Blender et Mixeur</item>
+        <item>Batteur</item>
+        <item>Robot Pétrin et Multifonction</item>
+        <item>Hachoir et Trancheuse</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayAppareildeCuisson">
+        <item>Appareil de Cuisson</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayBeautéetSanté">
+        <item>Beauté et Santé</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayEntretienSolsetSurfaces">
+        <item>Entretien Sols et Surfaces</item>
+    </string-array>
+
+    <string-array name="subsubTypeArraySoinduLinge">
+        <item>Soin du Linge</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayAlimentationetRécompenses">
+        <item>Chats</item>
+        <item>Chiens</item>
+        <item>Autres</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayHygièneetaccessoires">
+        <item>Hygiène et Accessoires</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayImageetSon">
+        <item>Téléviseur</item>
+        <item>Récépteur</item>
+        <item>Son</item>
+        <item>Accessoires TV</item>
+    </string-array>
+
+
+    <string-array name="subsubTypeArrayInformatiqueetAccessoires">
+        <item>Informatique et Accessoires</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayTéléphonieetAccessoires">
+        <item>Informatique et Accessoires</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayJardin">
+        <item>Jardin</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayAutomobile">
+        <item>Automobile</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayBricolage">
+        <item>Bricolage</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayÉlectricité">
+        <item>Électricité</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayFournituresScolaires">
+        <item>Fournitures scolaires</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayLingedeMaison">
+        <item>Linge de Maison</item>
+    </string-array>
+
+
+    <string-array name="subsubTypeArrayJeuxetJouets">
+        <item>Jeux et Jouets</item>
+    </string-array>
+
+    <string-array name="subsubTypeArrayBagagerie">
+        <item>Bagagerie</item>
+    </string-array>
+
+    <string-array name="subsubTypeArraySport">
+        <item>Sports</item>
+        <item>Protéines</item>
+    </string-array>
+
+
+    <string-array name="subsubTypeArrayLoisir">
+        <item>Loisirs</item>
+    </string-array>
+
+</resources>

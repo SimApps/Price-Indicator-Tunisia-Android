@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/MainFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_homepage"
+        android:title="Accueil" />
+
+    <item
+        android:id="@+id/ShopingFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_shopping_list"
+        android:title="Courses" />
+
+
+    <item
+        android:id="@+id/fidCardFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_giftcard"
+        android:title="@string/Cartes_de_fidélitées" />
+
+
+
+
+    <item
+        android:id="@+id/TiketFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_take_a_picture"
+        android:title="Tiket" />
+
+    <item
+        android:id="@+id/SettingFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="Parametres" />
+
+
+</menu>
