@@ -37,7 +37,6 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchType
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchtext
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchtype
 import com.amirami.simapp.priceindicatortunisia.databinding.FragmentAddProductBinding
-import com.narify.netdetect.NetDetect
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import java.util.*
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeLeadingZeroes
@@ -46,16 +45,18 @@ import com.amirami.simapp.priceindicatortunisia.viewmodel.*
 import com.amirami.simapp.priceindicatortunisia.model.Product
 import com.amirami.simapp.priceindicatortunisia.model.ProdRoomNamesModel
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.shoping.ProductShopingRoom
-import com.amirami.simapp.priceindicatortunisia.shoping.ShopListRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.PriceReFormating
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.dynamicToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.errorToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.setSafeOnClickListener
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.showInterstitialAd
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.warningToast
 import com.amirami.simapp.priceindicatortunisia.utils.exhaustive
+import com.narify.netdetect.NetDetect
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import java.math.BigDecimal
@@ -133,16 +134,12 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 productsViewModel.getResponseFromFirestoreUsingCoroutines.collectLatest { dataOrException ->
                     val productList = dataOrException.data
-                    //      DynamicToast.makeError(requireContext(),"load", 9).show()
                     if (productList != null) {
                         products.addAll(productList)
-                        hideProgressBar()
-
                         if (productList.isNotEmpty()) {
                             _binding.listViewAddprod.visibility = View.GONE
                             _binding.nestedScroll.visibility = View.VISIBLE
 
-                            showInterstitialAd(requireActivity(), nbrInterstitialAdShowed)
                             // product.setDocumentId(documentSnapshot.id)
                             val id: String = productList[0].id!!.toString()
                             val name: String = productList[0].name!!
@@ -287,41 +284,57 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
                                 fromArrayList(productList[0].carrefourPriceHistory),
                                 fromArrayList(productList[0].geantPriceHistory)
                             )
-                            clickBtnAddtoShopList(product)
-                            clickBtnDeleteProd(id, name)
-                        }
-                        else {
-                            if (searchtype == "id") {
-                                val action = AddProductFragmentDirections.actionAddProductFragmentToDialogFragment(
-                                        "addFROMADDFRAG",
-                                        removeLeadingZeroes(searchtext)
-                                    )
-                                this@AddProductFragment.findNavController().navigate(action)
-                            //     NavHostFragment.findNavController(requireParentFragment()).navigate(action)
-                            } else warningToast(requireContext(),"$searchtext  n'est pas disponible dans notre base de donnée!")
+if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, ""))==id){
+    clickBtnAddtoShopList(product)
+    clickBtnDeleteProd(id, name)
+}
 
-                            showInterstitialAd(requireActivity(), nbrInterstitialAdShowed)
-                        }
 
-                        hideProgressBar()
+                        }
+                     /*   else {
+
+                    //         if (searchtype == "id") {
+                                NetDetect.check { isConnected: Boolean ->
+                                if (isConnected) {
+                                 /*   val action = AddProductFragmentDirections.actionAddProductFragmentToDialogFragment(
+                                            "addFROMADDFRAG",
+                                            removeLeadingZeroes(searchtext)
+                                        )
+                                    this@AddProductFragment.findNavController().navigate(action)*/
+                                }
+                                else errorToast(requireContext(),getString(R.string.erreurconexion))
+                            }
+                         //   }
+                          //  else warningToast(requireContext(),"$searchtext  n'est pas disponible dans notre base de donnée!")
+
+                        }
+*/
                     }
 
                     if (dataOrException.e != null) {
                         if (dataOrException.e == "add") {
                             if (searchtype == "id") {
-                                val action = AddProductFragmentDirections.actionAddProductFragmentToDialogFragment(
-                                        "addFROMADDFRAG",
-                                        removeLeadingZeroes(searchtext)
-                                    )
-                                this@AddProductFragment.findNavController()
-                                    .navigate(action) //   NavHostFragment.findNavController(requireParentFragment()).navigate(action)
+                                NetDetect.check { isConnected: Boolean ->
+                                    if (isConnected) {
+                                        val action =
+                                            AddProductFragmentDirections.actionAddProductFragmentToDialogFragment(
+                                                "addFROMADDFRAG",
+                                                removeLeadingZeroes(searchtext)
+                                            )
+                                        this@AddProductFragment.findNavController()
+                                            .navigate(action) //   NavHostFragment.findNavController(requireParentFragment()).navigate(action)
+
+                                    }
+                                    else errorToast(requireContext(),getString(R.string.erreurconexion))
+                                    // else errorToast()
+                                }
                             }
 
                         }
-                        //  logErrorMessage(dataOrException.e!!.message!!)
-                        hideProgressBar()
-                        errorToast(requireContext(),dataOrException.e.toString())
+                        else errorToast(requireContext(),dataOrException.e.toString())
                     }
+                    hideProgressBar()
+
                 }
             }
         }
@@ -427,9 +440,12 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
                                             fromArrayList(it.product.carrefourPriceHistory),
                                             fromArrayList(it.product.geantPriceHistory)
                                         )
-                                        clickBtnAddtoShopList(productShopingRoom)
-                                        clickBtnDeleteProd(it.product.id!!, it.product.name!!)
-                                        //  search_input=findViewById<SearchView>(R.id.search_input)
+                                        if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, ""))==it.product.id!!){
+                                            clickBtnAddtoShopList(productShopingRoom)
+                                            clickBtnDeleteProd(it.product.id!!, it.product.name!!)
+                                            //  search_input=findViewById<SearchView>(R.id.search_input)
+                                        }
+
                                     }
                                     "nobill" -> {
                                         searchtext = it.product.id.toString()
@@ -1050,7 +1066,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
     }
 
     private fun loadProducttomodify() {
-
         restProductVar()
         displayProgressBar()
 
@@ -1060,6 +1075,8 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
         if (nbrInterstitialAdShowed >= 100) nbrInterstitialAdShowed = 0
 
         preferencesViewModel.onNbrInterstitialAdShowedChanged(nbrInterstitialAdShowed)
+
+        showInterstitialAd(requireActivity(), nbrInterstitialAdShowed)
 
         resetOnluInputtext()
 
@@ -1091,8 +1108,9 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
     private fun clickBtnDeleteProd(id: String, name: String) {
 
         _binding.deletebtn.setSafeOnClickListener {
+
             NetDetect.check { isConnected: Boolean ->
-                if (isConnected) {
+                if ( isConnected) {
                     val idTextInpu = _binding.ProductIDInput.text.toString()
 
                     if (id != "" && isNumber(

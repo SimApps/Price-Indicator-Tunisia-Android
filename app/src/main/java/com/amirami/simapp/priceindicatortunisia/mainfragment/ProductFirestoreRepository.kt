@@ -51,7 +51,7 @@ class ProductFirestoreRepository @Inject constructor(
             val productList = mutableListOf<Product>()
 
             val products = productsRef.whereEqualTo(searchtype,
-                if(searchtype =="id") removeLeadingZeroes(searchtext) else searchtext
+                if(searchtype ==ID) removeLeadingZeroes(searchtext) else searchtext
             )
                 //.orderBy(NAME_PROPERTY, Query.Direction.ASCENDING)
                 .get().await()
@@ -81,7 +81,7 @@ class ProductFirestoreRepository @Inject constructor(
 
 
     suspend fun getResponseFromFirestoreUsingCoroutines(searchtype:String,searchtext:String): DataOrException<List<Product>, String> {
-        val response = DataOrException<List<Product>, String>()
+    /*    val response = DataOrException<List<Product>, String>()
         try {
             response.data = productsRef.whereEqualTo(searchtype,
                 if(searchtype ==ID) removeLeadingZeroes(searchtext) else searchtext
@@ -91,7 +91,36 @@ class ProductFirestoreRepository @Inject constructor(
         } catch (exception: Exception) {
             response.e = exception.toString()
         }
-        return response
+        return response*/
+        val dataOrException = DataOrException<List<Product>, String>()
+
+        try {
+            val productList = mutableListOf<Product>()
+
+            val products = productsRef.whereEqualTo(searchtype,
+                if(searchtype ==ID) removeLeadingZeroes(searchtext) else searchtext
+            )
+                //.orderBy(NAME_PROPERTY, Query.Direction.ASCENDING)
+                .get().await()
+            if(!products.isEmpty){
+                for (document in products) {
+                    if (document.exists()) {
+                        document.toObject(Product::class.java).let {
+                            productList.add(it)
+                            //   Log.d(TAG,"ll"+productList[0].id )
+                        }
+                    }
+                    else  dataOrException.e = "add"
+
+                }
+            }
+            else dataOrException.e = "add"
+
+            dataOrException.data = productList
+        } catch (e: FirebaseFirestoreException) {
+            dataOrException.e = e.toString()
+        }
+        return dataOrException
     }
 
 
@@ -111,8 +140,11 @@ class ProductFirestoreRepository @Inject constructor(
     suspend fun getProductByIdFromFirestoreUsingCoroutines(text:String): DataOrException<List<Product>, String> {
         val response = DataOrException<List<Product>, String>()
         try {
-            response.data = productsRef.whereEqualTo(ID, removeLeadingZeroes(text)
-            ).get().await().documents.mapNotNull { snapShot ->
+            response.data = productsRef
+                .whereEqualTo(ID, removeLeadingZeroes(text))
+                .get()
+                .await()
+                .documents.mapNotNull { snapShot ->
                 snapShot.toObject(Product::class.java)
             }
         } catch (exception: Exception) {

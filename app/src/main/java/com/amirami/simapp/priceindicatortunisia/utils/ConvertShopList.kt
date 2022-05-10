@@ -2,8 +2,8 @@ package com.amirami.simapp.priceindicatortunisia.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.amirami.simapp.priceindicatortunisia.shoping.ProductShopingRoom
-import com.amirami.simapp.priceindicatortunisia.shoping.ProdShopListEntity
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListEntity
 
 
 object ConvertShopList {

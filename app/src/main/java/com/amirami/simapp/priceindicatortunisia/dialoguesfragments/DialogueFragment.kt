@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.dialogues
+package com.amirami.simapp.priceindicatortunisia.dialoguesfragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductInfoViewModel
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductsViewModel
-import com.amirami.simapp.priceindicatortunisia.shoping.ShopListRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.databinding.YesNoDialogueBinding
 import com.amirami.simapp.priceindicatortunisia.fidcard.Barecode
 import com.amirami.simapp.priceindicatortunisia.model.Product
@@ -202,14 +202,23 @@ class DialogueFragment : BottomSheetDialogFragment() {
                     }
 
                     "addFROMADDFRAG" -> {
-                      //  productInfoViewModel.putProductInfoFromAddDialogue(args.searchtext)
-                        Functions.bottomsheetStateInfo = "putonlyproductID"
-                        val product = Product(
-                            args.searchtext, "","", "", "","", "", "","", "", "","", "", "", "", "", "", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "",""
-                        )
+                        NetDetect.check { isConnected: Boolean ->
+                            if (isConnected) {
+                                //  productInfoViewModel.putProductInfoFromAddDialogue(args.searchtext)
+                                Functions.bottomsheetStateInfo = "putonlyproductID"
+                                val product = Product(
+                                    args.searchtext, "","", "", "","", "", "","", "", "","", "", "", "", "", "", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "","", "", "",""
+                                )
 
-                        productInfoViewModel.putprodInfoTomodify(product)
-                        dismiss()
+                                productInfoViewModel.putprodInfoTomodify(product)
+                                dismiss()
+                            }
+
+                            else errorToast(requireContext(),getString(R.string.erreurconexion))
+
+
+                            }
+
 
                     }
 
@@ -223,7 +232,7 @@ class DialogueFragment : BottomSheetDialogFragment() {
                     "deleteOneItem" -> {
                         shopListRoomViewModel.deleteItem(
                             args.searchtext.toLong(),
-                            getString(R.string.product_deleted_in_shoping_list)
+                            getString(R.string.product_deleted_in_shoping_list,args.barecodetype)
                         )
                         dismiss()
                     }

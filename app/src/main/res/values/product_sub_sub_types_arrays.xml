@@ -34,8 +34,6 @@
         <item>Pâtes</item>
         <item>Couscous</item>
         <item>Riz</item>
-        <item>Farines</item>
-        <item>Semoules</item>
 
         <item>Bouillons et Soupes</item>
         <item>Tomates</item>
@@ -138,8 +136,12 @@
     </string-array>
 
     <string-array name="subsubTypeArrayBoulangerieetPâtisserie">
+        <item>Farines</item>
+        <item>Semoules</item>
         <item>Pains</item>
         <item>Pains de mie</item>
+        <item>Levure</item>
+        <item>Bicarbonate</item>
         <item>Biscottes</item>
         <item>Toast</item>
         <item>Viennoiseries et Brioches</item>
@@ -238,6 +240,8 @@
         <item>Gels Nettoyants</item>
         <item>Déodorants Femmes</item>
         <item>Déodorants Hommes</item>
+        <item>Roll-On Femmes</item>
+        <item>Roll-On Hommes</item>
         <item>Épilation et Rasage Femme</item>
         <item>Rasage Hommes</item>
         <item>Soins du visage</item>

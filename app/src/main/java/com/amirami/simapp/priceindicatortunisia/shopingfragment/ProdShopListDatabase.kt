@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.shoping
+package com.amirami.simapp.priceindicatortunisia.shopingfragment
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

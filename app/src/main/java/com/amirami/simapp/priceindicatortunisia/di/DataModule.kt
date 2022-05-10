@@ -7,8 +7,8 @@ import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDao
 import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDatabase
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDAO
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDatabase
-import com.amirami.simapp.priceindicatortunisia.shoping.ProdShopListDAO
-import com.amirami.simapp.priceindicatortunisia.shoping.ProdShopListDatabase
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListDAO
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

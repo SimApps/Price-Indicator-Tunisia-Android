@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.dialogues
+package com.amirami.simapp.priceindicatortunisia.dialoguesfragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

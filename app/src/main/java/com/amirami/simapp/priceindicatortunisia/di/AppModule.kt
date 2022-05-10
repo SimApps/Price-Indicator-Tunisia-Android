@@ -6,8 +6,8 @@ import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDao
 import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoom
 import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomBaseRepository
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDAO
-import com.amirami.simapp.priceindicatortunisia.shoping.ProdShopListDAO
-import com.amirami.simapp.priceindicatortunisia.shoping.RepositoryShopListRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListDAO
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.RepositoryShopListRoom
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.PRODUCTS_COLLECTION
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.USERS_IDS_REF
 import com.amirami.simapp.priceindicatortunisia.utils.Functions

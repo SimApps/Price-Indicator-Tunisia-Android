@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import com.google.firebase.firestore.FieldValue
+import com.narify.netdetect.NetDetect
 import java.text.DateFormat
 
 
@@ -741,4 +742,7 @@ object Functions {
     fun dynamicToast(context: Context,message: String) {
         DynamicToast.make(context, message, 9).show()
     }
+
+
+
 }

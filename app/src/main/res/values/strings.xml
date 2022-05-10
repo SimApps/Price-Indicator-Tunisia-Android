@@ -11,7 +11,7 @@
     <string name="superUserOptions">true</string>
     <string name="true_">true</string>
 
-    <string name="misejourshopinglist">Mettre à jour la liste des courses</string>
+    <string name="misejourshopinglist">Mise à jour de la liste des courses</string>
     <string name="deleteshopinglist">Supprimer la liste des courses</string>
     <string name="calculshopinglist">Calculer la liste des courses</string>
     <string name="emptyshopinglist">La liste des courses est vide !</string>
@@ -49,7 +49,7 @@
 
     <string name="product_saved_in_shoping_list">Produit enregistré dans la liste de courses.</string>
 
-    <string name="product_deleted_in_shoping_list">Produit supprimé dans la liste de courses.</string>
+    <string name="product_deleted_in_shoping_list">%s  est supprimé de la liste de courses.</string>
     <string name="fidcard_deleted">Carte de fidélitée supprimé.</string>
 
     <string name="Produit_déja_dans_l_list_de_course">Produit est déjà ajouté dans la liste de courses !</string>

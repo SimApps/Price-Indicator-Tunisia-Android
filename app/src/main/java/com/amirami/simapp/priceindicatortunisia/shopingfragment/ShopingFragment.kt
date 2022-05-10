@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.shoping
+package com.amirami.simapp.priceindicatortunisia.shopingfragment
 
 import android.os.Bundle
 import android.view.View
@@ -67,11 +67,11 @@ class ShopingFragment : Fragment(R.layout.fragment_shoping), ProductShopingRV.On
             shopListRoomViewModel.shopListEvents.collect { event ->
                 when (event) {
                     is ShopListRoomViewModel.ShopListEvents.ProdAddToShopMsg -> {
-                        DynamicToast.makeSuccess(requireContext(), event.msg, 9).show()
+                        if (event.msg == "")  Unit
+                        else Functions.dynamicToast(requireContext(), event.msg)
                     }
                     is ShopListRoomViewModel.ShopListEvents.ProdDeleteShopMsg -> {
-                        DynamicToast.makeSuccess(requireContext(), event.msg, 9).show()
-                    }
+                        Functions.dynamicToast(requireContext(), event.msg)                    }
 
                     else -> {}
                 }.exhaustive
@@ -213,7 +213,7 @@ class ShopingFragment : Fragment(R.layout.fragment_shoping), ProductShopingRV.On
                             }
                             shopListRoomViewModel.insertItem(
                                 product[i],
-                                getString(R.string.misejourshopinglist)
+                             ""  // getString(R.string.misejourshopinglist)
                             )
 
                             if (i == productList.size - 1) {
@@ -223,20 +223,22 @@ class ShopingFragment : Fragment(R.layout.fragment_shoping), ProductShopingRV.On
                         }
 
                         preferencesViewModel.onLastShopingRefreshChanged(getCurrentDate())
-                    } else {
-                        hideProgressBar()
-                        DynamicToast.makeError(
-                            requireContext(),
-                            "productList is Empty() " + dataOrException.e.toString(),
-                            9
-                        ).show()
+                    }
+                    else {
+                       // hideProgressBar()
+                        shopListRoomViewModel.deleteItem(
+                            element.productid!!,
+                            getString(R.string.product_deleted_in_shoping_list,element.name)
+                        )
+                       // errorToast(requireContext(), "productList is Empty() " + dataOrException.e.toString())
+
                     }
 
                 }
 
                 if (dataOrException.e != null) {
                     hideProgressBar()
-                    DynamicToast.makeError(requireContext(), dataOrException.e.toString(), 9).show()
+                    errorToast(requireContext(), dataOrException.e.toString())
                 }
             }
         }
@@ -256,7 +258,7 @@ class ShopingFragment : Fragment(R.layout.fragment_shoping), ProductShopingRV.On
         } else/* if( quantity(quantityEdited)<=0.001) */ {
             shopListRoomViewModel.deleteItem(
                 task.productid!!.toLong(),
-                getString(R.string.product_deleted_in_shoping_list)
+                getString(R.string.product_deleted_in_shoping_list,task.name)
             )
         }
 

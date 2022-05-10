@@ -1,25 +1,16 @@
-package com.amirami.simapp.priceindicatortunisia.ui
+package com.amirami.simapp.priceindicatortunisia.dialoguesfragments
 
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.appcompat.app.AlertDialog
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.fragment.app.DialogFragment
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.databinding.LicencesDialogueBinding
-import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.errorToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.setSafeOnClickListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import dagger.hilt.android.AndroidEntryPoint
 
 

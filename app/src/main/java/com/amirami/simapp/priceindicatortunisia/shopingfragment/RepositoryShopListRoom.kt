@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.shoping
+package com.amirami.simapp.priceindicatortunisia.shopingfragment
 
 
 

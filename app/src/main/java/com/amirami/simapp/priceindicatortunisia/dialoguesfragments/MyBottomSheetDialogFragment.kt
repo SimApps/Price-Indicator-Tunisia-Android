@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.dialogues
+package com.amirami.simapp.priceindicatortunisia.dialoguesfragments
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.databinding.BottomSheetModalBinding
 import com.amirami.simapp.priceindicatortunisia.model.Product
-import com.amirami.simapp.priceindicatortunisia.shoping.ProductShopingRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
 import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromString
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.PriceFormating
@@ -28,7 +28,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.shortformateDate
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.showRestOfString
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.showStringifNotEmpty
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductInfoViewModel
-import com.amirami.simapp.priceindicatortunisia.shoping.ShopListRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.narify.netdetect.NetDetect
 import dagger.hilt.android.AndroidEntryPoint

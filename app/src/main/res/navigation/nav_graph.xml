@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/ShopingFragment"
-        android:name="com.amirami.simapp.priceindicatortunisia.shoping.ShopingFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopingFragment"
         android:label="fragment_shoping"
         tools:layout="@layout/fragment_shoping" >
 
@@ -108,7 +108,7 @@
 
     <dialog
         android:id="@+id/priceRemarqueDialogue"
-        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.PriceRemarqueDialogue"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialoguesfragments.PriceRemarqueDialogue"
         android:label="PriceRemarqueFragment" >
 
 
@@ -131,7 +131,7 @@
 
     <dialog
         android:id="@+id/myBottomSheetDialogFragment"
-        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.MyBottomSheetDialogFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialoguesfragments.MyBottomSheetDialogFragment"
         tools:layout="@layout/bottom_sheet_modal"
         android:label="MyBottomSheetDialogFragment" >
         <action
@@ -172,7 +172,7 @@
 
     <dialog
         android:id="@+id/DialogueFragment"
-        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.DialogueFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialoguesfragments.DialogueFragment"
         android:label="DialogueFragment" >
         <action
             android:id="@+id/action_dialogFragment_to_AddProductFragment"
@@ -237,7 +237,7 @@
 
     <dialog
         android:id="@+id/licencesDialogFragment"
-        android:name="com.amirami.simapp.priceindicatortunisia.ui.LicencesDialogFragment"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialoguesfragments.LicencesDialogFragment"
         android:label="LicencesDialogFragment" />
 
 
@@ -257,7 +257,7 @@
     </fragment>
     <dialog
         android:id="@+id/productTypesDialog"
-        android:name="com.amirami.simapp.priceindicatortunisia.dialogues.ProductTypesDialog"
+        android:name="com.amirami.simapp.priceindicatortunisia.dialoguesfragments.ProductTypesDialog"
         android:label="ProductTypesDialog" >
 
     <argument

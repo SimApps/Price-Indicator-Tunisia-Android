@@ -1,7 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.repository
 
 import androidx.lifecycle.LiveData
-import com.amirami.simapp.priceindicatortunisia.shoping.ProdShopListEntity
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListEntity
 
 interface ShopListRoomBaseRepository {
 

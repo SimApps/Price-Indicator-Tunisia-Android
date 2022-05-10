@@ -35,9 +35,9 @@ import com.amirami.simapp.priceindicatortunisia.databinding.ProductTiketBinding
 import com.amirami.simapp.priceindicatortunisia.model.ProdRoomNamesModel
 import com.amirami.simapp.priceindicatortunisia.model.Product
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.shoping.ProductShopingRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
 import com.amirami.simapp.priceindicatortunisia.rvadapters.ProductTypesAdapter
-import com.amirami.simapp.priceindicatortunisia.shoping.ShopListRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Constants
 import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
 import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromString
@@ -148,14 +148,15 @@ class MainFragment : Fragment(R.layout.fragment_main),
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                if (getdateDiffrence(preferencesViewModel.preferencesFlow.first().date_list_name_refresh).toInt() >= 1) {
+                if (getdateDiffrence(preferencesViewModel.preferencesFlow.first().date_list_name_refresh).toInt() >= 1
+                    ||getdateDiffrence(preferencesViewModel.preferencesFlow.first().date_list_name_refresh).toInt() < 0) {
                     NetDetect.check { isConnected: Boolean ->
                         if (isConnected) {
                             _binding.mainTxVwInfo.text =
                                 getString(R.string.Mise_a_jour_liste_des_nom)
                             getProdListNamesFromFirestore()
-                        } else errorToast( requireContext(),
-                            getString(R.string.erreur_conexion, ""))
+                        }
+                        else errorToast( requireContext(), getString(R.string.erreur_conexion, ""))
                     }
                 } else {
                     val mainTxvwArray = resources.getStringArray(R.array.main_txvw_array)

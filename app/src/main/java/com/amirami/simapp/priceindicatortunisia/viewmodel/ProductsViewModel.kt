@@ -29,8 +29,8 @@ class ProductsViewModel @Inject constructor(
     fun getProductListFromFirestore(searchtype:String,searchtext:String) =  liveData(Dispatchers.IO) {
         emit(repository.getProductListFromFirestore(searchtype,searchtext))
     }
-    private val _getResponseFromFirestoreUsingCoroutines = MutableStateFlow<DataOrException<List<Product>, String>>(DataOrException<List<Product>, String>())
-    val getResponseFromFirestoreUsingCoroutines: StateFlow<DataOrException<List<Product>, String>> = _getResponseFromFirestoreUsingCoroutines
+    private val _getResponseFromFirestoreUsingCoroutines = MutableSharedFlow<DataOrException<List<Product>, String>>()
+    val getResponseFromFirestoreUsingCoroutines: SharedFlow<DataOrException<List<Product>, String>> = _getResponseFromFirestoreUsingCoroutines
 
      private val _getListResponseFromFirestoreUsingCoroutines = MutableSharedFlow<PagingData<Product>>()
     val getListResponseFromFirestoreUsingCoroutines: SharedFlow<PagingData<Product>> = _getListResponseFromFirestoreUsingCoroutines
@@ -42,8 +42,8 @@ class ProductsViewModel @Inject constructor(
     fun getResponseFromFirestoreUsingCoroutines(searchtype:String,searchtext:String) {
         viewModelScope.launch {
             Functions.bottomsheetStateInfo= "FirestoreloadFrom_AddFragment"
-             //    _getResponseFromFirestoreUsingCoroutines.emit(repository.getResponseFromFirestoreUsingCoroutines(searchtype,searchtext))
-            _getResponseFromFirestoreUsingCoroutines.value = repository.getResponseFromFirestoreUsingCoroutines(searchtype,searchtext)
+                 _getResponseFromFirestoreUsingCoroutines.emit(repository.getResponseFromFirestoreUsingCoroutines(searchtype,searchtext))
+          //  _getResponseFromFirestoreUsingCoroutines.value = repository.getResponseFromFirestoreUsingCoroutines(searchtype,searchtext)
 
     }
     }
