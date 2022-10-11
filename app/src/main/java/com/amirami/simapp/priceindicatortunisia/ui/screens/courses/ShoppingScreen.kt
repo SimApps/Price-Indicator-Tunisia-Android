@@ -27,7 +27,6 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.QuantitySelector
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
@@ -334,11 +333,11 @@ fun ProductShopTiket(
                 }
         )*/
 
-        QuantitySelector(
+      /*  QuantitySelector(
             count = count,
             decreaseItemCount = { if (count > 0) updateCount(count - 1) },
             increaseItemCount = { updateCount(count + 1) }
-        )
+        )*/
         //  Spacer(Modifier.weight(1f))
     }
 }
