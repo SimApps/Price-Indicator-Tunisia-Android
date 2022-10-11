@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "515731319694",
+    "project_id": "price-indicator-tunisia-b2a04",
+    "storage_bucket": "price-indicator-tunisia-b2a04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515731319694:android:94e7f50a86d77226d952df",
+        "android_client_info": {
+          "package_name": "com.amirami.simapp.priceindicatortunisia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515731319694-s6ndbraqnh2f86kj986imco7l911hhf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2q20OuywsmIoHMwOf46X3GzL0FHLWCXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515731319694-s6ndbraqnh2f86kj986imco7l911hhf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

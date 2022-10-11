@@ -1,0 +1,52 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+
+    <string-array name="main_txvw_array">
+        <!--   <item>Pour scanner le code-barres cliqué sur l\'image ci-dessus. Avec prix en Tunisie trouvez le meilleur prix !</item>-->
+        <item>Prix en Tunisie compare les prix des magasins et les grandes surfaces en Tunisie.</item>
+        <item>Prix en Tunisie vous permet de réaliser des économies.</item>
+        <item>L\'application est encore jeune, chaque jour, nous allons ajouter des produits et leurs prix.</item>
+        <item>Revenez souvent pour découvrir des nouveaux produits et promotions !</item>
+
+        <item>Êtes vous sûrs d\'acheter moins cher vos produits de grande consommation ?</item>
+        <item>Comparez les prix dans : Carrefour, Géant, Monoprix, Magasin Général et Magasins Aziza</item>
+
+        <item>Prix en Tunisie est une base de données ouverte de plus de  %s produits (plus ceux auxquels vous contribuerez).</item>
+
+        <item>Les prix proposés ne sont pas forcément à jour, mais il vous permet d\'avoir un ordre de grandeur et de comparer les prix.</item>
+        <item>Vous pouvez mettre à jours les prix !</item>
+
+        <item>Prix en Tunisie est entièrement gratuit.</item>
+        <item>Prix en Tunisie est conçue pour vous permettre de comparer les prix sans effort : la seule chose que vous avez à faire, c\'est votre liste de courses !</item>
+
+        <item>Attention : cette application n\’est pas une enseigne de vente en ligne.</item>
+        <item>Nous sommes totalement indépendants ! C\'est une application pour vous permettre de choisir dans quel magasin les prix sont moins chers.</item>
+
+       </string-array>
+
+
+    <string-array name="unit_of_mesur">
+        <!-- Unité -->
+        <item>L</item>
+        <item>ml</item>
+        <item>cl</item>
+        <item>Kg</item>
+        <item>g</item>
+        <item>m</item>
+        <item>cm</item>
+        <item>Rouleaux</item>
+        <item>Pièces</item>
+        <item>Oeufs</item>
+        <item>watt</item>
+    </string-array>
+   </resources>

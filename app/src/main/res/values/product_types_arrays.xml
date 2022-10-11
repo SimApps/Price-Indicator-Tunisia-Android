@@ -1,0 +1,40 @@
+<resources>
+    <string-array name="productTypeArray">
+        <item>Alimentation</item>
+        <item>Entretient de la Maison</item>
+        <item>Hygiène et Beauté</item>
+        <item>Bébé</item>
+        <item>Cuisine</item>
+        <item>Gros électroménager</item>
+        <item>Petit électroménager</item>
+        <item>Animalerie</item>
+        <item>High-Tech</item>
+        <item>Jardin</item>
+        <item>Brico et Accessoires Auto</item>
+        <item>Fournitures Scolaires</item>
+        <item>Linge de Maison</item>
+        <item>Jeux et Jouets</item>
+        <item>Bagagerie</item>
+        <item>Sport et Loisir</item>
+    </string-array>
+
+
+
+    <string-array name="error">
+        <item>Erreur 404</item>
+    </string-array>
+
+
+    <string-array name="productFeauteredTypeArray">
+        <item>Tous les Catégories</item>
+        <item>Huiles d\'olive</item>
+        <item>Huiles Végétales</item>
+        <item>Café</item>
+        <item>Yaourts</item>
+        <item>Pâtisserie</item>
+        <item>Bio sans Gluten Diététique</item>
+        <item>Biscuits</item>
+        <item>Cakes</item>
+    </string-array>
+</resources>
+    <!-- Type subtype of alomentaire <item>Bio et Naturel</item>-->

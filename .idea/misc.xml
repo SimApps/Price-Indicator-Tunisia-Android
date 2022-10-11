@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/LENOVO/AppData/Local/Android/Sdk/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.15172101449275363" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable-v24/ic_baseline_shop_24.xml" value="0.196" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/animated_splash_icon.xml" value="0.1045" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_add_product.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_add_to_cart.xml" value="0.2175" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_baseline_shop_24.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_bill.xml" value="0.1375" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_calcul_discount.xml" value="0.1265" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_edit.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_expand.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_giftcard.xml" value="0.222" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_history_price.xml" value="0.22" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_minus.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_photo.xml" value="0.222" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_plus.xml" value="0.222" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_rate.xml" value="0.222" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_reset.xml" value="0.2165" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_send.xml" value="0.196" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_shopping_list.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_sync.xml" value="0.1375" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/ic_take_a_picture.xml" value="0.222" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/round_corner.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/rounded_corner_transparent.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/rounded_textview.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/type_alimentaire.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/type_hygiene.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/drawable/type_maison.xml" value="0.141" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/barecode_image_dialogue.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/barecodescanner_view.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/bottom_sheet_modal.xml" value="0.16" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/content_fab.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/custom_barcode_scanner.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fidcard_tiket.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_add_product.xml" value="0.12" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_barecode_image.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_fid_card.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_main.xml" value="0.18704710144927536" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_price_remarque.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_prices_history_graph.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_setting.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_shoping.xml" value="0.136" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/fragment_tiket.xml" value="0.1621376811594203" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/licences_dialogue.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/list_item.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_shopingtiket.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket_h.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket_horizantal.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_type_h.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/product_types_dialog.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/producttypes_tiket.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/ptoduct_tiket.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/layout/yes_no_dialogue.xml" value="0.12613981762917933" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/MVVM Apps/PriceIndicatorTunisia/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1527777777777778" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable-v24/ic_baseline_shop_24.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/animated_splash_icon.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/avd_anim.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/bg_gradient.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/branded_logo.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/circle.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/edit_text_style.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/edittextstyle.xml" value="0.18333333333333332" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic__history_price.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_add_product.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_add_to_cart.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_baseline_image_not_supported_24.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_calcul_discount.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_calculator.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_close.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_delete.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_disclaimer.xml" value="0.26944444444444443" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_discount.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_e454d749_ee13_4bf8_8d1c_13a0039154c0.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_edit.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_expand.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_flash_off_indicator.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_flash_on_indicator.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_giftcard.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_help.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_homepage.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_how_use.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_launcher_background.xml" value="0.26944444444444443" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_licenses.xml" value="0.26944444444444443" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_minus.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_monoprix_logo.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_no_sound.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_photo.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_plus.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_rate.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_reset.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_save.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_scanbarcode.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_send.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_settings.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_shopping_list.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_signin.xml" value="0.2712820512820513" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_signout.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_sound_on.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_take_a_picture.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_vibrate_off.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_vibrate_on.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/ic_volume.xml" value="0.18425925925925926" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/list_divider.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/round_corner.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/rounded_corner_transparent.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/rounded_textview.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/roundedcorner_buttomsheet.xml" value="0.27037037037037037" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/drawable/splash_background.xml" value="0.2755208333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/activity_fid_card.xml" value="0.17980072463768115" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/activity_main.xml" value="0.14719202898550723" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/activity_prices_history_graph.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/activity_slider.xml" value="0.17527173913043478" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/barecode_image_dialogue.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/barecodescanner_view.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/bottom_sheet_modal.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/content_fab.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/custom_barcode_scanner.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/dialogue_sendphoto.xml" value="0.17527173913043478" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/dilogue_scanbarcode.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fidcard_tiket.xml" value="0.17980072463768115" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_add_product.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_main.xml" value="0.2" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_setting.xml" value="0.176" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_shoping.xml" value="0.25" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_slider.xml" value="0.1403985507246377" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/fragment_tiket.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/licences_dialogue.xml" value="0.24114173228346455" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/list_item.xml" value="0.15896739130434784" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/price_remarque_dialogue.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket.xml" value="0.152" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket_horizantal.xml" value="0.12092391304347826" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/layout/yes_no_dialogue.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.259375" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26944444444444443" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/PriceIndicatorTunisia/app/src/main/res/xml/root_preferences.xml" value="0.1403985507246377" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/activity_prices_history_graph.xml" value="0.16802536231884058" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/barecode_image_dialogue.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/bottom_sheet_modal.xml" value="0.259375" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fidcard_tiket.xml" value="0.18659420289855072" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fragment_add_product.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fragment_fid_card.xml" value="0.20108695652173914" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fragment_main.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fragment_setting.xml" value="0.1743659420289855" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/fragment_shoping.xml" value="0.5333333333333333" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/licences_dialogue.xml" value="0.16802536231884058" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/list_item.xml" value="0.15579710144927536" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket.xml" value="0.24864130434782608" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/layout/product_tiket_horizantal.xml" value="0.15579710144927536" />
+        <entry key="..\:/Users/LENOVO/Desktop/CS/current version price tunisia/PriceIndicatorTunisia/app/src/main/res/xml/root_preferences.xml" value="0.12552083333333333" />
+        <entry key="..\:/Users/PC/Desktop/My Apps/Price-Indicator-Tunisia-Android-JetpackCompose/app/src/main/res/drawable/ic_close.xml" value="0.151" />
+        <entry key="..\:/Users/PC/Desktop/My Apps/Price-Indicator-Tunisia-Android-JetpackCompose/app/src/main/res/drawable/ic_edit.xml" value="0.151" />
+        <entry key="..\:/Users/PC/Desktop/My Apps/Price-Indicator-Tunisia-Android-JetpackCompose/app/src/main/res/drawable/search.xml" value="0.151" />
+        <entry key="..\:/Users/PC/Desktop/Price-Indicator-Tunisia-Android-JetpackCompose/app/src/main/res/drawable/ic_licenses.xml" value="0.1955" />
+        <entry key="..\:/Users/PC/Desktop/Price-Indicator-Tunisia-Android-JetpackCompose/app/src/main/res/drawable/search.xml" value="0.1955" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
