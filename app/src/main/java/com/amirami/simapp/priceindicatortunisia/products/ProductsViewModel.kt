@@ -93,4 +93,11 @@ class ProductsViewModel @Inject constructor(
     fun DeleteProdFromShopList(productid: String) = viewModelScope.launch(Dispatchers.IO) {
         shopListRepository.deleteProdShopListFromRoom(productid)
     }
+
+    fun UpdateProdQuantity(quantity: Double?, id: String?) = viewModelScope.launch(Dispatchers.IO) {
+        shopListRepository.updateProdQuantityInRoom(quantity, id)
+    }
+
+
+
 }

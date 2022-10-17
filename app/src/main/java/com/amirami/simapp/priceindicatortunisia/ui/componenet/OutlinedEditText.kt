@@ -8,13 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun OutlinedEditText(text : String,labl : Int,onValueChange: () -> Unit) {
+fun OutlinedEditText(modifier: Modifier,text: String, labl: Int, onValueChange: () -> Unit) {
     val context = LocalContext.current
 
     OutlinedTextField(
+        modifier = modifier,
         value = text,
         onValueChange = { onValueChange() },
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(context.getString(labl)) },
+        label = { Text(context.getString(labl)) }
     )
 }

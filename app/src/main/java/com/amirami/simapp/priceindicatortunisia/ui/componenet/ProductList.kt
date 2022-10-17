@@ -20,6 +20,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.core.Constants
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
@@ -128,6 +129,8 @@ fun ProductTiket(prodsResponse: ProductModel, productDetailDialogViewModel: Prod
                 .weight(1f)
                 // .size(35.dp)
                 .clickable {
+                    if (prodsResponse.typesub == Constants.PRODUITS_FRAIS) prodsResponse.quantity = 0.1
+                    else prodsResponse.quantity = 1.0
                     productsViewModel.AddProdToShopList(prodsResponse)
                 }
         )

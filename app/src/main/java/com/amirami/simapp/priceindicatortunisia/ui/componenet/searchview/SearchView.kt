@@ -2,11 +2,9 @@ package com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview
 
 import android.graphics.Rect
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import com.amirami.simapp.priceindicatortunisia.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -19,9 +17,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.AutoCompleteBox
@@ -29,13 +27,11 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.A
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.asAutoCompleteEntities
 import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.room.domain.model.FidCardEntity
-import com.amirami.simapp.priceindicatortunisia.utils.Constants
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.HOME_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 import java.util.*
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,7 +43,6 @@ fun SearchView(
     productsViewModel: ProductsViewModel,
     searchViewModel: SearchViewModel
 
-
 ) {
     val context = LocalContext.current
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -55,7 +50,6 @@ fun SearchView(
     val scope = rememberCoroutineScope()
 
     when (navBackStackEntry?.destination?.route) {
-
         ListScreens.Accueil.Route -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(true)
         }
@@ -63,7 +57,6 @@ fun SearchView(
         else -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(false)
         }
-
     }
 
     val autoCompleteEntities = prodname.asAutoCompleteEntities(
@@ -73,22 +66,17 @@ fun SearchView(
         }
     )
     if (barCodeViewModel.fidCardBarCodeInfo.value != "" && barCodeViewModel.sendBarCodeTo == HOME_SCREEN) {
-
-        val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value))
+        val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
             Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
-        else barCodeViewModel.fidCardBarCodeInfo.value
-
-
+        } else barCodeViewModel.fidCardBarCodeInfo.value
 
         barecodeValue.let {
             searchViewModel.onsearchValue(it)
             productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
 
-
             val fidcard = FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
             barCodeViewModel.onfidCardInfo(fidcard)
         }
-
     }
     val keyboardController = LocalSoftwareKeyboardController.current
     AnimatedVisibility(
@@ -114,16 +102,11 @@ fun SearchView(
 
                     // searchViewModel.onsearchValue("")
 
-
-                  scope.launch {
+                    scope.launch {
                         keyboardController!!.hide()
-                       delay(100) //  delay here IS nessesary to hide keyboard + scope
+                        delay(100) //  delay here IS nessesary to hide keyboard + scope
                         view.clearFocus()
-
-
-                     }
-
-
+                    }
                 }
 
                 IconsInSearchView(
@@ -138,38 +121,34 @@ fun SearchView(
                         filter(searchViewModel.searchValue)
 
                         view.clearFocus()
-
                     },
                     onClearClick = {
                         searchViewModel.onsearchValue("")
                         filter(searchViewModel.searchValue)
                         view.clearFocus()
-
                     },
                     onScanClick = {
                         barCodeViewModel.onsendBarCodeTo(HOME_SCREEN)
                         navController.navigate(ListScreens.BarCodeCameraPreview.Route)
                     },
                     onFocusChanged = { focusState ->
-                     //   isSearching = isKeyboardOpen != Keyboard.Closed
-                         isSearching = focusState.isFocused
+                        //   isSearching = isKeyboardOpen != Keyboard.Closed
+                        isSearching = focusState.isFocused
                     },
                     onValueChanged = { query ->
-                        searchViewModel.onsearchValue(query)   //value = query
+                        searchViewModel.onsearchValue(query) // value = query
                         filter(searchViewModel.searchValue)
                     }
                 )
             }
-        })
-
-
+        }
+    )
 }
-
 
 @Composable
 fun SearchAutoCompleteItem(product: String?) {
     Card(
-        elevation = 3.dp,
+        elevation = 3.dp
     ) {
         Column(
             modifier = Modifier
@@ -182,20 +161,18 @@ fun SearchAutoCompleteItem(product: String?) {
                     if (product != null) {
                         Text(text = product, style = MaterialTheme.typography.subtitle2)
                     }
-                    //Text(text = product.phoneNumber, style = MaterialTheme.typography.subtitle2)
+                    // Text(text = product.phoneNumber, style = MaterialTheme.typography.subtitle2)
                     // Text(text = product.email, style = MaterialTheme.typography.subtitle2)
                 }
             }
         }
     }
-
 }
-
-
 
 enum class Keyboard {
     Opened, Closed
 }
+
 //    val isKeyboardOpen by keyboardAsState()
 @Composable
 fun keyboardAsState(): State<Keyboard> {
