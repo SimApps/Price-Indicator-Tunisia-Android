@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -212,22 +213,50 @@ fun ScreenContent(
             }
         }
     }
-
     EditTextInputComponent(
-        modifier = Modifier,
-        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.name,
-        R.string.Commentaires,
+        modifier = Modifier.fillMaxWidth(),
+        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.userid,
+        R.string.NomduproduitenArabe,
         onValueChange = {
             addModifyViewModel.onEditTextValue(it)
         }
     )
+
+    EditTextInputComponent(
+        modifier = Modifier.fillMaxWidth(),
+        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.name,
+        R.string.ScanproductIdoradditmanually,
+        onValueChange = {
+            addModifyViewModel.onEditTextValue(it)
+        }
+    )
+
+    EditTextInputComponent(
+        modifier = Modifier.fillMaxWidth(),
+        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.namearabe,
+        R.string.NomduproduitenArabe,
+        onValueChange = {
+            addModifyViewModel.onEditTextValue(it)
+        }
+    )
+
+    EditTextInputComponent(
+        modifier = Modifier.fillMaxWidth(),
+        if (addModifyViewModel.editTextValueX != "") addModifyViewModel.editTextValueX else productModel.azzizaremarq,
+        R.string.NomduproduitenArabe,
+        onValueChange = {
+            addModifyViewModel.onEditTextValueX(it)
+        }
+    )
+
+
 }
 
 @Composable
 fun EditTextInputComponent(
     modifier: Modifier,
     text: String,
-    stringId : Int,
+    stringId: Int,
     onValueChange: (String) -> Unit
 ) {
     Surface(color = Color.Transparent, modifier = modifier) {

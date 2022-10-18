@@ -20,4 +20,16 @@ class AddModifyViewModel @Inject constructor(
         editTextValue = text
 
     }
+
+
+
+
+
+    var editTextValueX by mutableStateOf<String>("")
+        private set
+
+    fun onEditTextValueX(text: String) {
+        editTextValueX = text
+
+    }
 }
