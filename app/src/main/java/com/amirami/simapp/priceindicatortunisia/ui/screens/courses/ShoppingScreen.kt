@@ -40,7 +40,6 @@ import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDilogScreen
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.errorToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
 import kotlinx.coroutines.CoroutineScope
@@ -73,7 +72,7 @@ fun ShoppingScreen(
 
     ModalBottomSheetLayout(
         sheetContent = {
-            ProductDetailDilogScreen(productDetailDialogViewModel)
+            ProductDetailDilogScreen(productDetailDialogViewModel, navController)
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
@@ -90,14 +89,15 @@ fun ShoppingScreen(
                    ShowSnackBar(visibleState, snackBarMessage)
                },*/
             //    backgroundColor = colorResource(id = R.color.purple_500),
-               snackbarHost = {
-                   DefaultSnackbar(
-                   scaffoldState.snackbarHostState,
-                   onDismiss = {
-                       scaffoldState.snackbarHostState.currentSnackbarData?.performAction()
-                   },
-                   modifier = Modifier
-               )}
+            snackbarHost = {
+                DefaultSnackbar(
+                    scaffoldState.snackbarHostState,
+                    onDismiss = {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.performAction()
+                    },
+                    modifier = Modifier
+                )
+            }
         ) { padding ->
 
             Box(
@@ -105,8 +105,6 @@ fun ShoppingScreen(
                 contentAlignment = Alignment.Center
             ) {
                 ProductShopList(scaffoldState, productsViewModel, productDetailDialogViewModel, shoppingViewModel = shoppingViewModel)
-
-
             }
         }
     }
@@ -234,11 +232,11 @@ fun ProductShopTiket(
                         if (prodsResponse.typesub == PRODUITS_FRAIS) {
                             if (prodsResponse.quantity - 0.1 <= 0.001) {
                                 productsViewModel.DeleteProdFromShopList(prodsResponse.id)
-                                setSnackBarData(coroutineScope=coroutineScope, scaffoldState=scaffoldState,prodsResponse= prodsResponse, context = context,productsViewModel = productsViewModel)                                //  errorToast(context = context, "delete")
+                                setSnackBarData(coroutineScope = coroutineScope, scaffoldState = scaffoldState, prodsResponse = prodsResponse, context = context, productsViewModel = productsViewModel) //  errorToast(context = context, "delete")
                             } else productsViewModel.UpdateProdQuantity(String.format("%.3f", BigDecimal.valueOf(prodsResponse.quantity) - BigDecimal.valueOf(0.1)).toDouble(), prodsResponse.id)
                         } else {
                             if (prodsResponse.quantity - 1 < 1) {
-                                setSnackBarData(coroutineScope=coroutineScope, scaffoldState=scaffoldState,prodsResponse= prodsResponse, context = context,productsViewModel = productsViewModel)                                //  errorToast(context = context, "delete")
+                                setSnackBarData(coroutineScope = coroutineScope, scaffoldState = scaffoldState, prodsResponse = prodsResponse, context = context, productsViewModel = productsViewModel) //  errorToast(context = context, "delete")
                             } else productsViewModel.UpdateProdQuantity(prodsResponse.quantity - 1, prodsResponse.id)
                         }
 
@@ -280,7 +278,6 @@ fun ProductShopTiket(
                 RepeatingButton(
                     modifier = Modifier.width(32.dp),
                     onClick = {
-                        // shoppingViewModel.onquantityChange(shoppingViewModel.quantity+1)
                         productsViewModel.UpdateProdQuantity(prodsResponse.quantity + 1, prodsResponse.id)
 
                         if (prodsResponse.typesub == PRODUITS_FRAIS) {
@@ -288,7 +285,6 @@ fun ProductShopTiket(
                         } else {
                             productsViewModel.UpdateProdQuantity(prodsResponse.quantity + 1, prodsResponse.id)
                         }
-                        // shoppingViewModel.onquantityChange(prodsResponse.quantity+1)
                     },
                     enabled = true,
                     interactionSource = MutableInteractionSource(),
@@ -621,19 +617,19 @@ fun DefaultSnackbar(
                             )
                         }
                     }
-                },
-            //    contentColor = Color.Blue,
-            //    backgroundColor = Color.Black
+                }
+                //    contentColor = Color.Blue,
+                //    backgroundColor = Color.Black
             )
         },
         modifier = modifier
-            .padding(0.dp,0.dp,0.dp,50.dp)
+            .padding(0.dp, 0.dp, 0.dp, 50.dp)
             .fillMaxWidth()
             .wrapContentHeight(Alignment.Bottom)
     )
 }
 
-fun setSnackBarData(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState,prodsResponse: ProductModel, context :Context,productsViewModel: ProductsViewModel){
+fun setSnackBarData(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState, prodsResponse: ProductModel, context: Context, productsViewModel: ProductsViewModel) {
     coroutineScope.launch {
         val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
             message = "Delete product : " + prodsResponse.name,
@@ -645,6 +641,4 @@ fun setSnackBarData(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState
             SnackbarResult.ActionPerformed -> productsViewModel.DeleteProdFromShopList(prodsResponse.id)
         }
     }
-
 }
-

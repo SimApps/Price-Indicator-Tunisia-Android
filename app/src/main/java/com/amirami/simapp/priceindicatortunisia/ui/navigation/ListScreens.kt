@@ -5,6 +5,7 @@ sealed class ListScreens(val Route: String) {
     object CarteFidelite : ListScreens("Cartes de fidélitées")
     object Courses : ListScreens("Courses")
     object Tiket : ListScreens("Tiket")
+    object AddModify : ListScreens("AddModify")
     object Settings : ListScreens("Parametres")
 
     object CameraX : ListScreens("CameraX")

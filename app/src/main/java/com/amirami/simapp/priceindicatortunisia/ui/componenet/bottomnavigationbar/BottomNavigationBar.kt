@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar
 
-import com.amirami.simapp.priceindicatortunisia.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -21,9 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.amirami.simapp.priceindicatortunisia.BottomNavItem
+import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
-
 
 @Composable
 fun BottomNavigationBar(
@@ -37,38 +36,38 @@ fun BottomNavigationBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     when (navBackStackEntry?.destination?.route) {
-        ListScreens.BarCodeCameraPreview.Route-> {
+        ListScreens.BarCodeCameraPreview.Route -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
         }
-        ListScreens.CameraX.Route-> {
+        ListScreens.CameraX.Route -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
         }
-        ListScreens.MainImageTiket.Route-> {
+        ListScreens.MainImageTiket.Route -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
         }
 
-        ListScreens.GeneratedBarcodeImage.Route-> {
+        ListScreens.GeneratedBarcodeImage.Route -> {
+            bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
+        }
+
+        ListScreens.AddModify.Route -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
         }
         else -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(true)
         }
-
     }
 
     AnimatedVisibility(
         visible = bottomNavigationBarViewModel.BottomNavigationBarStates,
-        enter = slideInVertically(initialOffsetY = {  it }),
-        exit = slideOutVertically(targetOffsetY = {  it }),
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
         content = {
             BottomNavigation(
                 modifier = modifier.background(MaterialTheme.colorScheme.primary),
-             //   backgroundColor = Color.Black,
+                //   backgroundColor = Color.Black,
                 elevation = 5.dp
-            )
-            {
-
-
+            ) {
                 val bottomnavItems = listOf(
                     BottomNavItem(
                         name = "Accueil",
@@ -98,10 +97,8 @@ fun BottomNavigationBar(
                         name = "Parametres",
                         route = "Parametres",
                         icon = R.drawable.ic_settings
-                    ),
+                    )
                 )
-
-
 
                 bottomnavItems.forEach { item ->
                     val selected = item.route == backStackEntry.value?.destination?.route
@@ -112,10 +109,10 @@ fun BottomNavigationBar(
                         unselectedContentColor = Color.DarkGray,
                         icon = {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                if(item.badgeCount > 0) {
+                                if (item.badgeCount > 0) {
                                     BadgedBox(
                                         badge = {
-                                            Text(text = item.badgeCount.toString(),color = MaterialTheme.colorScheme.error)
+                                            Text(text = item.badgeCount.toString(), color = MaterialTheme.colorScheme.error)
                                         }
                                     ) {
                                         Icon(
@@ -129,7 +126,7 @@ fun BottomNavigationBar(
                                         contentDescription = item.name
                                     )
                                 }
-                                if(selected) {
+                                if (selected) {
                                     Text(
                                         text = item.name,
                                         textAlign = TextAlign.Center,
@@ -142,11 +139,6 @@ fun BottomNavigationBar(
                     )
                 }
             }
-
-
         }
     )
-
 }
-
-

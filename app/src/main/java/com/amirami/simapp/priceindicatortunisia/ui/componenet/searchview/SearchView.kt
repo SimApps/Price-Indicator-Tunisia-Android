@@ -53,6 +53,9 @@ fun SearchView(
         ListScreens.Accueil.Route -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(true)
         }
+        ListScreens.AddModify.Route -> {
+            searchViewModel.onsearchViewVisibilityStatesChanged(true)
+        }
 
         else -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(false)

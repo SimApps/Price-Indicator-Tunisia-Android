@@ -14,18 +14,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.*
+import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.logopalcer
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
 
 @Composable
-fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogViewModel) {
+fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogViewModel, navController: NavHostController) {
     val context = LocalContext.current
     val product = productDetailDialogViewModel.prodDetailDialogStates
     Column(
@@ -89,7 +91,7 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
         Row(modifier = Modifier.fillMaxWidth()) {
             ButtonWithBorder(
                 modifier = Modifier.wrapContentWidth(),
-                onClicks = { /*TODO*/ },
+                onClicks = {  navController.navigate(ListScreens.AddModify.Route) },
                 text = context.getString(R.string.Modifier)
             )
 
