@@ -81,7 +81,7 @@ dependencies {
 
     // Material 3 Android UI
     implementation 'androidx.compose.material3:material3:1.0.0-rc01'
-    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.26.1-alpha'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -97,17 +97,17 @@ dependencies {
 
 
     //Coil
-    implementation 'io.coil-kt:coil-compose:2.2.0'
+    implementation 'io.coil-kt:coil-compose:2.2.2'
 
     //firebase firestore
     implementation 'com.google.firebase:firebase-firestore:24.4.0'
-    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
 
 
 //admob
     implementation 'com.google.android.gms:play-services-ads:21.3.0'
     //custom toast
-    implementation 'com.pranavpandey.android:dynamic-toasts:4.1.0'
+    implementation 'com.pranavpandey.android:dynamic-toasts:4.1.2'
 
     //firebase auth
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
@@ -136,7 +136,7 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
 
 //GSON
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02"
@@ -198,11 +198,11 @@ dependencies {
 
 
     /** Dagger hilt */
-    implementation "com.google.dagger:hilt-android:$dagger_version"
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_compiler_version"
+    implementation "com.google.dagger:hilt-android:2.44"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     testImplementation 'junit:junit:4.13.2'
-    kapt "com.google.dagger:hilt-compiler:$dagger_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
 
     implementation "com.airbnb.android:lottie-compose:5.2.0"
 
@@ -211,6 +211,7 @@ dependencies {
     def accompanist_version = "0.25.0"
 
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    //noinspection GradleDependency
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
     implementation "com.google.accompanist:accompanist-drawablepainter:$accompanist_version"
@@ -227,7 +228,7 @@ dependencies {
     implementation "androidx.camera:camera-extensions:1.2.0-beta02"
 
     //Coil Image Loader
-    implementation "io.coil-kt:coil-compose:2.2.0"
+    implementation "io.coil-kt:coil-compose:2.2.2"
 
 
     //permission handling in compose
@@ -239,7 +240,7 @@ dependencies {
 // Barcode model
     implementation 'com.google.mlkit:barcode-scanning:17.0.2'
 // TO GENERATE BARCODE MAYBE SEE IF  I CAN USE : com.google.mlkit:barcode-scanning
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:core:3.5.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
 
 

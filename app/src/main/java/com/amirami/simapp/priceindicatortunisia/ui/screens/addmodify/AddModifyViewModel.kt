@@ -4,32 +4,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
-class AddModifyViewModel @Inject constructor(
-) : ViewModel() {
+class AddModifyViewModel @Inject constructor() : ViewModel() {
 
-    var editTextValue by mutableStateOf<String>("")
+    var barcodeTextValue by mutableStateOf<String>("")
         private set
 
-    fun onEditTextValue(text: String) {
-        editTextValue = text
+    fun onbarcodeTextValue(text: String) {
+        barcodeTextValue = text
+    }
 
+    var nomProduitTextValue by mutableStateOf<String>("")
+        private set
+    fun onNomProduitTextValue(text: String) {
+        nomProduitTextValue = text
     }
 
 
 
-
-
-    var editTextValueX by mutableStateOf<String>("")
+    var nomProduitArabeTextValue by mutableStateOf<String>("")
         private set
-
-    fun onEditTextValueX(text: String) {
-        editTextValueX = text
-
+    fun onNomProduitTextArabeValue(text: String) {
+        nomProduitArabeTextValue = text
     }
+
+
 }

@@ -2,13 +2,16 @@ package com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -18,18 +21,35 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
@@ -188,9 +208,19 @@ fun AddModifyScreenContent(
 @Composable
 fun ScreenContent(
     productModel: ProductModel,
-    // text: String,
     addModifyViewModel: AddModifyViewModel
 ) {
+    EditTextInputComponent(
+        modifier = Modifier.fillMaxWidth(),
+        if (addModifyViewModel.barcodeTextValue != "") addModifyViewModel.barcodeTextValue else productModel.id,
+        R.string.ScanproductIdoradditmanually,
+        onValueChange = {
+            addModifyViewModel.onbarcodeTextValue(it)
+        },
+        readOnly = true,
+        enabled = false
+    )
+
     SubcomposeAsyncImage(
         modifier = Modifier
             //  .weight(2f)
@@ -215,37 +245,19 @@ fun ScreenContent(
     }
     EditTextInputComponent(
         modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.userid,
-        R.string.NomduproduitenArabe,
+        if (addModifyViewModel.nomProduitTextValue != "") addModifyViewModel.nomProduitTextValue else productModel.name,
+        R.string.Nomduproduit,
         onValueChange = {
-            addModifyViewModel.onEditTextValue(it)
+            addModifyViewModel.onNomProduitTextValue(it)
         }
     )
 
     EditTextInputComponent(
         modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.name,
-        R.string.ScanproductIdoradditmanually,
-        onValueChange = {
-            addModifyViewModel.onEditTextValue(it)
-        }
-    )
-
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.editTextValue != "") addModifyViewModel.editTextValue else productModel.namearabe,
+        if (addModifyViewModel.nomProduitArabeTextValue != "") addModifyViewModel.nomProduitArabeTextValue else productModel.namearabe,
         R.string.NomduproduitenArabe,
         onValueChange = {
-            addModifyViewModel.onEditTextValue(it)
-        }
-    )
-
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.editTextValueX != "") addModifyViewModel.editTextValueX else productModel.azzizaremarq,
-        R.string.NomduproduitenArabe,
-        onValueChange = {
-            addModifyViewModel.onEditTextValueX(it)
+            addModifyViewModel.onNomProduitTextArabeValue(it)
         }
     )
 
@@ -257,37 +269,122 @@ fun EditTextInputComponent(
     modifier: Modifier,
     text: String,
     stringId: Int,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
     Surface(color = Color.Transparent, modifier = modifier) {
         val context = LocalContext.current
-        /*
-         var textValue by remember { mutableStateOf(TextFieldValue("123")) }
-         BasicTextField(
-             value = textValue,
-             modifier = Modifier
-                 .padding(16.dp),
-             // Setting the keyboard type allows you to configure what kind of data you can input
-             // in this TextInput. Some examples are number, phone, email, password, etc.
-             // Update value of textValue with the latest value of the text field
-             onValueChange = {
-                textValue = it
-             },
-             keyboardOptions = KeyboardOptions(
-                 keyboardType = KeyboardType.Number
-             )
-         )*/
-
         OutlinedTextField(
             value = text, // shoppingViewModel.quantity.toString(),
             onValueChange = {
                 onValueChange(it)
             },
+            readOnly = readOnly,
+            enabled = enabled,
             modifier = modifier,
-            label = { Text(context.getString(stringId)) },
+            label = { Text(context.getString(stringId), fontSize = 12.sp) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
             )
+        )
+    }
+}
+/*
+ val focusRequester = remember { FocusRequester() }
+
+    Password(
+        label = stringResource(id = R.string.Pas_nom_produit),
+        if (addModifyViewModel.nomProduitArabeTextValue != "") addModifyViewModel.nomProduitArabeTextValue else productModel.userid,
+        onValueChange = {
+            addModifyViewModel.onNomProduitTextArabeValue(it)
+        },
+        modifier = Modifier.focusRequester(focusRequester)
+        // onImeAction = { onSubmit() }
+    )
+
+
+    @Composable
+fun Password(
+    label: String,
+    text: String,
+    onValueChange: (String) -> Unit,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    modifier: Modifier = Modifier,
+    imeAction: ImeAction = ImeAction.Done
+    // onImeAction: () -> Unit = {}
+) {
+    val showPassword = rememberSaveable { mutableStateOf(false) }
+    OutlinedTextField(
+        value = text,
+        onValueChange = {
+            onValueChange(it)
+        },
+        modifier = modifier
+            .fillMaxWidth()
+         /*   .onFocusChanged { focusState ->
+                passwordState.onFocusChange(focusState.isFocused)
+                if (!focusState.isFocused) {
+                    passwordState.enableShowErrors()
+                }
+            }*/,
+        readOnly = readOnly,
+        enabled = enabled,
+        textStyle = MaterialTheme.typography.bodyMedium,
+        label = {
+            androidx.compose.material3.Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        trailingIcon = {
+            if (showPassword.value) {
+                IconButton(onClick = { showPassword.value = false }) {
+                    Icon(
+                        imageVector = Icons.Filled.Visibility,
+                        contentDescription = stringResource(id = R.string.facture)
+                    )
+                }
+            } else {
+                IconButton(onClick = { showPassword.value = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.VisibilityOff,
+                        contentDescription = stringResource(id = R.string.search_hint)
+                    )
+                }
+            }
+        },
+        visualTransformation = if (showPassword.value) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        //   isError = passwordState.showErrors(),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = imeAction,
+            keyboardType = KeyboardType.Password
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                //     onImeAction()
+            }
+        )
+    )
+
+    // passwordState.getError()?.let { error -> TextFieldError(textError = error) }
+}
+ */
+
+
+@Composable
+fun TextFieldError(textError: String) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.width(16.dp))
+        androidx.compose.material3.Text(
+            text = textError,
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.error
         )
     }
 }
