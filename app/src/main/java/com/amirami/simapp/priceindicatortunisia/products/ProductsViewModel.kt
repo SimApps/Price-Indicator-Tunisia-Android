@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.NotInit
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
-import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.use_case.UseCasesProduct
+import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.usecases.UseCasesProduct
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.products.room.domain.repository.ShopListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +21,8 @@ class ProductsViewModel @Inject constructor(
     private val useCasesProduct: UseCasesProduct,
     private val shopListRepository: ShopListRepository
 ) : ViewModel() {
+
     var prodResponse by mutableStateOf<Response<MutableList<ProductModel>>>(NotInit)
-        private set
 
     var prodataResponse by mutableStateOf<List<ProductModel>>(emptyList<ProductModel>())
         private set
@@ -41,6 +41,12 @@ class ProductsViewModel @Inject constructor(
 
     init {
         getShopListProducts()
+    }
+    var actionTypesListView by mutableStateOf<String>("")
+    var prodType by mutableStateOf(ProductModel())
+
+    fun onActionTypesListViewChanged(action: String) {
+        actionTypesListView = action
     }
 
     fun getProds(searchtype: String, searchtext: String) = viewModelScope.launch {
@@ -98,6 +104,18 @@ class ProductsViewModel @Inject constructor(
         shopListRepository.updateProdQuantityInRoom(quantity, id)
     }
 
+    var typesArrays by mutableStateOf<Array<String>>(emptyList<String>().toTypedArray())
+
+    fun onprodDetailDialogVisibilityStatesChanged(typesArray: Array<String>) {
+        typesArrays = typesArray
+    }
 
 
+
+
+    var typesModel by mutableStateOf(ProductModel())
+
+    fun onprodDetailDialogVisibilityStatesChanged(typeModel: ProductModel) {
+        typesModel = typeModel
+    }
 }

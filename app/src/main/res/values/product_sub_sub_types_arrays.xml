@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="subsubTypeArrayBoissons">
+        <item>Boissons\u0020</item>
         <item>Eaux</item>
         <item>Eaux Gazéifiées</item>
         <item>Boissons Gazeuses</item>
@@ -18,6 +19,7 @@
 
 
     <string-array name="subsubTypeArrayProduitsLaitiers">
+        <item>Produits Laitiers\u0020</item>
         <item>Lait</item>
         <item>Lait Concentré</item>
         <item>Lait en Poudre</item>
@@ -34,6 +36,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayConserves">
+        <item>Conserves\u0020</item>
         <item>Harissa</item>
         <item>Doubles concentrés de tomates</item>
         <item>Tomates concassées</item>
@@ -51,6 +54,7 @@
 
     </string-array>
     <string-array name="subsubTypeArrayÉpicerieSalée">
+        <item>Épicerie Salée\u0020</item>
         <item>Pâtes</item>
         <item>Couscous</item>
         <item>Riz</item>
@@ -90,7 +94,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayÉpicerieSucrée">
-
+        <item>Épicerie Sucrée\u0020</item>
         <item>Café</item>
         <item>Café Solubles</item>
         <item>Café Chicorées</item>
@@ -119,6 +123,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayBiosansGlutenDiététique">
+        <item>Bio sans Gluten Diététique\u0020</item>
         <item>Diététique</item>
         <item>Sans Gluten</item>
         <item>Pâtes Sans Gluten</item>
@@ -133,6 +138,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayCrèmerieetFromages">
+        <item>Crèmerie et Fromages\u0020</item>
         <item>Margarines</item>
         <item>Liégois</item>
         <item>Crèmes Fraîches</item>
@@ -147,6 +153,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayCharcuterie">
+        <item>Charcuterie\u0020</item>
         <item>Salami</item>
         <item>Jambon</item>
         <item>Saucisse</item>
@@ -155,6 +162,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayBoulangerieetPâtisserie">
+        <item>Boulangerie et Pâtisserie\u0020</item>
         <item>Farines</item>
         <item>Semoules</item>
         <item>Pains</item>
@@ -170,6 +178,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayProduitsFrais">
+        <item>Produits Frais\u0020</item>
         <item>Fruits Frais</item>
         <item>Légumes Frais</item>
         <item>Produits de la Mer Frais</item>
@@ -178,6 +187,7 @@
     </string-array>
 
     <string-array name="subsubTypeArraySurgelés">
+        <item>Surgelés\u0020</item>
         <item>Fruits Surgelés</item>
         <item>Légumes Surgelés</item>
         <item>Viandes Surgelés</item>
@@ -192,10 +202,12 @@
     </string-array>
 
     <string-array name="subsubTypeArrayOeufs">
+        <item>Oeufs\u0020</item>
         <item>Oeufs</item>
     </string-array>
 
     <string-array name="subsubTypeArrayProduitsMénagers">
+        <item>Produits Ménagers\u0020</item>
         <item>Produits Vaisselle</item>
         <item>Savons et Multi-Usages</item>
         <item>Sols et Surfaces</item>
@@ -205,6 +217,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayLessivesetSoinsduLinge">
+        <item>Lessives et Soins du Linge\u0020</item>
         <item>Main</item>
         <item>Machine</item>
         <item>Adoucissants</item>
@@ -212,19 +225,23 @@
     </string-array>
 
     <string-array name="subsubTypeArrayDésodorisants">
+        <item>Désodorisants\u0020</item>
         <item>Désodrisants</item>
     </string-array>
 
     <string-array name="subsubTypeArrayInsecticides">
+        <item>Insecticides\u0020</item>
         <item>Insecticides</item>
     </string-array>
 
     <string-array name="subsubTypeArrayPapieretLingettesNettoyantes">
+        <item>Papier et Lingettes Nettoyantes\u0020</item>
         <item>Lingettes Nettoyantes</item>
         <item>Papier</item>
     </string-array>
 
     <string-array name="subsubTypeArrayAccessoiresMénagers">
+        <item>Accessoires Ménagers\u0020</item>
         <item>Balais Seaux et Bassines</item>
         <item>Chamoisines Serpillères</item>
         <item>Éponges</item>
@@ -235,16 +252,19 @@
     </string-array>
 
     <string-array name="subsubTypeArrayRangementduLinge">
+        <item>Rangement du Linge\u0020</item>
         <item>Etendage</item>
         <item>Repassage</item>
         <item>Rangement</item>
     </string-array>
 
     <string-array name="subsubTypeArrayEntretiendesChaussures">
+        <item>Entretien des Chaussures\u0020</item>
         <item>Entretien des Chaussures</item>
     </string-array>
 
     <string-array name="subsubTypeArrayCheveux">
+        <item>Cheveux\u0020</item>
         <item>Shampooings</item>
         <item>Masques et Soins Capillaires</item>
         <item>Coloration</item>
@@ -254,6 +274,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayCorpsetvisage">
+        <item>Corps et Visage\u0020</item>
         <item>Gels Douche</item>
         <item>Crèmes</item>
         <item>Savons</item>
@@ -276,18 +297,20 @@
     </string-array>
 
     <string-array name="subsubTypeArrayPapieretCoton">
+        <item>Papier et Coton\u0020</item>
         <item>Papier Toilette</item>
         <item>Papier Mouchoir</item>
         <item>Coton</item>
     </string-array>
 
     <string-array name="subsubTypeArrayCouchesetLingettes">
+        <item>Couches et Lingettes\u0020</item>
         <item>Couches</item>
         <item>Lingettes Bébé</item>
     </string-array>
 
     <string-array name="subsubTypeArrayToilettesetSoins">
-
+        <item>Toilettes et Soins\u0020</item>
         <item>Shampooing Bébé</item>
         <item>Savons Bébé</item>
         <item>Lait de Corp Bébé</item>
@@ -299,6 +322,7 @@
     </string-array>
 
     <string-array name="subsubTypeArrayRepas">
+        <item>Repas\u0020</item>
         <item>Purées</item>
         <item>Compote</item>
         <item>Coulis</item>
@@ -306,10 +330,12 @@
     </string-array>
 
     <string-array name="subsubTypeArrayPuériculture">
+        <item>Puériculture\u0020</item>
         <item>Puériculture</item>
     </string-array>
 
     <string-array name="subsubTypeArrayArtdelaTable">
+        <item>Art de la Table\u0020</item>
         <item>Assiettes et Services</item>
         <item>Verres Thermos et Carafes</item>
         <item>Couverts et Plateaux</item>
@@ -317,61 +343,75 @@
     </string-array>
 
     <string-array name="subsubTypeArrayCuisson">
+        <item>Cuisson\u0020</item>
         <item>Plats à Four</item>
         <item>Poêles et Sauteuses</item>
     </string-array>
 
     <string-array name="subsubTypeArrayBoitesdeConservation">
+        <item>Boites de Conservation\u0020</item>
         <item>Boites de Conservation</item>
     </string-array>
 
     <string-array name="subsubTypeArrayUstensilesdeCuisine">
+        <item>Ustensiles de Cuisine\u0020</item>
         <item>Ustensiles de Cuisine</item>
     </string-array>
 
     <string-array name="subsubTypeArrayPapieretEmballagesAlimentaires">
+        <item>Papier et Emballages Alimentaires\u0020</item>
         <item>Papier et Emballages Alimentaires</item>
     </string-array>
 
     <string-array name="subsubTypeArrayRangementdelaCuisine">
+        <item>Rangement de la Cuisine\u0020</item>
         <item>Rangement de la Cuisine</item>
     </string-array>
 
     <string-array name="subsubTypeArrayClimatisationetChauffage">
+        <item>Climatisation et Chauffage\u0020</item>
         <item>Climatisation et Chauffage</item>
     </string-array>
 
     <string-array name="subsubTypeArrayRéfrigérateuretMiniBar">
+        <item>Réfrigérateur et Mini-Bar\u0020</item>
         <item>Réfrigérateur et Mini-Bar</item>
     </string-array>
 
     <string-array name="subsubTypeArrayCongélateur">
+        <item>Congélateur\u0020</item>
         <item>Congélateur</item>
     </string-array>
 
     <string-array name="subsubTypeArrayLaveLinge">
+        <item>Lave Linge\u0020</item>
         <item>Lave Linge</item>
     </string-array>
 
 
     <string-array name="subsubTypeArrayLaveVaisselle">
+        <item>Lave Vaisselle\u0020</item>
         <item>Lave Vaisselle</item>
     </string-array>
 
     <string-array name="subsubTypeArrayCuisinièreetEncastrable">
+        <item>Cuisinière et Encastrable\u0020</item>
         <item>Cuisinière et Encastrable</item>
     </string-array>
 
     <string-array name="subsubTypeArrayMicroOndeetMiniFour">
+        <item>Micro-Onde et Mini-Four\u0020</item>
         <item>Micro-Onde et Mini-Four</item>
     </string-array>
 
     <string-array name="subsubTypeArrayPetitDéjeuner">
+        <item>Petit Déjeuner\u0020</item>
         <item>Petit Déjeuner</item>
     </string-array>
 
 
     <string-array name="subsubTypeArrayPréparationCulinaire">
+        <item>Préparation Culinaire\u0020</item>
         <item>Blender et Mixeur</item>
         <item>Batteur</item>
         <item>Robot Pétrin et Multifonction</item>
@@ -379,32 +419,39 @@
     </string-array>
 
     <string-array name="subsubTypeArrayAppareildeCuisson">
+        <item>Appareil de Cuisson\u0020</item>
         <item>Appareil de Cuisson</item>
     </string-array>
 
     <string-array name="subsubTypeArrayBeautéetSanté">
+        <item>Beauté et Santé\u0020</item>
         <item>Beauté et Santé</item>
     </string-array>
 
     <string-array name="subsubTypeArrayEntretienSolsetSurfaces">
+        <item>Entretien Sols et Surfaces\u0020</item>
         <item>Entretien Sols et Surfaces</item>
     </string-array>
 
     <string-array name="subsubTypeArraySoinduLinge">
+        <item>Soin du Linge\u0020</item>
         <item>Soin du Linge</item>
     </string-array>
 
     <string-array name="subsubTypeArrayAlimentationetRécompenses">
+        <item>Alimentation et Récompenses\u0020</item>
         <item>Chats</item>
         <item>Chiens</item>
         <item>Autres</item>
     </string-array>
 
     <string-array name="subsubTypeArrayHygièneetaccessoires">
+        <item>Hygiène et Accessoires\u0020</item>
         <item>Hygiène et Accessoires</item>
     </string-array>
 
     <string-array name="subsubTypeArrayImageetSon">
+        <item>Image et Son\u0020</item>
         <item>Téléviseur</item>
         <item>Récépteur</item>
         <item>Son</item>
@@ -413,54 +460,66 @@
 
 
     <string-array name="subsubTypeArrayInformatiqueetAccessoires">
+        <item>Informatique et Accessoires\u0020</item>
         <item>Informatique et Accessoires</item>
     </string-array>
 
     <string-array name="subsubTypeArrayTéléphonieetAccessoires">
+        <item>Téléphonie et Accessoires\u0020</item>
         <item>Informatique et Accessoires</item>
     </string-array>
 
     <string-array name="subsubTypeArrayJardin">
+        <item>Jardin\u0020\u0020</item>
         <item>Jardin</item>
     </string-array>
 
     <string-array name="subsubTypeArrayAutomobile">
+        <item>Automobile\u0020</item>
         <item>Automobile</item>
     </string-array>
 
     <string-array name="subsubTypeArrayBricolage">
+        <item>Bricolage\u0020</item>
         <item>Bricolage</item>
     </string-array>
 
     <string-array name="subsubTypeArrayÉlectricité">
+        <item>Électricité\u0020</item>
         <item>Électricité</item>
     </string-array>
 
     <string-array name="subsubTypeArrayFournituresScolaires">
+        <item>Fournitures Scolaires\u0020\u0020</item>
         <item>Fournitures scolaires</item>
     </string-array>
 
     <string-array name="subsubTypeArrayLingedeMaison">
+        <item>Linge de Maison\u0020\u0020</item>
         <item>Linge de Maison</item>
     </string-array>
 
 
     <string-array name="subsubTypeArrayJeuxetJouets">
+        <item>Jeux et Jouets\u0020\u0020</item>
         <item>Jeux et Jouets</item>
     </string-array>
 
     <string-array name="subsubTypeArrayBagagerie">
+        <item>Bagagerie\u0020\u0020</item>
         <item>Bagagerie</item>
     </string-array>
 
     <string-array name="subsubTypeArraySport">
+        <item>Sport\u0020</item>
         <item>Sports</item>
         <item>Protéines</item>
     </string-array>
 
 
     <string-array name="subsubTypeArrayLoisir">
-        <item>Loisirs</item>
+        <item>Loisir\u0020</item>
+        <item>Loisirs\u0020</item>
     </string-array>
 
 </resources>

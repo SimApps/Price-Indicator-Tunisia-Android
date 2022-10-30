@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog
+package com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
@@ -30,6 +30,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
 fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogViewModel, navController: NavHostController) {
     val context = LocalContext.current
     val product = productDetailDialogViewModel.prodDetailDialogStates
+
     Column(
         modifier = Modifier
             //   .fillMaxSize()
@@ -83,7 +84,7 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
 
         Spacer(modifier = Modifier.height(10.dp))
         when (productDetailDialogViewModel.toggleBtnSelectedStates) {
-            context.getString(R.string.Prix) -> showProductWithoutBill(context, product)
+            context.getString(R.string.Prix) -> ShowProductWithoutBill(context, product)
             context.getString(R.string.Promotions) -> ShowremarqNoBill(context, product)
             context.getString(R.string.Bonus) -> ShowBonusNoBill(context, product)
         }
@@ -91,7 +92,9 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
         Row(modifier = Modifier.fillMaxWidth()) {
             ButtonWithBorder(
                 modifier = Modifier.wrapContentWidth(),
-                onClicks = {  navController.navigate(ListScreens.AddModify.Route) },
+                onClicks = {
+                    navController.navigate(ListScreens.AddModify.Route)
+                },
                 text = context.getString(R.string.Modifier)
             )
 
@@ -118,7 +121,7 @@ fun typeToTxt(product: ProductModel): String {
 }
 
 @Composable
-fun showProductWithoutBill(context: Context, product: ProductModel) {
+fun ShowProductWithoutBill(context: Context, product: ProductModel) {
     when {
         product.name.contains(context.getString(R.string.carrefour)) -> {
             TextWithIconString(

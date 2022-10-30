@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
 
 
@@ -63,6 +62,9 @@ fun TopBar(
         }
 
 
+        ListScreens.PriceRemarques.Route -> {
+            topAppBar(title,true,modifier)//  topBarViewModel.ontopBarStateChanged(false)
+        }
 
 
     }

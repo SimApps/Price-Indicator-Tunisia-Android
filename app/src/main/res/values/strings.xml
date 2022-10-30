@@ -103,6 +103,7 @@
     <string name="SousCatégories">Sous Catégories</string>
     <string name="sousousCatégories">Sous sous Catégories</string>
     <string name="Catégories">Catégories</string>
+    <string name="Tous_les_Catégories">Tous les Catégories</string>
     <string name="NomduproduitenArabe">Nom du produit en Arabe</string>
     <string name="Nomduproduit">Nom du produit</string>
 
@@ -187,6 +188,8 @@
     <string name="valeur_invalid">Valeur Invalid !</string>
     <string name="bonus_dans_la_carte_de_fidélité">&#160;TND Bonus dans la carte de fidélité&#160;</string>
     <string name="Prix">Prix</string>
+    <string name="Nombre">Nombre</string>
+    <string name="Pourcentage">Pourcentage</string>
 
     <string name="Historique_des_prix">Historique des prix&#160;</string>
 

@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +23,12 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProductList
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDilogScreen
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.producttype.ProductTypesListView
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.getbyproducttype.GetProductByTypesListView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
+import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_GET_PROD_BY_TYPES
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
@@ -50,12 +51,12 @@ fun HomeScreen(
     val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
-        // LaunchedEffect(key1 = context) {
+        LaunchedEffect(key1 = context) {
         scope.launch {
             modalBottomSheetState.show()
             productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
         }
-        //  }
+          }
     }
 
     ModalBottomSheetLayout(
@@ -134,7 +135,10 @@ fun HomeScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.padding(top = 15.dp))
-            ProductTypesListView(productsViewModel)
+            productsViewModel.onActionTypesListViewChanged(ACTION_GET_PROD_BY_TYPES)
+            productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productFeauteredTypeArray))
+
+            GetProductByTypesListView(productsViewModel, null,"")
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             if (productNameViewModel.message == ERREUR_CONNECTION) {

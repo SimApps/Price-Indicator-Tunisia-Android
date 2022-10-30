@@ -14,13 +14,16 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeVie
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.MainImageTiket
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.camera.CameraXScreen
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.screens.accueil.HomeScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.AddModifyScreen
+import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.FidCardsScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.GeneratedBarcodeImageScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.room.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.screens.courses.ShoppingScreen
+import com.amirami.simapp.priceindicatortunisia.ui.screens.priceremarqs.PriceRemarqScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.settings.SettingsScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.tiket.TiketScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -42,6 +45,8 @@ fun Navigation(
     val fidCardRoomViewModel: FidCardRoomViewModel = hiltViewModel()
 
     val productDetailDialogViewModel: ProductDetailDialogViewModel = hiltViewModel()
+    val addModifyViewModel: AddModifyViewModel = hiltViewModel()
+
     NavHost(navController = navController, startDestination = ListScreens.Accueil.Route) {
         composable(ListScreens.Accueil.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
@@ -53,18 +58,16 @@ fun Navigation(
             )
         }
 
-
         composable(ListScreens.AddModify.Route) {
-         //   barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+            //   barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             AddModifyScreen(
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
-                productsViewModel = productsViewModel,
+                addModifyViewModel= addModifyViewModel,
+                // productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel
             )
         }
-
-
 
         composable(ListScreens.Courses.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
@@ -79,6 +82,7 @@ fun Navigation(
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             TiketScreen(navController, cameraViewModel = cameraViewModel)
         }
+
         composable(ListScreens.Settings.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             SettingsScreen()
@@ -102,6 +106,11 @@ fun Navigation(
         composable(ListScreens.GeneratedBarcodeImage.Route) {
             //    fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             GeneratedBarcodeImageScreen(barCodeViewModel)
+        }
+
+
+        composable(ListScreens.PriceRemarques.Route) {
+           PriceRemarqScreen(addModifyViewModel= addModifyViewModel)
         }
     }
 }

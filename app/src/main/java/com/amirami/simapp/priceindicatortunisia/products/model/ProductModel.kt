@@ -248,6 +248,17 @@ data class ProductModel(
         this.geantPricHistory = geantPriceHistory
     }
 
+    constructor(
+        type: String,
+        typesub: String,
+        typesubsub: String
+    ) : this() {
+
+        this.type = type
+        this.typesub = typesub
+        this.typesubsub = typesubsub
+    }
+
     override fun toString(): String {
         return "MessageThreadListEntity(Id=$id, Name=$name)"
     }

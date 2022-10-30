@@ -23,7 +23,7 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Constants
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.logopalcer
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.pricenotdefined
@@ -48,13 +48,20 @@ fun ProductList(
     ) {
         items(prodsResponse.size) { position ->
 
-            ProductTiket(prodsResponse[position], productDetailDialogViewModel, productsViewModel)
+            ProductTiket(
+                prodsResponse = prodsResponse[position],
+                productDetailDialogViewModel = productDetailDialogViewModel,
+                productsViewModel = productsViewModel)
         }
     }
 }
 
 @Composable
-fun ProductTiket(prodsResponse: ProductModel, productDetailDialogViewModel: ProductDetailDialogViewModel, productsViewModel: ProductsViewModel) {
+fun ProductTiket(
+    prodsResponse: ProductModel,
+    productDetailDialogViewModel: ProductDetailDialogViewModel,
+    productsViewModel: ProductsViewModel
+) {
     val context = LocalContext.current
 
     Row(
@@ -67,7 +74,7 @@ fun ProductTiket(prodsResponse: ProductModel, productDetailDialogViewModel: Prod
                     productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
                 } else productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
 
-                productDetailDialogViewModel.onprodDetailDialogStatesChanged(prodsResponse)
+                productDetailDialogViewModel.onprodDetailDialogStatesChanged(product = prodsResponse)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

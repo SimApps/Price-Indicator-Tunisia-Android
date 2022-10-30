@@ -14,5 +14,9 @@ class Constants {
         const val ERREUR_CONNECTION = "ERREUR CONNECTION"
 
 
+        const val ACTION_SHOW_TYPES = "showTypes"
+        const val ACTION_GET_PROD_BY_TYPES = "getProdByType"
+
+
     }
 }

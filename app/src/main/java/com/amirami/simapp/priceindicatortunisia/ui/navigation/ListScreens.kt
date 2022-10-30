@@ -15,4 +15,7 @@ sealed class ListScreens(val Route: String) {
 
     object GeneratedBarcodeImage : ListScreens("GeneratedBarcodeImage")
 
+    object PriceRemarques : ListScreens("PriceRemarques")
+
+
 }

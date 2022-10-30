@@ -1,5 +1,6 @@
 <resources>
     <string-array name="productTypeArray">
+        <item>Catégories Par Défaut</item>
         <item>Alimentation</item>
         <item>Entretient de la Maison</item>
         <item>Hygiène et Beauté</item>

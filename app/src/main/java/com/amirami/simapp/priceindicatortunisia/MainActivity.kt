@@ -31,11 +31,13 @@ class MainActivity : ComponentActivity() {
         NetDetect.init(this@MainActivity)
 
         setContent {
+
             DynamicColorTheme {
                 val navController = rememberNavController()
                 val productsViewModel: ProductsViewModel = hiltViewModel()
 
                 MainScreen(navController, modifier = Modifier.background(MaterialTheme.colorScheme.primary), productsViewModel)
+
             }
         }
     }
@@ -82,4 +84,5 @@ class MainActivity : ComponentActivity() {
 
         )
     }
+
 }

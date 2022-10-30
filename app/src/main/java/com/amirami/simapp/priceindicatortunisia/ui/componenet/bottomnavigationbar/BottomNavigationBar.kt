@@ -53,6 +53,9 @@ fun BottomNavigationBar(
         ListScreens.AddModify.Route -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
         }
+        ListScreens.PriceRemarques.Route -> {
+            bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(false)
+        }
         else -> {
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(true)
         }

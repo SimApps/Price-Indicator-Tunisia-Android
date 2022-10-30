@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.products.firestore.domain.use_case
+package com.amirami.simapp.priceindicatortunisia.products.firestore.domain.usecases
 
 data class UseCasesProduct(
     val getProduct: GetProduct,

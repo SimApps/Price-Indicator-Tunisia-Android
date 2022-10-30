@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="subTypeArrayAlimentation">
+        <item>Alimentation\u0020</item>
         <item>Boissons</item>
         <item>Conserves</item>
         <item>Produits Frais</item>
@@ -18,6 +19,7 @@
 
 
     <string-array name="subTypeArrayEntretientdelaMaison">
+        <item>Entretient de la Maison\u0020</item>
         <item>Produits Ménagers</item>
         <item>Lessives et Soins du Linge</item>
         <item>Désodorisants</item>
@@ -30,12 +32,14 @@
 
 
     <string-array name="subTypeArrayHygièneetBeauté">
+        <item>Hygiène et Beauté\u0020</item>
         <item>Cheveux</item>
         <item>Corps et Visage</item>
         <item>Papier et Coton</item>
     </string-array>
 
     <string-array name="subTypeArrayBébé">
+        <item>Bébé\u0020</item>
         <item>Couches et Lingettes</item>
         <item>Toilettes et Soins</item>
         <item>Repas</item>
@@ -43,6 +47,7 @@
     </string-array>
 
     <string-array name="subTypeArrayCuisine">
+        <item>Cuisine\u0020</item>
         <item>Art de la Table</item>
         <item>Cuisson</item>
         <item>Boites de Conservation</item>
@@ -52,6 +57,7 @@
     </string-array>
 
     <string-array name="subTypeArrayGrosElectroménager">
+        <item>Gros électroménager\u0020</item>
         <item>Climatisation et Chauffage</item>
         <item>Réfrigérateur et Mini-Bar</item>
         <item>Congélateur</item>
@@ -63,7 +69,8 @@
 
 
     <string-array name="subTypeArrayPetitElectroménager">
-        <item>Petit Déjeuner</item>
+        <item>Petit électroménager\u0020</item>
+        <item>Petit Déjeuner\u0020</item>
         <item>Préparation Culinaire</item>
         <item>Appareil de Cuisson</item>
         <item>Beauté et Santé</item>
@@ -74,12 +81,14 @@
 
 
     <string-array name="subTypeArrayAnimalerie">
+        <item>Animalerie\u0020</item>
         <item>Alimentation et Récompenses</item>
         <item>Hygiène et Accessoires</item>
     </string-array>
 
 
     <string-array name="subTypeArrayHighTech">
+        <item>High-Tech\u0020</item>
         <item>Image et Son</item>
         <item>Informatique et Accessoires</item>
         <item>Téléphonie et Accessoires</item>
@@ -87,36 +96,43 @@
 
 
     <string-array name="subTypeJardin">
-        <item>Jardin </item>
+        <item>Jardin</item>
+        <item>Jardin\u0020</item>
     </string-array>
 
 
     <string-array name="subTypeArrayBricoetaccessoiresauto">
+        <item>Brico et Accessoires Auto\u0020</item>
         <item>Automobile</item>
         <item>Bricolage</item>
         <item>Électricité</item>
     </string-array>
 
     <string-array name="subTypeArrayFournituresScolaires">
-        <item>Fournitures Scolaires </item>
+        <item>Fournitures Scolaires\u0020\u0020</item>
+        <item>Fournitures Scolaires\u0020</item>
     </string-array>
 
 
     <string-array name="subTypeArrayLingedeMaison">
-        <item>Linge de Maison </item>
+        <item>Linge de Maison\u0020\u0020</item>
+        <item>Linge de Maison\u0020</item>
     </string-array>
 
     <string-array name="subTypeArrayJeuxetJouets">
-        <item>Jeux et Jouets </item>
+        <item>Jeux et Jouets\u0020\u0020</item>
+        <item>Jeux et Jouets\u0020</item>
     </string-array>
 
 
     <string-array name="subTypeArrayBagagerie">
-        <item>Bagagerie </item>
+        <item>Bagagerie\u0020\u0020</item>
+        <item>Bagagerie\u0020</item>
     </string-array>
 
 
     <string-array name="subTypeArraySportetLoisir">
+        <item>Sport et Loisir\u0020</item>
         <item>Sport</item>
         <item>Loisir</item>
     </string-array>

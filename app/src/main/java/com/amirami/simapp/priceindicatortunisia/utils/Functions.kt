@@ -255,7 +255,7 @@ object Functions {
         string = removeWord(string, "oeufs")
         string = removeWord(string, "watt")
         string = removeWord(string, " ")
-        return string
+        return string//.replace("\\s".toRegex(), "")
     }
 
     fun removeWord(value: String, wordtoremove: String): String {
@@ -388,6 +388,7 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
                 result += charArray[i]
             }
         }
+
 
         result= removeWord(result,  ".")
         result= removeWord(result,  "*")

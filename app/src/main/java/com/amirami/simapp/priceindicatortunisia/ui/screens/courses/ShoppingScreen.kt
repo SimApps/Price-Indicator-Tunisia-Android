@@ -38,8 +38,8 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUITS_FRAIS
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDialogViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.productinfodialog.ProductDetailDilogScreen
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
 import kotlinx.coroutines.CoroutineScope
@@ -57,14 +57,15 @@ fun ShoppingScreen(
     shoppingViewModel: ShoppingViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     val modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
-        // LaunchedEffect(key1 = context) {
-        scope.launch {
-            modalBottomSheetState.show()
-            productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
+        LaunchedEffect(key1 = context) {
+            scope.launch {
+                modalBottomSheetState.show()
+                productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
+            }
         }
     }
 
@@ -135,7 +136,9 @@ fun ProductShopList(
                 productsViewModel.shopLists[position],
                 productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel,
-                shoppingViewModel = shoppingViewModel
+                shoppingViewModel = shoppingViewModel,
+                prodIndex = position
+
             )
         }
     }
@@ -148,7 +151,8 @@ fun ProductShopTiket(
     prodsResponse: ProductModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     productsViewModel: ProductsViewModel,
-    shoppingViewModel: ShoppingViewModel
+    shoppingViewModel: ShoppingViewModel,
+    prodIndex: Int
 ) {
     val context = LocalContext.current
     //  val (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
@@ -163,7 +167,7 @@ fun ProductShopTiket(
                     productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
                 } else productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
 
-                productDetailDialogViewModel.onprodDetailDialogStatesChanged(prodsResponse)
+                productDetailDialogViewModel.onprodDetailDialogStatesChanged(product = prodsResponse)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -563,29 +567,6 @@ fun Modifier.repeatingClickable(
                     heldButtonJob.cancel()
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun SnackbarDemo(scaffoldState: ScaffoldState) {
-    // val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-
-    Scaffold(scaffoldState = scaffoldState) {
-        Button(onClick = {
-            coroutineScope.launch {
-                val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
-                    message = "This is your message",
-                    actionLabel = "Do something"
-                )
-                when (snackbarResult) {
-                    SnackbarResult.Dismissed -> TODO()
-                    SnackbarResult.ActionPerformed -> TODO()
-                }
-            }
-        }) {
-            Text(text = "Click me!")
         }
     }
 }
