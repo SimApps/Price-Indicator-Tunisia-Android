@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddModifyViewModel @Inject constructor() : ViewModel() {
+    var magasinValue by mutableStateOf<String>("")
+        private set
+    fun onMagasinValue(text: String) {
+        magasinValue = text
+    }
+
+
+
     val unitselected: MutableState<String> = mutableStateOf("")
 
     var mesureUnitList by mutableStateOf<List<String>>(listOf())
@@ -122,6 +131,13 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
         monoprixPromotionTextValue = text
     }
 
+    var monoprixBonusSurCartFidTextValue by mutableStateOf<String>("")
+        private set
+    fun onMonoprixBonusSurCartFidTextValue(text: String) {
+        monoprixBonusSurCartFidTextValue = text
+    }
+
+
     var mgPriceTextValue by mutableStateOf<String>("")
         private set
     fun onMgPriceTextValue(text: String) {
@@ -132,6 +148,13 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
         private set
     fun onMgPromotionTextValue(text: String) {
         mgPromotionTextValue = text
+    }
+
+
+    var mgBonusSurCartFidTextValue by mutableStateOf<String>("")
+        private set
+    fun onMgBonusSurCartFidTextValue(text: String) {
+        mgBonusSurCartFidTextValue = text
     }
 
     var carrefourPriceTextValue by mutableStateOf<String>("")
@@ -146,6 +169,13 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
         carrefourPromotionTextValue = text
     }
 
+
+    var carrefourBonusSurCartFidTextValue by mutableStateOf<String>("")
+        private set
+    fun onCarrefouBonusSurCartFidTextValue(text: String) {
+        carrefourBonusSurCartFidTextValue = text
+    }
+
     var azizaPriceTextValue by mutableStateOf<String>("")
         private set
     fun onAzizaPriceTextValue(text: String) {
@@ -156,6 +186,12 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
         private set
     fun onAzizaPromotionTextValue(text: String) {
         azizaPromotionTextValue = text
+    }
+
+    var azizaBonusSurCartFidTextValue by mutableStateOf<String>("")
+        private set
+    fun onAzizaBonusSurCartFidTextValue(text: String) {
+        azizaBonusSurCartFidTextValue = text
     }
 
     var geantPriceTextValue by mutableStateOf<String>("")
@@ -169,4 +205,21 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
     fun onGeantPromotionTextValue(text: String) {
         geantPromotionTextValue = text
     }
+
+    var geantBonusSurCartFidTextValue by mutableStateOf<String>("")
+        private set
+    fun onGeantBonusSurCartFidTextValue(text: String) {
+        geantBonusSurCartFidTextValue = text
+    }
+
+
+
+    var putproductRemarqueInfoValue by mutableStateOf<String>("")
+        private set
+    fun onPutproductRemarqueInfoValue(magasin:String,promotion:String,bonusSurCartFid:String) {
+        magasinValue = magasin
+        putproductRemarqueInfoValue = promotion
+        putproductRemarqueInfoValue = bonusSurCartFid
+    }
+
 }

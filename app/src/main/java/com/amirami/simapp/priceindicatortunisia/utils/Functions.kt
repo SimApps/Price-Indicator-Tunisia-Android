@@ -26,84 +26,77 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import java.math.BigDecimal
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import com.google.firebase.database.DatabaseReference
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import com.google.firebase.firestore.FieldValue
-import java.text.DateFormat
-
 
 object Functions {
     private var mInterstitialAd: InterstitialAd? = null
-    var nbrInterstitialAdShowed=0
-
+    var nbrInterstitialAdShowed = 0
 
     lateinit var database: DatabaseReference
     var prod_name_array: ArrayList<String> = ArrayList()
 
-    var checkedradio:Int=-55
+    var checkedradio: Int = -55
 
     var bottomsheetStateInfo = "false"
-        //  var pricewithDicount = false
+
+    //  var pricewithDicount = false
     var commentaire = ""
     var reopendialogue = true
 
     val userRecord = FirebaseAuth.getInstance()
 
-    var searchtext=""
-    var searchtype="name"
+    var searchtext = ""
+    var searchtype = "name"
 
-
-    fun getCurrentDate():String{
+    fun getCurrentDate(): String {
         val currentDate = System.currentTimeMillis()
-        return currentDate.toString() //DateFormat.getDateTimeInstance().format(currentDate) // formated
+        return currentDate.toString() // DateFormat.getDateTimeInstance().format(currentDate) // formated
     }
 
     fun getcurrentDate(): String {
-
         val cal = Calendar.getInstance()
         val dayOfMonth = cal[Calendar.DAY_OF_MONTH].toString()
         val monthOfYear = cal[Calendar.MONTH].toString()
         val year = cal[Calendar.YEAR].toString()
 
-
         return "$dayOfMonth/$monthOfYear/$year"
     }
 
-    fun formatDate(Date:String) :String{
+    fun formatDate(Date: String): String {
         // SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
         // SimpleDateFormat("MM/yyyy", Locale.getDefault()).format(Date())
-        return  DateFormat.getDateTimeInstance().format(Date.toLong())
+        return DateFormat.getDateTimeInstance().format(Date.toLong())
     }
 
-    fun shortformateDate(Date:String):String{
+    fun shortformateDate(Date: String): String {
         // SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
         // SimpleDateFormat("MM/yyyy", Locale.getDefault()).format(Date())
 
-        return if(isNumber(Date)) SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date.toLong())
+        return if (isNumber(Date)) SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date.toLong())
         else Date
     }
-
-
 
     fun isNumber(s: String?): Boolean {
         return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) }
     }
 
     fun isDouble(s: String?): Boolean {
-        return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) || it == '.'}
+        return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) || it == '.' }
     }
 
     @SuppressLint("DefaultLocale")
     fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.lowercase().replaceFirstChar(Char::titlecase) }
-
 
     fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -116,13 +109,12 @@ object Functions {
         }
     }
 
-    fun searchType(text:String):String{
-
+    fun searchType(text: String): String {
         searchtype = when {
             isNumber(text) -> {
                 "id"
             }
-            //search type of product
+            // search type of product
           /*  text in searchType -> {
                 "type"
             }*/
@@ -133,50 +125,42 @@ object Functions {
         return searchtype
     }
 
-
-    fun showStringifNotEmpty(string: String,extrainfo:String):String{
-
+    fun showStringifNotEmpty(string: String, extrainfo: String): String {
         var strings = string.filter { !it.isWhitespace() }
-        strings=  removeWord(strings ,"TND")
-        return if(strings=="") strings
-        else if(string=="0.00" || string=="0.000" || string=="0.0" || string=="0 TND" || string=="0.000 TND" ||string=="0.00 TND" ) ""
-        else if(extrainfo=="fidbonustring" &&strings.toDouble().roundToInt()!=0 )"\n${String.format("%.3f",BigDecimal.valueOf(strings.toDouble()) )} TND bonus dans la carte de fidélité"
-        else if(extrainfo=="fidbonustring" &&strings.toDouble().roundToInt()==0)  ""
-        else string// " , $string  dans  carte d"
+        strings = removeWord(strings, "TND")
+        return if (strings == "") strings
+        else if (string == "0.00" || string == "0.000" || string == "0.0" || string == "0 TND" || string == "0.000 TND" || string == "0.00 TND") ""
+        else if (extrainfo == "fidbonustring" && strings.toDouble().roundToInt() != 0)"\n${String.format("%.3f",BigDecimal.valueOf(strings.toDouble()))} TND bonus dans la carte de fidélité"
+        else if (extrainfo == "fidbonustring" && strings.toDouble().roundToInt() == 0) ""
+        else string // " , $string  dans  carte d"
     } //
 
-
-    fun showNbrMissingPrice(context: Context,nbr:Int):String{
-        return if(nbr==0){
+    fun showNbrMissingPrice(context: Context, nbr: Int): String {
+        return if (nbr == 0) {
             ""
         } else {
             " (- $nbr ${context.getString(R.string.Prix)})"
         }
     }
 
-    fun showRestOfString(text:String):String{
-        return if (text!="") " : $text" else ""
+    fun showRestOfString(text: String): String {
+        return if (text != "") " : $text" else ""
     }
 
-    fun pricenotdefined(context: Context,price:String,showajouterprix:Boolean):String{
-//if modifiy then modifie pricenotdefinedbuttomsheet
+    fun pricenotdefined(context: Context, price: String, showajouterprix: Boolean): String {
+// if modifiy then modifie pricenotdefinedbuttomsheet
 
-        return if(price!="99999.0" && price!=""  && price.isNotEmpty()){
-            val firstNummonoprixprice:BigDecimal? = try { BigDecimal(price) }
-            catch (e: NumberFormatException) { null }
+        return if (price != "99999.0" && price != "" && price.isNotEmpty()) {
+            val firstNummonoprixprice: BigDecimal? = try { BigDecimal(price) } catch (e: NumberFormatException) { null }
 
-            if (!factor100(firstNummonoprixprice)) firstNummonoprixprice.toString() +context.getString(R.string.TND)
-            else String.format("%.3f", firstNummonoprixprice)+context.getString(R.string.TND)
-        }
-        else if(showajouterprix) context.getString(R.string.NA)/*"Ajoutez un prix"*/ else "0"
+            if (!factor100(firstNummonoprixprice)) firstNummonoprixprice.toString() + context.getString(R.string.TND)
+            else String.format("%.3f", firstNummonoprixprice) + context.getString(R.string.TND)
+        } else if (showajouterprix) context.getString(R.string.NA)/*"Ajoutez un prix"*/ else "0"
     }
-
 
     fun factor100(n: BigDecimal?) = n!!.toDouble() % 100.0 == 0.0
 
-
-    fun loadimageurl(context: Context,url:String,imageView: ImageView){
-
+    fun loadimageurl(context: Context, url: String, imageView: ImageView) {
         imageView.load(url) {
             // crossfade(true)
             // crossfade(500)
@@ -184,52 +168,47 @@ object Functions {
             error(R.drawable.ic_photo)
             diskCachePolicy(CachePolicy.ENABLED)
             memoryCachePolicy(CachePolicy.ENABLED)
-            placeholder(R.drawable.ic_photo) //image shown when loading image
+            placeholder(R.drawable.ic_photo) // image shown when loading image
             scale(Scale.FIT)
             //   transformations(CircleCropTransformation())
             // transformations(GrayscaleTransformation())
             //   transformations(BlurTransformation(applicationContext))
             //  transformations(BlurTransformation(applicationContext, 5f))
         }
-
     }
 
-
-    fun loadimageInt(image:Int,imageView: ImageView){
-
+    fun loadimageInt(image: Int, imageView: ImageView) {
         imageView.load(image) {
             // crossfade(true)
             // crossfade(500)
-          //  transformations(RoundedCornersTransformation(16f))
+            //  transformations(RoundedCornersTransformation(16f))
             error(R.drawable.ic_photo)
             diskCachePolicy(CachePolicy.ENABLED)
             memoryCachePolicy(CachePolicy.ENABLED)
-            placeholder(R.drawable.ic_photo) //image shown when loading image
+            placeholder(R.drawable.ic_photo) // image shown when loading image
             scale(Scale.FILL)
             //   transformations(CircleCropTransformation())
             // transformations(GrayscaleTransformation())
             //   transformations(BlurTransformation(applicationContext))
             //  transformations(BlurTransformation(applicationContext, 5f))
         }
-
     }
 
-    fun minusordeleteimage(Quantity: Double, double:Boolean, imageView: ImageView){
-        if(double){
-            if(Quantity<=0.001) imageView.setImageResource(R.drawable.ic_delete)
+    fun minusordeleteimage(Quantity: Double, double: Boolean, imageView: ImageView) {
+        if (double) {
+            if (Quantity <= 0.001) imageView.setImageResource(R.drawable.ic_delete)
             else imageView.setImageResource(R.drawable.ic_minus)
-        }
-        else {
-            if(Quantity.toInt()==1 || Quantity.toInt()==0) imageView.setImageResource(R.drawable.ic_delete)
+        } else {
+            if (Quantity.toInt() == 1 || Quantity.toInt() == 0) imageView.setImageResource(R.drawable.ic_delete)
             else imageView.setImageResource(R.drawable.ic_minus)
         }
     }
 
-    fun changemodificationpricedate(oldprice:String,currentprice:String,olddate:String):String{
+    fun changemodificationpricedate(oldprice: String, currentprice: String, olddate: String): String {
         return when {
-            currentprice=="" ->  ""
+            currentprice == "" -> ""
 
-            oldprice!=currentprice -> getCurrentDate()//SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
+            oldprice != currentprice -> getCurrentDate() // SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
 
             // olddate=="" -> getCurrentDate()//SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
 
@@ -237,7 +216,7 @@ object Functions {
         }
     }
 
-    fun replacesiez(productSieze:String):String{
+    fun replacesiez(productSieze: String): String {
         var string: String = removeWord(productSieze, "L")
         string = removeWord(string, "/L")
         string = removeWord(string, "Unité")
@@ -255,7 +234,7 @@ object Functions {
         string = removeWord(string, "oeufs")
         string = removeWord(string, "watt")
         string = removeWord(string, " ")
-        return string//.replace("\\s".toRegex(), "")
+        return string // .replace("\\s".toRegex(), "")
     }
 
     fun removeWord(value: String, wordtoremove: String): String {
@@ -263,28 +242,22 @@ object Functions {
         var possibleMatch = ""
         var i = 0
         var j = 0
-        while ( i in value.indices) {
-            if ( value[i] == wordtoremove[j] ) {
-                if ( j == wordtoremove.length - 1 ) { // match
+        while (i in value.indices) {
+            if (value[i] == wordtoremove[j]) {
+                if (j == wordtoremove.length - 1) { // match
                     possibleMatch = "" // discard word
                     j = 0
-                }
-                else {
+                } else {
                     possibleMatch += value[i]
                     j++
                 }
-            }
-            else {
-
+            } else {
                 result += possibleMatch
                 possibleMatch = ""
 
-                if ( j == 0 ) {
-
+                if (j == 0) {
                     result += value[i]
-                }
-                else {
-
+                } else {
                     j = 0
                     i-- // re-test
                 }
@@ -296,27 +269,26 @@ object Functions {
         return result
     }
 
-    fun removeWordWithReplace(value: String, oldword: String,neword:String): String = value.replace(oldword, neword)
+    fun removeWordWithReplace(value: String, oldword: String, neword: String): String = value.replace(oldword, neword)
 
-
-fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDecimal, String>>{
-
-    val sortedValues = mutableListOf(
-        BigDecimal(PriceFormating(product.monoprixprice))    to context.getString(R.string.monoprix),
-        BigDecimal(PriceFormating(product.mgprice))   to context.getString(R.string.mg),
-        BigDecimal(PriceFormating(product.carrefourprice))   to context.getString(R.string.carrefour),
-        BigDecimal(PriceFormating(product.azzizaprice)) to context.getString(R.string.azziza),
-        BigDecimal(PriceFormating(product.geantprice))   to context.getString(R.string.Géant))
-    sortedValues.sortBy { it.first }
+    fun sortPrices(context: Context, product: ProductModel): MutableList<Pair<BigDecimal, String>> {
+        val sortedValues = mutableListOf(
+            BigDecimal(PriceFormating(product.monoprixprice)) to context.getString(R.string.monoprix),
+            BigDecimal(PriceFormating(product.mgprice)) to context.getString(R.string.mg),
+            BigDecimal(PriceFormating(product.carrefourprice)) to context.getString(R.string.carrefour),
+            BigDecimal(PriceFormating(product.azzizaprice)) to context.getString(R.string.azziza),
+            BigDecimal(PriceFormating(product.geantprice)) to context.getString(R.string.Géant)
+        )
+        sortedValues.sortBy { it.first }
         return sortedValues
-}
-    fun logopalcer(context:Context,string: String ):Int{
+    }
+    fun logopalcer(context: Context, string: String): Int {
         return when (string) {
-            context.getString(R.string.monoprix)    -> R.drawable.ic_monoprix_logo
-            context.getString(R.string.mg)   -> R.drawable.mglogo
-            context.getString(R.string.carrefour)   -> R.drawable.logo_carrefour
-            context.getString(R.string.azziza)  -> R.drawable.azizalogo
-            context.getString(R.string.Géant)  -> R.drawable.geantlogo
+            context.getString(R.string.monoprix) -> R.drawable.ic_monoprix_logo
+            context.getString(R.string.mg) -> R.drawable.mglogo
+            context.getString(R.string.carrefour) -> R.drawable.logo_carrefour
+            context.getString(R.string.azziza) -> R.drawable.azizalogo
+            context.getString(R.string.Géant) -> R.drawable.geantlogo
             else -> R.drawable.ic_plus
         }
     }
@@ -337,43 +309,42 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         return sb.toString()
     }
 
-    fun getuserid ():String{
-        return if(userRecord.uid!=null) userRecord.uid!!
+    fun getuserid(): String {
+        return if (userRecord.uid != null) userRecord.uid!!
         else "no_user"
     }
 
-    fun checkPermission(context: Context):Boolean {
-        if ((ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
-        {
+    fun checkPermission(context: Context): Boolean {
+        if ((ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
             // Permission is not granted
             return false
         }
         return true
     }
 
-
-
-
-
-
-    fun getNumberFromString(s: String):Double{
-        return s.filter { it.isDigit() || it == '.'}.toDouble()
+    fun getNumberFromString(s: String): String {
+        return try {
+            //  val num = parseDouble(string)
+            s.filter { it.isDigit() || it == '.' }
+        } catch (e: NumberFormatException) {
+            ""
+        }
+        //   return s.filter { it.isDigit() || it == '.'}.toDouble()
     }
 
-    fun getNumbersFromString(string: String,indexOne:String,indexTwo:String):Double{
-        return removeWord(string.substring(string.lastIndexOf(indexOne)+indexOne.length,string.indexOf(indexTwo)), " ").toDouble()
+    fun getNumbersFromString(string: String, indexOne: String, indexTwo: String): Double {
+        return if (removeWord(string.substring(string.lastIndexOf(indexOne) + indexOne.length, string.indexOf(indexTwo)), " ").isNotEmpty()) {
+            removeWord(string.substring(string.lastIndexOf(indexOne) + indexOne.length, string.indexOf(indexTwo)), " ").toDouble()
+        } else 0.0
     }
 
-    fun copyToclipord(context: Context,string: String){
+    fun copyToclipord(context: Context, string: String) {
         val myClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val myClip: ClipData = ClipData.newPlainText("note_copy",string  )
+        val myClip: ClipData = ClipData.newPlainText("note_copy", string)
         myClipboard.setPrimaryClip(myClip)
 
         Toast.makeText(context, string, Toast.LENGTH_SHORT).show()
     }
-
-
-
 
     fun removeAllDigitExeptX(str: String): String {
         // Converting the given string
@@ -384,25 +355,22 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         for (i in charArray.indices) {
             // Check if the specified character is not digit
             // then add this character into result variable
-            if (!Character.isDigit(charArray[i]) ) {
+            if (!Character.isDigit(charArray[i])) {
                 result += charArray[i]
             }
         }
 
+        result = removeWord(result, ".")
+        result = removeWord(result, "*")
+        result = removeWord(result, "x")
+        result = removeWord(result, "X")
 
-        result= removeWord(result,  ".")
-        result= removeWord(result,  "*")
-        result= removeWord(result,  "x")
-        result= removeWord(result,  "X")
-
-        return  result.replace("\\s".toRegex(), "").replace("Rouleau", "Rouleaux")
+        return result.replace("\\s".toRegex(), "").replace("Rouleau", "Rouleaux")
     }
 
-
-    fun customUnitmesure(ProductSubTypedb:String):Boolean{
+    fun customUnitmesure(ProductSubTypedb: String): Boolean {
         return ProductSubTypedb == PRODUITS_FRAIS
     }
-
 
     fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
         this.addTextChangedListener(object : TextWatcher {
@@ -419,18 +387,14 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
             }
-
         })
     }
 
     fun EditText.decimalLimiter(string: String, MAX_DECIMAL: Int): String {
-
         var str = string
         if (str[0] == '.') str = "0$str"
         val max = str.length
@@ -442,10 +406,11 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         var decimal = 0
         var t: Char
 
-        val decimalCount = str.count{ ".".contains(it) }
+        val decimalCount = str.count { ".".contains(it) }
 
-        if (decimalCount > 1)
+        if (decimalCount > 1) {
             return str.dropLast(1)
+        }
 
         while (i < max) {
             t = str[i]
@@ -455,8 +420,9 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
                 after = true
             } else {
                 decimal++
-                if (decimal > MAX_DECIMAL)
+                if (decimal > MAX_DECIMAL) {
                     return rFinal
+                }
             }
             rFinal += t
             i++
@@ -464,14 +430,12 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         return rFinal
     }
 
-
-
-    fun DeleteFieldInDocument(context: Context, prodNameToDelete:String, docid:String){
+    fun DeleteFieldInDocument(context: Context, prodNameToDelete: String, docid: String) {
         val db = FirebaseFirestore.getInstance()
-     //   Toast.makeText(context, "gd", Toast.LENGTH_LONG).show()
-      //  val priceHistoryArray = dB.collection("Tunisia").document(docid)
+        //   Toast.makeText(context, "gd", Toast.LENGTH_LONG).show()
+        //  val priceHistoryArray = dB.collection("Tunisia").document(docid)
         // Atomically remove a region from the "regions" array field.
-      //  priceHistoryArray.update(prodNameToDelete, arrayRemove())
+        //  priceHistoryArray.update(prodNameToDelete, arrayRemove())
 
         val docRef = db.collection("Tunisia").document(docid)
 
@@ -484,51 +448,38 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
             "MonoprixPriceHistory" to FieldValue.delete()
         )
 
-
-
         docRef.update(updates).addOnCompleteListener {
             Toast.makeText(context, "succ!", Toast.LENGTH_LONG).show()
         }
             .addOnFailureListener { exception ->
                 Toast.makeText(context, exception.toString(), Toast.LENGTH_LONG).show()
             }
-
     }
 
+    fun PriceFormating(price: String): String = if (price == "") "99999.0" else price
+    fun PriceReFormating(price: String): String = if (price == "99999.0") "" else price
 
+    fun getdateDiffrence(lastdate: String): String {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US) // SimpleDateFormat("dd/MM/yyyy" )
 
-
-
-    fun PriceFormating(price: String) :String = if(price=="")   "99999.0" else price
-    fun PriceReFormating(price: String) :String = if(price=="99999.0")   "" else price
-
-    fun getdateDiffrence(lastdate:String): String {
-
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)  //SimpleDateFormat("dd/MM/yyyy" )
-
-        val simpleDateFormat= SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.US)
+        val simpleDateFormat = SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.US)
         val currentDT: Date = simpleDateFormat.parse(Date().toString())!!
 
         val lastdates: Date = sdf.parse(shortformateDate(lastdate))!!
 
         val diff: Long = abs(currentDT.time - lastdates.time)
 
-
-        return  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toString()
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toString()
     }
 
-
     fun getcurrentDta(): String {
-
         val cal = Calendar.getInstance()
         val dayOfMonth = cal[Calendar.DAY_OF_MONTH].toString()
         val monthOfYear = cal[Calendar.MONTH].toString()
         val year = cal[Calendar.YEAR].toString()
 
-
         return "$dayOfMonth/$monthOfYear/$year"
     }
-
 
     class SafeClickListener(
 
@@ -552,34 +503,26 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         setOnClickListener(safeClickListener)
     }
 
-
-
-
-    fun unwrap(context: Context):Activity {
-        var scontext=context
-        while (scontext !is Activity && scontext is ContextWrapper)
-        {
+    fun unwrap(context: Context): Activity {
+        var scontext = context
+        while (scontext !is Activity && scontext is ContextWrapper) {
             scontext = scontext.baseContext
         }
         return scontext as Activity
     }
 
-
-
-    fun hideBonusFidIfZero(context: Context,string: String):String{
-        return if(removeWord(string,context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt()==0
-            || removeWord(string,context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble()==0.0
-            || removeWord(string,context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble()==0.00
-            || removeWord(string,context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble()==0.000) {
+    fun hideBonusFidIfZero(context: Context, string: String): String {
+        return if (removeWord(string, context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt() == 0 ||
+            removeWord(string, context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble() == 0.0 ||
+            removeWord(string, context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble() == 0.00 ||
+            removeWord(string, context.getString(R.string.bonus_dans_la_carte_de_fidélité)).toInt().toDouble() == 0.000
+        ) {
             ""
-
         } else string
     }
 
-
-    fun searchInGoogle(context: Context, questionTosearsh:String){
-
-        if (questionTosearsh!=""){
+    fun searchInGoogle(context: Context, questionTosearsh: String) {
+        if (questionTosearsh != "") {
             val intent = Intent(Intent.ACTION_WEB_SEARCH)
             intent.setClassName(
                 "com.google.android.googlequicksearchbox",
@@ -587,11 +530,10 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
             )
             intent.putExtra("query", questionTosearsh)
             context.startActivity(intent)
-        }else{
+        } else {
             DynamicToast.makeWarning(context, context.getString(R.string.error_message), 9).show()
         }
     }
-
 
 /*
     fun recyclerviewhorizantal(context: Context, rvhorizantal: RecyclerView,manager: FragmentManager){
@@ -690,25 +632,27 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
     }
 */
 
-
-    fun loadInterstitialAd(context: Context ){
-         val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(context, context.getString(R.string.Interstitial_adUnitId), adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                mInterstitialAd = null
+    fun loadInterstitialAd(context: Context) {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            context,
+            context.getString(R.string.Interstitial_adUnitId),
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                }
             }
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                mInterstitialAd = interstitialAd
-            }
-        })
+        )
     }
 
-    fun listnerInterstitialAd(context: Context){
-
-        mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+    fun listnerInterstitialAd(context: Context) {
+        mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 loadInterstitialAd(context)
-
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -721,34 +665,28 @@ fun sortPrices(context: Context, product: ProductModel) : MutableList<Pair<BigDe
         }
     }
 
-    fun showInterstitialAd(a: Activity,nbrinterstitialAdShowed:Int){
-
-        if (mInterstitialAd != null   ) {
-            if(nbrinterstitialAdShowed % 5 ==0){
+    fun showInterstitialAd(a: Activity, nbrinterstitialAdShowed: Int) {
+        if (mInterstitialAd != null) {
+            if (nbrinterstitialAdShowed % 5 == 0) {
                 mInterstitialAd?.show(a)
             }
-        }
-        else {
+        } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.")
         }
     }
 
-
-     fun errorToast(context: Context,message: String) {
+    fun errorToast(context: Context, message: String) {
         DynamicToast.make(context, message, 9).show()
     }
 
-    fun succesToast(context: Context,message: String) {
+    fun succesToast(context: Context, message: String) {
         DynamicToast.make(context, message, 9).show()
     }
 
-    fun warningToast(context: Context,message: String) {
+    fun warningToast(context: Context, message: String) {
         DynamicToast.makeWarning(context, message, 9).show()
     }
-    fun dynamicToast(context: Context,message: String) {
+    fun dynamicToast(context: Context, message: String) {
         DynamicToast.make(context, message, 9).show()
     }
-
-
-
 }

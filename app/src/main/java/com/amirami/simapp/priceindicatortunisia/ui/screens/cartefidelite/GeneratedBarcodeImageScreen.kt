@@ -14,29 +14,24 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeVie
 
 @Composable
 fun GeneratedBarcodeImageScreen(barCodeViewModel: BarCodeViewModel) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-          //  .background(androidx.compose.ui.graphics.Color.White)
+            //  .background(androidx.compose.ui.graphics.Color.White)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(text = barCodeViewModel.fidCardBarCodeInfo.name)
         Spacer(modifier = Modifier.height(20.dp))
         barCodeViewModel.fidCardBitmap?.asImageBitmap()?.let { it ->
             Image(
                 bitmap = it,
-                contentDescription = "Generate BarCode Image",
-             //   modifier = Modifier.size(250.dp)
+                contentDescription = "Generate BarCode Image"
+                //   modifier = Modifier.size(250.dp)
             )
         }
         Spacer(modifier = Modifier.height(9.dp))
         Text(text = barCodeViewModel.fidCardBarCodeInfo.value)
-
     }
 }
-
-

@@ -470,7 +470,13 @@ fun ScreenContent(
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
         EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 2f, fill = true)
+                .clickable {
+                    addModifyViewModel.onmonoprixPromotionTextValue(productModel.monoprixremarq)
+                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_monoprix))
+                    addModifyViewModel.onMonoprixBonusSurCartFidTextValue(productModel.monoprixbonusfid)
+                    navController.navigate(ListScreens.PriceRemarques.Route)
+                },
             if (addModifyViewModel.monoprixPromotionTextValue != "") addModifyViewModel.monoprixPromotionTextValue else productModel.monoprixremarq,
             R.string.promotion_monoprix,
             onValueChange = {
@@ -501,7 +507,13 @@ fun ScreenContent(
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
         EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 2f, fill = true)
+                .clickable {
+                    addModifyViewModel.onMgPromotionTextValue(productModel.mgremarq)
+                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_mg))
+                    addModifyViewModel.onMgBonusSurCartFidTextValue(productModel.mgbonusfid)
+                    navController.navigate(ListScreens.PriceRemarques.Route)
+                },
             if (addModifyViewModel.mgPromotionTextValue != "") addModifyViewModel.mgPromotionTextValue else productModel.mgremarq,
             R.string.promotion_mg,
             onValueChange = {
@@ -532,7 +544,13 @@ fun ScreenContent(
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
         EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 2f, fill = true)
+                .clickable {
+                    addModifyViewModel.onCarrefouPromotionTextValue(productModel.carrefourremarq)
+                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_carrefour))
+                    addModifyViewModel.onCarrefouBonusSurCartFidTextValue(productModel.carrefourbonusfid)
+                    navController.navigate(ListScreens.PriceRemarques.Route)
+                },
             if (addModifyViewModel.carrefourPromotionTextValue != "") addModifyViewModel.carrefourPromotionTextValue else productModel.carrefourremarq,
             R.string.promotion_carrefour,
             onValueChange = {
@@ -563,9 +581,15 @@ fun ScreenContent(
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
         EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
+            modifier = Modifier.weight(weight = 2f, fill = true)
+                .clickable {
+                addModifyViewModel.onAzizaPromotionTextValue(productModel.azzizaremarq)
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_azziza))
+                addModifyViewModel.onAzizaBonusSurCartFidTextValue(productModel.azzizabonusfid)
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
             if (addModifyViewModel.azizaPromotionTextValue != "") addModifyViewModel.azizaPromotionTextValue else productModel.azzizaremarq,
-            R.string.promotion_carrefour,
+            R.string.promotion_azziza,
             onValueChange = {
                 productModel.azzizaremarq = it
                 addModifyViewModel.onAzizaPromotionTextValue(it)
@@ -594,9 +618,11 @@ fun ScreenContent(
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
         EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true)
+            modifier = Modifier.weight(weight = 2f, fill = true)
                 .clickable {
                     addModifyViewModel.onGeantPromotionTextValue(productModel.geantremarq)
+                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_Géant))
+                    addModifyViewModel.onGeantBonusSurCartFidTextValue(productModel.geantbonusfid)
                     navController.navigate(ListScreens.PriceRemarques.Route)
                 },
             if (addModifyViewModel.geantPromotionTextValue != "") addModifyViewModel.geantPromotionTextValue else productModel.geantremarq,
@@ -648,7 +674,7 @@ fun EditTextInputComponent(
             label = { Text(context.getString(stringId), fontSize = 12.sp, maxLines = 1) },
             trailingIcon = {
                 if (isFocused) {
-                    IconButton(onClick = { onValueChange(" ") }) {
+                    IconButton(onClick = { onValueChange("") }) {
                         Icon(
                             imageVector = Icons.Filled.Clear,
                             contentDescription = stringResource(id = R.string.deleteshopinglist)

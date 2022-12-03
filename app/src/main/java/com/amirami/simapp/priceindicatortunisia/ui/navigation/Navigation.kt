@@ -110,7 +110,7 @@ fun Navigation(
 
 
         composable(ListScreens.PriceRemarques.Route) {
-           PriceRemarqScreen(addModifyViewModel= addModifyViewModel)
+           PriceRemarqScreen(navController=navController,addModifyViewModel= addModifyViewModel)
         }
     }
 }
