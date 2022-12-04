@@ -6,6 +6,7 @@ import android.content.Intent
 import android.database.MatrixCursor
 import android.os.Bundle
 import android.provider.BaseColumns
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,51 +17,49 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.databinding.FragmentAddProductBinding
+import com.amirami.simapp.priceindicatortunisia.model.ProdRoomNamesModel
+import com.amirami.simapp.priceindicatortunisia.model.Product
+import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
+import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.PriceReFormating
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.changemodificationpricedate
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.checkPermission
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.copyToclipord
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.errorToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getCurrentDate
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getuserid
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.hideKeyboard
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.isDouble
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.isNumber
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.loadimageurl
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.prod_name_array
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.listnerInterstitialAd
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.loadimageurl
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.nbrInterstitialAdShowed
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.prod_name_array
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeLeadingZeroes
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeWord
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.replacesiez
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchType
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchtext
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.searchtype
-import com.amirami.simapp.priceindicatortunisia.databinding.FragmentAddProductBinding
-import com.pranavpandey.android.dynamic.toasts.DynamicToast
-import java.util.*
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeLeadingZeroes
-import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.viewmodel.*
-import com.amirami.simapp.priceindicatortunisia.model.Product
-import com.amirami.simapp.priceindicatortunisia.model.ProdRoomNamesModel
-import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProductShopingRoom
-import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.PriceReFormating
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.dynamicToast
-import com.amirami.simapp.priceindicatortunisia.utils.Functions.errorToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.setSafeOnClickListener
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.showInterstitialAd
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.warningToast
 import com.amirami.simapp.priceindicatortunisia.utils.exhaustive
+import com.amirami.simapp.priceindicatortunisia.viewmodel.*
 import com.narify.netdetect.NetDetect
+import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import java.math.BigDecimal
-
+import java.util.*
 
 @AndroidEntryPoint
 class AddProductFragment : Fragment(R.layout.fragment_add_product) {
@@ -71,7 +70,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
     private val shopListRoomViewModel: ShopListRoomViewModel by activityViewModels()
 
     private val products: MutableList<Product> = mutableListOf()
-
 
     var preveiewsProdame = ""
     var preveiewsMonoprixPrice = ""
@@ -85,7 +83,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
     var preveiewsGeantremarque = ""
     var preveiewsAzizaremarque = ""
     var preveiewsCarrefourremarque = ""
-
 
     var geantmoddate: String = ""
     var mgmoddate: String = ""
@@ -105,13 +102,11 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
     var azzizabonusfid = ""
     var mgbonusfid = ""
 
-
     var monoprixHistoryPriceArray: ArrayList<String> = ArrayList()
     var mgHistoryPriceArray: ArrayList<String> = ArrayList()
     var azizaHistoryPriceArray: ArrayList<String> = ArrayList()
     var carrefourHistoryPriceArray: ArrayList<String> = ArrayList()
     var geantHistoryPriceArray: ArrayList<String> = ArrayList()
-
 
     lateinit var _binding: FragmentAddProductBinding
 
@@ -128,7 +123,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
         clickScanBtn()
         clickTypes()
         clickSize()
-
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -196,7 +190,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
 
                             preveiewsProdame = name
 
-
                             _binding.apply {
                                 ProductIDInput.setText(getString(R.string.codebarre_ID, id))
                                 productNameInput.setText(name)
@@ -216,7 +209,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
                                 loadimageurl(requireContext(), imageurl, imageViewadd)
                             }
 
-
                             //  setMagasineInputText(name,pricenotdefined(preveiewsCarrefourPrice) , carrefourremarq, pricenotdefined(preveiewsMonoprixPrice) , monoprixremarq,pricenotdefined(preveiewsGeantPrice) , geantremarq,pricenotdefined(preveiewsMgPrice) , mgremarq, pricenotdefined(preveiewsAzizaPrice), azzizaremarq)
 
                             setMagasineInputText()
@@ -226,7 +218,6 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
                             azizaHistoryPriceArray = productList[0].azizaPriceHistory
                             carrefourHistoryPriceArray = productList[0].carrefourPriceHistory
                             geantHistoryPriceArray = productList[0].geantPriceHistory
-
 
                             val product = ProductShopingRoom(
                                 id.toLong(),
@@ -284,12 +275,10 @@ class AddProductFragment : Fragment(R.layout.fragment_add_product) {
                                 fromArrayList(productList[0].carrefourPriceHistory),
                                 fromArrayList(productList[0].geantPriceHistory)
                             )
-if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, ""))==id){
-    clickBtnAddtoShopList(product)
-    clickBtnDeleteProd(id, name)
-}
-
-
+                            if (removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, "")) == id) {
+                                clickBtnAddtoShopList(product)
+                                clickBtnDeleteProd(id, name)
+                            }
                         }
                      /*   else {
 
@@ -323,18 +312,13 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                                             )
                                         this@AddProductFragment.findNavController()
                                             .navigate(action) //   NavHostFragment.findNavController(requireParentFragment()).navigate(action)
-
-                                    }
-                                    else errorToast(requireContext(),getString(R.string.erreurconexion))
+                                    } else errorToast(requireContext(), getString(R.string.erreurconexion))
                                     // else errorToast()
                                 }
                             }
-
-                        }
-                        else errorToast(requireContext(),dataOrException.e.toString())
+                        } else errorToast(requireContext(), dataOrException.e.toString())
                     }
                     hideProgressBar()
-
                 }
             }
         }
@@ -342,9 +326,8 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 productInfoViewModel.putProductInfo.collectLatest {
-
                     when (it) {
-                        is ProductInfoViewModel.LatestprodInfoTomodify.Success ->{
+                        is ProductInfoViewModel.LatestprodInfoTomodify.Success -> {
                             searchTextAndSuggestList()
                             run {
                                 //      if (Functions.bottomsheetStateInfo != "FirestoreloadFrom_AddFragment") {
@@ -366,7 +349,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                                             productTypesSubInput.setText(it.product.typesub)
                                             productTypesSubsubInput.setText(it.product.typesubsub)
                                             spinnerUnitofmesurAutocomplete.setText(removeAllDigitExeptX(it.product.sieze!!))
-
                                         }
                                         preveiewsProdame = it.product.name!!
 
@@ -383,9 +365,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                                         preveiewsCarrefourremarque = it.product.carrefourremarq!!
                                         setMagasineInputText()
 
-
-
-                                     val productShopingRoom=   ProductShopingRoom(
+                                        val productShopingRoom = ProductShopingRoom(
                                             it.product.id!!.toLong(),
                                             it.product.date!!,
                                             it.product.name!!,
@@ -440,12 +420,11 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                                             fromArrayList(it.product.carrefourPriceHistory),
                                             fromArrayList(it.product.geantPriceHistory)
                                         )
-                                        if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, ""))==it.product.id!!){
+                                        if (removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codebarre_ID, "")) == it.product.id!!) {
                                             clickBtnAddtoShopList(productShopingRoom)
                                             clickBtnDeleteProd(it.product.id!!, it.product.name!!)
                                             //  search_input=findViewById<SearchView>(R.id.search_input)
                                         }
-
                                     }
                                     "nobill" -> {
                                         searchtext = it.product.id.toString()
@@ -462,12 +441,9 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                             }
                             //  }
                         }
-                        is ProductInfoViewModel.LatestprodInfoTomodify.Error -> errorToast(requireContext(),it.exception.toString())
+                        is ProductInfoViewModel.LatestprodInfoTomodify.Error -> errorToast(requireContext(), it.exception.toString())
                     }
-
-
                 }
-
             }
         }
 
@@ -520,7 +496,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                             _binding.spinnerUnitofmesurAutocomplete.setText(event.size)
                         }
                     }
-
                 }.exhaustive
             }
         }
@@ -529,7 +504,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             shopListRoomViewModel.shopListEvents.collectLatest { event ->
                 when (event) {
                     is ShopListRoomViewModel.ShopListEvents.ProdAddToShopMsg -> {
-                        succesToast(requireContext(),event.msg)
+                        succesToast(requireContext(), event.msg)
                     }
                     else -> {}
                 }.exhaustive
@@ -550,10 +525,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 }.exhaustive
             }
         }
-
-
     }
-
 
     private fun saveproduct() {
         displayProgressBar()
@@ -566,7 +538,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         val productDescription = _binding.productDescriptionInput.text.toString()
         val productDescriptionArabe = _binding.productDescriptionArabeInput.text.toString()
         val productImageurl = _binding.productImageurlInput.text.toString()
-        val productType = _binding.productTypesInput.text.toString()//prodType.capitalizeWords()
+        val productType = _binding.productTypesInput.text.toString() // prodType.capitalizeWords()
         val productTypeSub = _binding.productTypesSubInput.text.toString()
         val productTypeSubsub = _binding.productTypesSubsubInput.text.toString()
         val monoprixPrice = _binding.monoprixPriceInput.text.toString()
@@ -580,21 +552,23 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         val geantPrice = _binding.geantPriceInput.text.toString()
         val geantRemarq = _binding.geantRemarq.text.toString()
 
-
         val currentDate = getCurrentDate()
 
-
-        if (checkPriceChange(mgPrice, preveiewsMgPrice))
+        if (checkPriceChange(mgPrice, preveiewsMgPrice)) {
             mgHistoryPriceArray.add(addPricesHistoryArrays(mgPrice, currentDate))
-        if (checkPriceChange(monoprixPrice, preveiewsMonoprixPrice))
+        }
+        if (checkPriceChange(monoprixPrice, preveiewsMonoprixPrice)) {
             monoprixHistoryPriceArray.add(addPricesHistoryArrays(monoprixPrice, currentDate))
-        if (checkPriceChange(azzizaPrice, preveiewsAzizaPrice))
+        }
+        if (checkPriceChange(azzizaPrice, preveiewsAzizaPrice)) {
             azizaHistoryPriceArray.add(addPricesHistoryArrays(azzizaPrice, currentDate))
-        if (checkPriceChange(carrefourPrice, preveiewsCarrefourPrice))
+        }
+        if (checkPriceChange(carrefourPrice, preveiewsCarrefourPrice)) {
             carrefourHistoryPriceArray.add(addPricesHistoryArrays(carrefourPrice, currentDate))
-        if (checkPriceChange(geantPrice, preveiewsGeantPrice))
+        }
+        if (checkPriceChange(geantPrice, preveiewsGeantPrice)) {
             geantHistoryPriceArray.add(addPricesHistoryArrays(geantPrice, currentDate))
-
+        }
 
         val product = Product(
             removeWord(productID, getString(R.string.codebarre_ID, "")),
@@ -620,7 +594,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             azzizaRemarq,
             geantPrice,
             geantRemarq,
-
 
             /*   changemodificationpricedate(preveiewsMonoprixremarque, monoprixRemarq, monoprixremarqmoddate),
                changemodificationpricedate(preveiewsMgremarque, mgRemarq, mgremarqmoddate),
@@ -649,13 +622,11 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             azzizabonusfid,
             geantbonusfid,
 
-
             currentDate,
             currentDate,
             currentDate,
             currentDate,
             currentDate,
-
 
             monoprixHistoryPriceArray,
             mgHistoryPriceArray,
@@ -664,22 +635,19 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             geantHistoryPriceArray
         )
 
-
         val isProductAddLiveData = productsViewModel.getProduct(product, product.id!!.toString())
 
         isProductAddLiveData.observe(viewLifecycleOwner) { dataOrException ->
             val isProductAdded = dataOrException.data
             if (isProductAdded != null) {
                 if (isProductAdded) {
-
-
                     if (productName != preveiewsProdame) {
                         prodNamesRoomViewModel.deleteAll()
                         deleteProductNamesArrayInFirestore(preveiewsProdame)
 
-                        if (prod_name_array.indexOf(preveiewsProdame) != -1)
+                        if (prod_name_array.indexOf(preveiewsProdame) != -1) {
                             prod_name_array[prod_name_array.indexOf(preveiewsProdame)] = productName
-                        else prod_name_array.add(productName)
+                        } else prod_name_array.add(productName)
 
                         addProdNameArrayInFirestore(productName)
 
@@ -693,15 +661,13 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
 
                     hideProgressBar()
 
-
                     resetOnluInputtext()
 
-                    succesToast(requireContext(),getString(R.string.product_saved))
+                    succesToast(requireContext(), getString(R.string.product_saved))
 
                     _binding.searchInput.setQuery("", false)
                 }
             }
-
 
             if (dataOrException.e != null) {
                 hideProgressBar()
@@ -709,7 +675,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 resetOnluInputtext()
             }
         }
-
     }
 
     private fun emailProdInfo(product: Product) {
@@ -718,7 +683,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.app_email)))
-            intent.type = "message/rfc822"//"text/plain"
+            intent.type = "message/rfc822" // "text/plain"
             intent.putExtra(
                 // Intent.EXTRA_EMAIL,
                 Intent.EXTRA_TEXT,
@@ -763,17 +728,14 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 )
             )
 
-
             requireContext().startActivity(
                 Intent.createChooser(
                     intent,
                     "Envoyer les informations du produits par "
                 )
             )
-
-
         } catch (e: Exception) {
-            //e.toString();
+            // e.toString();
         }
     }
 
@@ -785,7 +747,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 Intent.EXTRA_EMAIL,
                 arrayOf(requireContext().getString(R.string.app_email))
             )
-            intent.type = "message/rfc822"//"text/plain"
+            intent.type = "message/rfc822" // "text/plain"
             intent.putExtra(
                 // Intent.EXTRA_EMAIL,
                 Intent.EXTRA_TEXT,
@@ -807,21 +769,19 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                     getString(R.string.envoyer_info)
                 )
             )
-
         } catch (e: Exception) {
-            errorToast(requireContext(),e.toString())
+            errorToast(requireContext(), e.toString())
         }
     }
-
 
     private fun deleteProductNamesArrayInFirestore(productName: String) {
         val deleteProductNamesArrayInFirestore =
             productsViewModel.deleteProductNamesArrayInFirestore(productName)
         deleteProductNamesArrayInFirestore.observe(viewLifecycleOwner) {
-            //if (it != null)  if (it.data!!)  prod name array updated
+            // if (it != null)  if (it.data!!)  prod name array updated
             if (it.e != null) {
-                //prod bame array not updated
-                errorToast(requireContext(),it.e!!)
+                // prod bame array not updated
+                errorToast(requireContext(), it.e!!)
             }
         }
     }
@@ -830,15 +790,13 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         val addProductNamesArrayInFirestore =
             productsViewModel.addProductNamesArrayInFirestore(productName)
         addProductNamesArrayInFirestore.observe(viewLifecycleOwner) {
-            //if (it != null)  if (it.data!!)  prod name array updated
+            // if (it != null)  if (it.data!!)  prod name array updated
             if (it.e != null) {
-                //prod bame array not updated
-                errorToast(requireContext(),it.e!!)
+                // prod bame array not updated
+                errorToast(requireContext(), it.e!!)
             }
-
         }
     }
-
 
     private fun checkPriceChange(currentPrice: String, preveiewsPrice: String): Boolean =
         currentPrice != preveiewsPrice
@@ -851,7 +809,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
 
         return result
     }
-
 
     private fun allowSaveProduct(): Boolean {
         var result = true
@@ -870,12 +827,11 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             //  DynamicToast.makeError(requireContext(), getString(R.string.Le_type_du_produit_ne_doit_pas_etre_vide), 9).show()
         }
 
-
         if (!isNumber(
                 removeWord(
-                    _binding.ProductIDInput.text.toString(),
-                    getString(R.string.codebarre_ID, "")
-                )
+                        _binding.ProductIDInput.text.toString(),
+                        getString(R.string.codebarre_ID, "")
+                    )
             ) && result
         ) {
             result = false
@@ -884,16 +840,18 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 removeWord(
                     _binding.ProductIDInput.text.toString(),
                     getString(R.string.codebarre_ID, "")
-                ),
+                )
             )
-            errorToast( requireContext(),  getString(
-                R.string.identifiant_produit_nest_pas_nombre,
-                removeWord(
-                    _binding.ProductIDInput.text.toString(),
-                    getString(R.string.codebarre_ID, "")
-                ),
-            ))
-
+            errorToast(
+                requireContext(),
+                getString(
+                    R.string.identifiant_produit_nest_pas_nombre,
+                    removeWord(
+                        _binding.ProductIDInput.text.toString(),
+                        getString(R.string.codebarre_ID, "")
+                    )
+                )
+            )
         } else if (_binding.productSiezeInput.text.toString() != "" && _binding.spinnerUnitofmesurAutocomplete.text.toString() == "" && result) {
             result = false
             _binding.productSiezeInputLayout.error =
@@ -907,8 +865,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
     }
 
     private fun resetOnluInputtext() {
-
-
         _binding.apply {
             ProductIDInput.setText(getString(R.string.ScanproductIdoradditmanually))
             productNameInput.setText("")
@@ -945,9 +901,7 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             productSiezeInputLayout.error = null
         }
 
-
         loadimageurl(requireContext(), "", _binding.imageViewadd)
-
     }
 
     private fun restProductVar() {
@@ -987,11 +941,9 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         carrefourbonusfid = ""
         azzizabonusfid = ""
         mgbonusfid = ""
-
     }
 
     private fun setMagasineInputText() {
-
         when {
             preveiewsProdame.contains(getString(R.string.carrefour)) -> {
                 _binding.carrefourPriceInput.setText(preveiewsCarrefourPrice)
@@ -1014,7 +966,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 _binding.geantinfoAddprodLL.visibility = View.GONE
             }
             preveiewsProdame.contains(getString(R.string.Géant)) -> {
-
                 _binding.geantPriceInput.setText(preveiewsGeantPrice)
                 _binding.geantRemarq.setText(preveiewsGeantremarque)
 
@@ -1080,44 +1031,37 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
 
         resetOnluInputtext()
 
-
         productsViewModel.getResponseFromFirestoreUsingCoroutines(searchtype, searchtext)
-
     }
 
     private fun clickBtnAddtoShopList(product: ProductShopingRoom) {
-
         _binding.addtoshopinglistAddFragment.setSafeOnClickListener {
             if (isNumber(
                     removeWord(
-                        _binding.ProductIDInput.text.toString(),
-                        getString(R.string.codebarre_ID, "")
-                    )
+                            _binding.ProductIDInput.text.toString(),
+                            getString(R.string.codebarre_ID, "")
+                        )
                 )
             ) {
                 shopListRoomViewModel.insertItem(
                     product,
                     getString(R.string.product_saved_in_shoping_list)
                 )
-
             }
-
         }
     }
 
     private fun clickBtnDeleteProd(id: String, name: String) {
-
         _binding.deletebtn.setSafeOnClickListener {
-
             NetDetect.check { isConnected: Boolean ->
-                if ( isConnected) {
+                if (isConnected) {
                     val idTextInpu = _binding.ProductIDInput.text.toString()
 
                     if (id != "" && isNumber(
                             removeWord(
-                                id,
-                                getString(R.string.codebarre_ID, "")
-                            )
+                                    id,
+                                    getString(R.string.codebarre_ID, "")
+                                )
                         ) && isNumber(removeWord(idTextInpu, getString(R.string.codebarre_ID, "")))
                     ) {
                         val action =
@@ -1128,7 +1072,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                             )
                         this@AddProductFragment.findNavController()
                             .navigate(action) //   NavHostFragment.findNavController(requireParentFragment()).navigate(action)
-
                     } else {
                         DynamicToast.makeError(
                             requireContext(),
@@ -1141,7 +1084,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                     getString(R.string.erreur_conexion, ""),
                     9
                 ).show()
-
             }
         }
     }
@@ -1154,14 +1096,11 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         _binding.progressBarAddprod.visibility = View.GONE
     }
 
-
-
-
     private fun searchTextAndSuggestList() {
         _binding.listViewAddprod.visibility = View.GONE
         _binding.nestedScroll.visibility = View.VISIBLE
 
-        //suggest List
+        // suggest List
         val searchTypeTocompare =
             requireContext().resources.getStringArray(R.array.productTypeArray)
         val adapter =
@@ -1174,13 +1113,12 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 val selectedItem = parent.getItemAtPosition(position) as String
                 _binding.searchInput.setQuery(selectedItem, false)
                 searchtext = selectedItem.capitalizeWords()
-                //searchtype="type"  TO PUT IT IF I WANT TO MAKE SEARCH BY TYPE
+                // searchtype="type"  TO PUT IT IF I WANT TO MAKE SEARCH BY TYPE
                 searchType(searchtext)
 
-                if (!searchTypeTocompare.contains(searchtext)){
+                if (!searchTypeTocompare.contains(searchtext)) {
                     loadProducttomodify()
-                }
-                else warningToast(requireContext(),getString(R.string.Selectionn_un_produit))
+                } else warningToast(requireContext(), getString(R.string.Selectionn_un_produit))
 
                 _binding.listViewAddprod.visibility = View.GONE
                 _binding.nestedScroll.visibility = View.VISIBLE
@@ -1188,68 +1126,60 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 requireContext().hideKeyboard(view)
             }
 
-        //search text
+        // search text
         _binding.searchInput.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                val cursor =
-                    MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-                p0?.let {
-                    prod_name_array.forEachIndexed { index, suggestion ->
-                        if (suggestion.contains(p0, true)) {
-                            cursor.addRow(arrayOf(index, suggestion))
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    val cursor =
+                        MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    p0?.let {
+                        prod_name_array.forEachIndexed { index, suggestion ->
+                            if (suggestion.contains(p0, true)) {
+                                cursor.addRow(arrayOf(index, suggestion))
+                            }
                         }
                     }
-                }
 
-                searchType(_binding.searchInput.query.toString())
-                searchtext =
-                    if (searchtype != "id") _binding.searchInput.query.toString().capitalizeWords()
-                    else _binding.searchInput.query.toString()//.capitalizeWords()
+                    searchType(_binding.searchInput.query.toString())
+                    searchtext =
+                        if (searchtype != "id") _binding.searchInput.query.toString().capitalizeWords()
+                        else _binding.searchInput.query.toString() // .capitalizeWords()
 
+                    if (searchtext != "") {
+                        if (!searchTypeTocompare.contains(searchtext)) {
+                            loadProducttomodify()
+                        } else {
+                            DynamicToast.makeWarning(
+                                requireContext(),
+                                requireContext().getString(R.string.Selectionné_un_produit),
+                                9
+                            ).show()
+                            hideProgressBar()
+                        }
+                        _binding.searchInput.clearFocus()
+                    } else _binding.searchInput.queryHint = requireContext().getString(R.string.search_hint)
 
-                if (searchtext != "") {
-                    if (!searchTypeTocompare.contains(searchtext)){
-                        loadProducttomodify()
-                    }
-                    else {
-                        DynamicToast.makeWarning(
-                            requireContext(),
-                            requireContext().getString(R.string.Selectionné_un_produit),
-                            9
-                        ).show()
-                        hideProgressBar()
-                    }
-                    _binding.searchInput.clearFocus()
-                } else _binding.searchInput.queryHint = requireContext().getString(R.string.search_hint)
+                    requireContext().hideKeyboard(requireView())
 
-
-
-                requireContext().hideKeyboard(requireView())
-
-                _binding.listViewAddprod.visibility = View.GONE
-                _binding.nestedScroll.visibility = View.VISIBLE
-                return false
-            }
-
-            override fun onQueryTextChange(p0: String?): Boolean {
-                //Start filtering the list as user start entering the characters
-                if (p0 == "") {
                     _binding.listViewAddprod.visibility = View.GONE
                     _binding.nestedScroll.visibility = View.VISIBLE
-                } else {
-                    _binding.listViewAddprod.visibility = View.VISIBLE
-                    _binding.nestedScroll.visibility = View.GONE
-                    adapter.filter.filter(p0)
-
+                    return false
                 }
-                return false
-            }
-        })
 
-
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    // Start filtering the list as user start entering the characters
+                    if (p0 == "") {
+                        _binding.listViewAddprod.visibility = View.GONE
+                        _binding.nestedScroll.visibility = View.VISIBLE
+                    } else {
+                        _binding.listViewAddprod.visibility = View.VISIBLE
+                        _binding.nestedScroll.visibility = View.GONE
+                        adapter.filter.filter(p0)
+                    }
+                    return false
+                }
+            })
     }
-
 
     private fun setUserAccess() {
         if (requireContext().getString(R.string.superUserOptions) == requireContext().getString(R.string.true_)) {
@@ -1257,27 +1187,32 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             _binding.ProductIDInput.setOnClickListener {
                 if (isNumber(
                         removeWord(
-                            _binding.ProductIDInput.text.toString(), requireContext().getString(
-                                R.string.codebarre_ID, ""
+                                _binding.ProductIDInput.text.toString(),
+                                requireContext().getString(
+                                        R.string.codebarre_ID,
+                                        ""
+                                    )
                             )
-                        )
                     )
                 ) {
                     copyToclipord(
-                        requireContext(), (removeWord(
-                            _binding.ProductIDInput.text.toString(), requireContext().getString(
-                                R.string.codebarre_ID, ""
+                        requireContext(),
+                        (
+                            removeWord(
+                                _binding.ProductIDInput.text.toString(),
+                                requireContext().getString(
+                                    R.string.codebarre_ID,
+                                    ""
+                                )
                             )
-                        ))
+                            )
                     )
                 }
             }
         } else _binding.productImageurlInputLayout.visibility = View.GONE
     }
 
-
     private fun getResultFromScanFragment(value: String) {
-
         _binding.apply {
             if (isNumber(value)) ProductIDInput.setText(removeLeadingZeroes(value))
             else ProductIDInput.setText(value)
@@ -1287,7 +1222,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         searchtext = value
         loadProducttomodify()
         _binding.searchInput.setQuery(if (isNumber(value)) removeLeadingZeroes(value) else value, false)
-
     }
 
     private fun clickScanBtn() {
@@ -1307,7 +1241,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
     private fun clickSaveBtn() {
         _binding.BtnSaveInfo.setSafeOnClickListener {
             if (allowSaveProduct()) saveproduct()
-
         }
     }
 
@@ -1316,7 +1249,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             AddProductFragmentDirections.actionAddProductFragmentToBarrecodeScannerFragment()
 
         NavHostFragment.findNavController(this).navigate(action)
-
     }
 
     private fun pricenotdefined(price: String): String {
@@ -1328,11 +1260,8 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             }
             if (!Functions.factor100(firstNummonoprixprice)) firstNummonoprixprice.toString()
             else String.format("%.3f", firstNummonoprixprice)
-
         } else ""
-
     }
-
 
     private fun putRemarqueFragmentInfo(magasin: String, discount: String, bonusfidcard: String) {
         fun discountOrNo(): String =
@@ -1403,7 +1332,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
                 Toast.LENGTH_SHORT
             ).show()
         }
-
     }
 
     private fun clickSize() {
@@ -1417,7 +1345,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             goToProductTypesDialog("", "type")
         }
 
-
         _binding.productTypesSubInput.setSafeOnClickListener {
             goToProductTypesDialog(_binding.productTypesInput.text.toString(), "subtype")
         }
@@ -1430,13 +1357,11 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
     fun remarquesCliks() {
         _binding.apply {
             monoprixRemarqInput.setSafeOnClickListener {
-
                 goToPriceRemarqFragmenet(
                     getString(R.string.monoprix),
                     _binding.monoprixRemarqInput.text.toString(),
                     monoprixbonusfid
                 )
-
             }
 
             magasingeneralRemarqInput.setSafeOnClickListener {
@@ -1473,7 +1398,6 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
         }
     }
 
-
     private fun goToPriceRemarqFragmenet(magasin: String, discount: String, bonusfidcard: String) {
         val action = AddProductFragmentDirections.actionAddProductFragmentToPriceRemarqueFragment(
             magasin,
@@ -1493,5 +1417,3 @@ if(removeWord(_binding.ProductIDInput.text.toString(), getString(R.string.codeba
             .navigate(action) //   NavHostFragment.findNavController(this).navigate(action)
     }
 }
-
-

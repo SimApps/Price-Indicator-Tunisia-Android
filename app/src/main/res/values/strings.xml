@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Prix en Tunisie</string>
-    <string name="app_version">0.115.05</string>
-    <string name="app_version_settings">Version : 0.115.05</string>
+    <string name="app_version">0.1.05</string>
+    <string name="app_version_settings">Version : 0.1.05</string>
     <string name="app_email">prix.en.tunisie@gmail.com</string>
     <string name="pakege_name">com.amirami.simapp.priceindicatortunisia</string>
     <string name="pakege_fileprovider">com.amirami.simapp.priceindicatortunisia.fileprovider</string>
     <string name="Partager_image">Partage image (tiket,produit, etc)</string>
     <string name="choisir_email">Choisir e-mail</string>
 
-    <string name="superUserOptions">true</string>
+    <string name="superUserOptions">F</string>
     <string name="true_">true</string>
 
     <string name="misejourshopinglist">Mise à jour de la liste des courses</string>
