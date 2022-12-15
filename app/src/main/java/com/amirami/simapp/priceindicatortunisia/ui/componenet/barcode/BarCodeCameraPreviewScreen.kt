@@ -1,9 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode
 
 import android.Manifest
-import android.content.Context.CAMERA_SERVICE
 import android.content.Intent
-import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
@@ -12,20 +10,16 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -65,17 +59,15 @@ fun BarCodeCameraPreviewScreen(
 
 
     Box() {
-
-
-        //Call FlashLightComposable
-        if (barCodeViewModel.flashState)
-        BareCodeCameraView(
-            modifier= Modifier.fillMaxSize(),
-            navController = navController,
-            barCodeViewModel = barCodeViewModel
-        )
-        else BareCodeCameraView(
-            modifier= Modifier.fillMaxSize(),
+        // Call FlashLightComposable
+        if (barCodeViewModel.flashState) {
+            BareCodeCameraView(
+                modifier = Modifier.fillMaxSize(),
+                navController = navController,
+                barCodeViewModel = barCodeViewModel
+            )
+        } else BareCodeCameraView(
+            modifier = Modifier.fillMaxSize(),
             navController = navController,
             barCodeViewModel = barCodeViewModel
         )
@@ -93,16 +85,16 @@ fun BarCodeCameraPreviewScreen(
         )
 
 
-        Text(modifier = Modifier
-            //  .size(100.dp)
-            .padding(bottom = 60.dp)
-            .align(Alignment.BottomCenter),
+        Text(
+            modifier = Modifier
+                //  .size(100.dp)
+                .padding(bottom = 60.dp)
+                .align(Alignment.BottomCenter),
             textAlign = TextAlign.Center,
-          //  color = Color.Blue,
-            text = context.getString(R.string.Placé_ligner_parallèle_numéro_code_barres_pour_scanner))
+            //  color = Color.Blue,
+            text = context.getString(R.string.Placé_ligner_parallèle_numéro_code_barres_pour_scanner)
+        )
     }
-
-
 }
 
 
@@ -116,9 +108,9 @@ fun BareCodeCameraView(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
-     Permission(
+
+    Permission(
         permission = Manifest.permission.CAMERA,
-        rationale = context.getString(R.string.demande_permission),
         permissionNotAvailableContent = {
             Column(modifier) {
                 Text(context.getString(R.string.pas_decamera))
@@ -135,81 +127,82 @@ fun BareCodeCameraView(
                     Text(context.getString(R.string.go_tosetting))
                 }
             }
-        }
-    ) {
-
-        AndroidView(
-            factory = { AndroidViewContext ->
-                PreviewView(AndroidViewContext).apply {
-                    this.scaleType = PreviewView.ScaleType.FILL_CENTER
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                    )
-                    implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                }
-            },
-            modifier = Modifier.fillMaxSize(),
-            update = { previewView ->
-
-
-                val cameraSelector: CameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                    .build()
-                val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-                val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
-                    ProcessCameraProvider.getInstance(context)
-
-                cameraProviderFuture.addListener({
-                    preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
+        },
+        content = {
+            AndroidView(
+                factory = { AndroidViewContext ->
+                    PreviewView(AndroidViewContext).apply {
+                        this.scaleType = PreviewView.ScaleType.FILL_CENTER
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     }
-                    val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-                    val barcodeAnalyser = BarCodeAnalyser { barcodes ->
-                        barcodes.forEach { barcode ->
+                },
+                modifier = Modifier.fillMaxSize(),
+                update = { previewView ->
 
-                            barcode.rawValue?.let { barcodeValue ->
-                                val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
-                                barCodeViewModel.onfidCardInfo(fidcard)
 
-                                when (barCodeViewModel.sendBarCodeTo) {
-                                    ADD_FID_CARD_SCREEN -> {
-                                        navController.navigate(ListScreens.CarteFidelite.Route)
-                                        barCodeViewModel.onfidCardActionInfo(FID_CARD_ACTION_ADD)
+                    val cameraSelector: CameraSelector = CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                        .build()
+                    val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+                    val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
+                        ProcessCameraProvider.getInstance(context)
+
+                    cameraProviderFuture.addListener({
+                        preview = Preview.Builder().build().also {
+                            it.setSurfaceProvider(previewView.surfaceProvider)
+                        }
+                        val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+                        val barcodeAnalyser = BarCodeAnalyser { barcodes ->
+                            barcodes.forEach { barcode ->
+
+                                barcode.rawValue?.let { barcodeValue ->
+                                    val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
+                                    barCodeViewModel.onfidCardInfo(fidcard)
+
+                                    when (barCodeViewModel.sendBarCodeTo) {
+                                        ADD_FID_CARD_SCREEN -> {
+                                            navController.navigate(ListScreens.CarteFidelite.Route)
+                                            barCodeViewModel.onfidCardActionInfo(FID_CARD_ACTION_ADD)
+                                        }
+                                        HOME_SCREEN -> navController.navigate(ListScreens.Accueil.Route)
+                                        SHOPPING_LIST_SCREEN -> navController.navigate(ListScreens.Courses.Route)
                                     }
-                                    HOME_SCREEN -> navController.navigate(ListScreens.Accueil.Route)
-                                    SHOPPING_LIST_SCREEN -> navController.navigate(ListScreens.Courses.Route)
                                 }
                             }
                         }
-                    }
-                    val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also {
-                            it. setAnalyzer(cameraExecutor, barcodeAnalyser)
+                        val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
+                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .also {
+                                it.setAnalyzer(cameraExecutor, barcodeAnalyser)
+                            }
+
+
+                        try {
+                            cameraProvider.unbindAll()
+                            val camera = cameraProvider.bindToLifecycle(
+                                lifecycleOwner,
+                                cameraSelector,
+                                preview,
+                                imageAnalysis
+                            )
+
+
+                            if (camera.cameraInfo.hasFlashUnit()) {
+                                camera.cameraControl.enableTorch(barCodeViewModel.flashState)
+                            }
+                        } catch (e: Exception) {
+                            Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
                         }
-
-
-                    try {
-                        cameraProvider.unbindAll()
-                        val camera =     cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            cameraSelector,
-                            preview,
-                            imageAnalysis
-                        )
-
-
-                      if(camera.cameraInfo.hasFlashUnit())
-                          camera.cameraControl.enableTorch(barCodeViewModel.flashState)
-                    } catch (e: Exception) {
-                        Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
-                    }
-                }, ContextCompat.getMainExecutor(context))
-            }
-        )
-    }
+                    }, ContextCompat.getMainExecutor(context))
+                }
+            )
+        }
+    )
 }
 
 

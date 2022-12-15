@@ -400,7 +400,8 @@ fun ScreenContent(
         DropDownMenu(
             items = addModifyViewModel.mesureUnitList,
             // selectedItem = addModifyViewModel.unitselected.value,
-            selectedItem = if (addModifyViewModel.unitselected.value != "") addModifyViewModel.unitselected.value else Functions.removeAllDigitExeptX(productModel.sieze),
+            selectedItem = if (addModifyViewModel.unitselected.value != "")
+                addModifyViewModel.unitselected.value else Functions.removeAllDigitExeptX(productModel.sieze),
             onValueChange = {
                 //  productModel.sieze = Functions.replacesiez(productModel.sieze) +Functions.removeAllDigitExeptX(it)
 
@@ -460,7 +461,8 @@ fun ScreenContent(
     ) {
         EditTextInputComponent(
             modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.monoprixPriceTextValue != "") addModifyViewModel.monoprixPriceTextValue else productModel.monoprixprice,
+            if (addModifyViewModel.monoprixPriceTextValue != "")
+                addModifyViewModel.monoprixPriceTextValue else productModel.monoprixprice,
             R.string.monoprix_prix,
             onValueChange = {
                 productModel.monoprixprice = it
@@ -583,11 +585,11 @@ fun ScreenContent(
         EditTextInputComponent(
             modifier = Modifier.weight(weight = 2f, fill = true)
                 .clickable {
-                addModifyViewModel.onAzizaPromotionTextValue(productModel.azzizaremarq)
-                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_azziza))
-                addModifyViewModel.onAzizaBonusSurCartFidTextValue(productModel.azzizabonusfid)
-                navController.navigate(ListScreens.PriceRemarques.Route)
-            },
+                    addModifyViewModel.onAzizaPromotionTextValue(productModel.azzizaremarq)
+                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_azziza))
+                    addModifyViewModel.onAzizaBonusSurCartFidTextValue(productModel.azzizabonusfid)
+                    navController.navigate(ListScreens.PriceRemarques.Route)
+                },
             if (addModifyViewModel.azizaPromotionTextValue != "") addModifyViewModel.azizaPromotionTextValue else productModel.azzizaremarq,
             R.string.promotion_azziza,
             onValueChange = {
