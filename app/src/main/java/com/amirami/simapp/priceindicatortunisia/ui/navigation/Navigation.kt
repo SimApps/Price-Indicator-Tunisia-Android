@@ -14,7 +14,6 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeVie
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.MainImageTiket
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.camera.CameraXScreen
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.screens.accueil.HomeScreen
 import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.AddModifyScreen
@@ -63,7 +62,7 @@ fun Navigation(
             AddModifyScreen(
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
-                addModifyViewModel= addModifyViewModel,
+                addModifyViewModel = addModifyViewModel,
                 // productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel
             )
@@ -110,7 +109,7 @@ fun Navigation(
 
 
         composable(ListScreens.PriceRemarques.Route) {
-           PriceRemarqScreen(navController=navController,addModifyViewModel= addModifyViewModel)
+            PriceRemarqScreen(navController = navController, addModifyViewModel = addModifyViewModel)
         }
     }
 }

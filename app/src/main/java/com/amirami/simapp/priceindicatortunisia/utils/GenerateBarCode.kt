@@ -35,7 +35,7 @@ fun generateBarCode(barcod: FidCardEntity, barCodeViewModel: BarCodeViewModel)/*
              Log.d("TAG", "generateBarCode: ${e.message}")
          }
 
-         barCodeViewModel.onfidCardBitmap(bitmap)
+         barCodeViewModel.generateBarCodeBitmap(bitmap)
       //   return bitmap
 
 

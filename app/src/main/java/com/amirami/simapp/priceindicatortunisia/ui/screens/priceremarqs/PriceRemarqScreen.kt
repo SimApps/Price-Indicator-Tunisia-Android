@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
+import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.EditTextInputComponent
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
@@ -89,7 +90,7 @@ fun PriceRemarqScreen(navController: NavHostController, addModifyViewModel: AddM
         ButtonWithBorder(
             modifier = Modifier.wrapContentWidth().align(Alignment.CenterHorizontally),
             onClicks = {
-                //  navController.navigate(ListScreens.AddModify.Route)
+                 navController.navigate(ListScreens.AddModify.Route)
 
                 //  Log.d("ffffxs", getBonusFidelite(context, addModifyViewModel))
                 Log.d("ffffxs", getRemarque(context, addModifyViewModel))
@@ -116,6 +117,9 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
     )
 
     var index = radioBtnSteUp(context, getRemarque(context, addModifyViewModel), radioOptions)
+    Text(  "name " + index)
+    Text(  "cc " + addModifyViewModel.monoprixPromotionTextValue)
+    Text(  "C " + getRemarque(context, addModifyViewModel))
 
     var selectedItem by remember { mutableStateOf(radioOptions[if (index == -1) 0 else index - 1]) }
 
@@ -161,13 +165,13 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
                         EditTextInputComponent(
                             modifier = Modifier.fillMaxWidth(),
                             //  if(index==i)   Functions.getNumberFromString(getRemarque(context, addModifyViewModel)).toString() else i.toString() + label+ index  ,
-                            if (index == i) Functions.getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
+                            if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
                             //  if(index==i)   getRemarque(context, addModifyViewModel) else i.toString() + "N "+ index  ,
 
                             if (i == 2) R.string.prixEnPromotion else if (i == 4)R.string.emegratuit else R.string.aveccartefid,
                             onValueChange = {
                                 //  onValueChangeRemarq(context, addModifyViewModel, Functions.getNumberFromString(it).toString())
-                                onValueChangeRemarq(context, addModifyViewModel, Functions.getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
+                                onValueChangeRemarq(context, addModifyViewModel, getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
                             },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
@@ -181,10 +185,10 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
                         Spacer(modifier = Modifier.padding(end = 10.dp))
                         EditTextInputComponent(
                             modifier = Modifier.width(160.dp),
-                            if (index == i) Functions.getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
+                            if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
                             R.string.Pourcentage,
                             onValueChange = {
-                                onValueChangeRemarq(context, addModifyViewModel, Functions.getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
+                                onValueChangeRemarq(context, addModifyViewModel, getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
                             },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
@@ -337,9 +341,9 @@ fun onValueChangeRemarq(context: Context, addModifyViewModel: AddModifyViewModel
         7 -> context.getString(R.string.Leprix) + " " + valu + " " + context.getString(R.string.est) + " " + valu2 + " " + context.getString(R.string.TND)
         else -> ""
     }
-   /* Log.d("ffffxs","i = "+i+ "value "+ value)
+    Log.d("ffffxs","i = "+i+ "value "+ value)
     Log.d("ffffxs","valu "+ valu)
-    Log.d("ffffxs", "result  "+result)*/
+    Log.d("ffffxs", "result  "+result)
     when (addModifyViewModel.magasinValue) {
         context.getString(R.string.promotion_monoprix) -> addModifyViewModel.onmonoprixPromotionTextValue(result)
         context.getString(R.string.promotion_mg) -> addModifyViewModel.onMgPromotionTextValue(result)

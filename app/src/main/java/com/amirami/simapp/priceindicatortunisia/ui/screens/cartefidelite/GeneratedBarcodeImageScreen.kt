@@ -24,7 +24,7 @@ fun GeneratedBarcodeImageScreen(barCodeViewModel: BarCodeViewModel) {
     ) {
         Text(text = barCodeViewModel.fidCardBarCodeInfo.name)
         Spacer(modifier = Modifier.height(20.dp))
-        barCodeViewModel.fidCardBitmap?.asImageBitmap()?.let { it ->
+        barCodeViewModel.barCodeBitmap?.asImageBitmap()?.let { it ->
             Image(
                 bitmap = it,
                 contentDescription = "Generate BarCode Image"

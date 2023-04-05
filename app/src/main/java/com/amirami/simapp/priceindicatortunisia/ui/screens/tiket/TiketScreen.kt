@@ -1,11 +1,9 @@
 package com.amirami.simapp.priceindicatortunisia.ui.screens.tiket
 
-import com.amirami.simapp.priceindicatortunisia.R
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -23,10 +20,7 @@ import androidx.core.net.toFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
@@ -45,44 +39,45 @@ fun TiketScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-           // .background(Color.White)
+            // .background(Color.White)
             .padding(16.dp)
             .padding(bottom = 60.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text( modifier = Modifier.fillMaxWidth(),text = context.getString(R.string.tiketadvise))
+        Text(modifier = Modifier.fillMaxWidth(), text = context.getString(R.string.tiketadvise))
         Spacer(modifier = Modifier.height(30.dp))
 
-   //     OutlinedEditText(text = tiketViewModel.text,labl = R.string.Commentaires,tiketViewModel.ontext(it))
+        //     OutlinedEditText(text = tiketViewModel.text,labl = R.string.Commentaires,tiketViewModel.ontext(it))
         OutlinedEditText(tiketViewModel)
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        if (cameraViewModel.imageUri != EMPTY_IMAGE_URI)
+        if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) {
             AsyncImage(
-            model = cameraViewModel.imageUri,
-            modifier = Modifier.fillMaxSize(),
-            contentDescription = ""
-        )
-        else LottieComposable(250.dp, R.raw.mobilecamera)
+                model = cameraViewModel.imageUri,
+                modifier = Modifier.fillMaxSize(),
+                contentDescription = ""
+            )
+        } else LottieComposable(250.dp, R.raw.mobilecamera)
 
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             ButtonWithBorder(
                 modifier = Modifier.wrapContentWidth(),
                 onClicks = {
                     navController.navigate(ListScreens.MainImageTiket.Route)
                 },
                 if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) context.getString(R.string.prendreautrephotos)
-                else context.getString(R.string.prendrephotos),
+                else context.getString(R.string.prendrephotos)
 
-                )
+            )
 
             if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) {
                 ButtonWithBorder(
@@ -92,10 +87,7 @@ fun TiketScreen(
                     },
                     context.getString(R.string.Envoyer)
                 )
-
             }
-
-
         }
     }
 }
@@ -109,7 +101,7 @@ fun OutlinedEditText(tiketViewModel: TiketViewModel) {
         value = tiketViewModel.text,
         onValueChange = { tiketViewModel.ontext(it) },
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(context.getString(R.string.Commentaires)) },
+        label = { Text(context.getString(R.string.Commentaires)) }
     )
 }
 
@@ -119,11 +111,10 @@ private fun shareImageandText(
     cameraViewModel: CameraViewModel,
     tiketViewModel: TiketViewModel
 ) {
-
     //  val builder = VmPolicy.Builder()
     // StrictMode.setVmPolicy(builder.build())
     val uri = if (cameraViewModel.imageUri.toString()
-            .contains("cache")
+        .contains("cache")
     ) getmageToShare(context/*,bitmap: Bitmap*/, cameraViewModel)
     else cameraViewModel.imageUri
 
@@ -133,7 +124,8 @@ private fun shareImageandText(
     intent.putExtra(Intent.EXTRA_STREAM, uri)
 
     // adding text to share
-    intent.putExtra( /* Intent.EXTRA_EMAIL,*/ Intent.EXTRA_TEXT,
+    intent.putExtra(
+        /* Intent.EXTRA_EMAIL,*/ Intent.EXTRA_TEXT,
         context.getString(R.string.propose_liste_produits, tiketViewModel.text, "user_id")
     )
 
@@ -144,8 +136,8 @@ private fun shareImageandText(
     intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.Partager_image))
 
     // setting type to image
-    intent.type = "image/png"//"message/rfc822"//"text/plain"
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    intent.type = "image/png" // "message/rfc822"//"text/plain"
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     // calling startactivity() to share
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.choisir_email)))
 }

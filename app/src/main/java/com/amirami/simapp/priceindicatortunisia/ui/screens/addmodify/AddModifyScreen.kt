@@ -201,6 +201,8 @@ fun AddModifyScreenContent(
 
             when (val prodsResponse = productsViewModel.prodResponse) {
                 is Response.NotInit -> {
+                    Text("cxs size" +  addModifyViewModel.barcodeTextValue)
+                    Text(  "name" + prodDetailDialogStates.name)
                     ScreenContent(
                         navController = navController,
                         productModel = prodDetailDialogStates,
@@ -217,7 +219,9 @@ fun AddModifyScreenContent(
                 is Response.Loading -> ProgressBar()
 
                 is Response.Success -> {
-                    // Text(productIndex.toString() + "data size" + prodsResponse.data.size.toString())
+
+                     Text("xx size" +  addModifyViewModel.barcodeTextValue)
+                     Text("data size" + prodsResponse.data.size.toString())
                     ScreenContent(
                         navController = navController,
                         productModel = prodsResponse.data[0],

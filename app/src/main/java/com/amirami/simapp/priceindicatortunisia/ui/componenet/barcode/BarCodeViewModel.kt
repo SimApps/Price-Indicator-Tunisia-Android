@@ -43,10 +43,10 @@ class BarCodeViewModel @Inject constructor() : ViewModel() {
     }
 
 
-    var fidCardBitmap by mutableStateOf<Bitmap?>(null)
+    var barCodeBitmap by mutableStateOf<Bitmap?>(null)
         private set
-    fun onfidCardBitmap(fidCardBitmp: Bitmap) {
-        fidCardBitmap= fidCardBitmp
+    fun generateBarCodeBitmap(barCodBitmap: Bitmap) {
+        barCodeBitmap= barCodBitmap
     }
 
 }
