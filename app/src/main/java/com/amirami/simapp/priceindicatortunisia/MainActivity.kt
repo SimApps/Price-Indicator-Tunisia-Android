@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                 )
             },
             content = {
-                Navigation(modifier = modifier.padding(it),
+                Navigation(padding = it,
                     navController = navController,
                     productsViewModel = productsViewModel,
                     settingViewModel = settingViewModel)

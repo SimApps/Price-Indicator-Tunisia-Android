@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FidCardsScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     fidCardRoomViewModel: FidCardRoomViewModel
@@ -61,6 +62,7 @@ if(barCodeViewModel.showAddFidCard)
     }
 
     FidCardsMainScreen(
+        padding = padding,
         modifier = Modifier,
         navController = navController,
         barCodeViewModel = barCodeViewModel,
@@ -73,6 +75,7 @@ if(barCodeViewModel.showAddFidCard)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun FidCardsMainScreen(
+    padding: PaddingValues,
     modifier: Modifier,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
@@ -94,8 +97,9 @@ fun FidCardsMainScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(padding),
          //   .background(Color.White)
-            .padding(16.dp),
+          //  .padding(16.dp),
             //  .verticalScroll(rememberScrollState())
           //  .wrapContentHeight(),
         verticalArrangement = Arrangement.Top,

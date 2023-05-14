@@ -103,9 +103,7 @@ data class ProductModel(
     @ColumnInfo(name = "geantbonusfidmodifdate")
     var geantbonusfidmodifdate: String = "",
 
-    @Ignore
-    @ColumnInfo(name = "userid")
-    var userid: String = "",
+
 
     @get:Exclude
     @ColumnInfo(name = "monoprixPriceHistory")
@@ -123,19 +121,24 @@ data class ProductModel(
     @ColumnInfo(name = "geantPriceHistory")
     var geantPricHistory: String = "",
 
+
+){
     @Ignore
-    var monoprixPriceHistory: ArrayList<String> = ArrayList(),
+    @ColumnInfo(name = "userid")
+    var userid: String = ""
+
     @Ignore
-    var mgpriceHistory: ArrayList<String> = ArrayList(),
+    var monoprixPriceHistory: ArrayList<String> = ArrayList()
+
     @Ignore
-    var azizaPriceHistory: ArrayList<String> = ArrayList(),
+    var mgpriceHistory: ArrayList<String> = ArrayList()
+
     @Ignore
-    var carrefourPriceHistory: ArrayList<String> = ArrayList(),
+    var azizaPriceHistory: ArrayList<String> = ArrayList()
+
+    @Ignore
+    var carrefourPriceHistory: ArrayList<String> = ArrayList()
+
     @Ignore
     var geantPriceHistory: ArrayList<String> = ArrayList()
-) {
-
-    override fun toString(): String {
-        return "MessageThreadListEntity(Id=$id, Name=$name)"
-    }
 }

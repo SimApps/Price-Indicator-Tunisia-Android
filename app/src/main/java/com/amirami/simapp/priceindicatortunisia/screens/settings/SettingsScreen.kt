@@ -3,6 +3,7 @@ package com.amirami.simapp.priceindicatortunisia.screens.settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,19 +29,20 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.TextWithIcon
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
 
 @Composable
-fun SettingsScreen(settingViewModel : SettingViewModel) {
+fun SettingsScreen(
+    padding: PaddingValues,
+    settingViewModel : SettingViewModel
+) {
 
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
-    ) {
-        Spacer(modifier = Modifier.height(60.dp))
-        Row(
+    ) { Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically

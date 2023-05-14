@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.screens.cartefidelite
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -13,6 +14,8 @@ import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_M
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
+import com.amirami.simapp.priceindicatortunisia.utils.Functions
+import java.math.BigDecimal
 
 @Composable
 fun AddFidCardBottomSheetLayout(
@@ -122,5 +125,8 @@ fun AddFidCardBottomSheetLayout(
     }
 
 }
+
+
+
 
 

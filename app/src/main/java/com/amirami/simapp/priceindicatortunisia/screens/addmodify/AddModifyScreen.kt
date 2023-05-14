@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.amirami.simapp.priceindicatortunisia.screens.addmodify
 
 import androidx.compose.animation.core.SpringSpec
@@ -5,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,24 +19,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -71,14 +74,15 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinf
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.Constants
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddModifyScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     // productsViewModel: ProductsViewModel,
@@ -92,44 +96,31 @@ fun AddModifyScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
-        skipHalfExpanded = true,
-        animationSpec = SpringSpec(stiffness = 10f)
-    )
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+
 
 
 
     if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
-        LaunchedEffect(key1 = context) {
-            scope.launch {
-                modalBottomSheetState.show()
-                productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(false)
-            }
+        ModalBottomSheet(
+            sheetState = sheetState,
+            onDismissRequest = {
+                scope.launch {
+                    sheetState.hide()
+                }
+                productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
+
+            },
+        ) {
+            ProductTypesDialogScreen(productTypesDialogViewModel, navController, addModifyViewModel = addModifyViewModel)
+
         }
     }
 
-    ModalBottomSheetLayout(
-        sheetContent = {
-            ProductTypesDialogScreen(productTypesDialogViewModel, navController, addModifyViewModel = addModifyViewModel)
-        },
-        sheetState = modalBottomSheetState,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-        // sheetBackgroundColor = colorResource(id = R.color.gray),
-        // scrimColor = Color.Red,  // Color for the fade background when you open/close the drawer
-    ) {
-        Scaffold(
-            topBar = { },
-            /*
-            //use it like this when there is no lambda trail
-            content = {
-                   ShowSnackBar(visibleState, snackBarMessage)
-               },*/
-            //    backgroundColor = colorResource(id = R.color.purple_500),
-            snackbarHost = {}
-        ) { padding ->
+
+
             AddModifyScreenContent(
+                padding = padding,
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
                 //  productsViewModel = productsViewModel,
@@ -139,12 +130,13 @@ fun AddModifyScreen(
                 productDetailDialogViewModel = productDetailDialogViewModel,
                 productTypesDialogViewModel = productTypesDialogViewModel
             )
-        }
-    }
+
+
 }
 
 @Composable
 fun AddModifyScreenContent(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     productsViewModel: ProductsViewModel = hiltViewModel(),
@@ -160,6 +152,7 @@ fun AddModifyScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            . padding(padding)
         // .background(Color.White)
         //  .verticalScroll(rememberScrollState()),
         // verticalArrangement = Arrangement.Top,
@@ -808,13 +801,14 @@ fun DropDownMenu(
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
+                    text = {
+                        Text(text = item)
+                    },
                     onClick = {
                         onValueChange(item)
                         expanded = false
                     }
-                ) {
-                    Text(text = item)
-                }
+                )
             }
         }
     }

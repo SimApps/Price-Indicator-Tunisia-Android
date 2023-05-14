@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,20 +44,25 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.getNumberFromStr
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getNumbersFromString
 
 @Composable
-fun PriceRemarqScreen(navController: NavHostController, addModifyViewModel: AddModifyViewModel) {
+fun PriceRemarqScreen(
+    padding : PaddingValues,
+    navController: NavHostController,
+    addModifyViewModel: AddModifyViewModel) {
     val context = LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // .background(Color.White)
-            // .padding(16.dp)
+             .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         Spacer(modifier = Modifier.height(30.dp))
-        Text(text = addModifyViewModel.magasinValue, modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(
+            text = addModifyViewModel.magasinValue,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
 

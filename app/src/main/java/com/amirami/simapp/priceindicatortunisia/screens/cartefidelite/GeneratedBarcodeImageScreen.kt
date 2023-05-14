@@ -13,11 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 
 @Composable
-fun GeneratedBarcodeImageScreen(barCodeViewModel: BarCodeViewModel) {
+fun GeneratedBarcodeImageScreen(
+    padding: PaddingValues,
+    barCodeViewModel: BarCodeViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            //  .background(androidx.compose.ui.graphics.Color.White)
+            .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

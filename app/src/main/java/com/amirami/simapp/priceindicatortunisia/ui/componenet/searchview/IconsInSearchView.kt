@@ -30,6 +30,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 @Composable
 fun IconsInSearchView(
     modifier: Modifier = Modifier,
+    isSearching : Boolean,
     value: String,
     label: String,
     onDoneActionClick: () -> Unit = {},
@@ -63,7 +64,7 @@ fun IconsInSearchView(
         },
 
         trailingIcon ={
-            if(value.isNotEmpty())
+            if(value.isNotEmpty() || isSearching)
             Icon(
                 imageVector =  Icons.Default.Close,
                 contentDescription = "",

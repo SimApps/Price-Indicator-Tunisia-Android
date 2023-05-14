@@ -41,24 +41,16 @@ import java.util.concurrent.Executors
 
 @Composable
 fun BarCodeCameraPreviewScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel
 ) {
     val context = LocalContext.current
 
-    val infiniteTransition = rememberInfiniteTransition()
-    val infinitelyAnimatedFloat = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(),
-            // The value will infinitely repeat from 0 to 1 and 1 to 0
-            repeatMode = RepeatMode.Reverse
-        )
-    )
 
 
-    Box() {
+
+    Box(modifier = Modifier.padding(padding)) {
         // Call FlashLightComposable
         if (barCodeViewModel.flashState) {
             BareCodeCameraView(

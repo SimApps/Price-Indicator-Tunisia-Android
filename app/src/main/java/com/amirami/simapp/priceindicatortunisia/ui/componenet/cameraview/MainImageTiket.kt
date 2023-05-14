@@ -37,8 +37,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalPermissionsApi
 @Composable
 fun MainImageTiket(
+    padding: PaddingValues,
     navController: NavHostController,
-    modifier: Modifier = Modifier,
+
     cameraViewModel: CameraViewModel,
     barCodeViewModel: BarCodeViewModel
 ) {
@@ -51,7 +52,7 @@ fun MainImageTiket(
     )
 
     if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) {
-        Box(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = rememberAsyncImagePainter(cameraViewModel.imageUri),
@@ -83,16 +84,15 @@ fun MainImageTiket(
     } else {
         if (cameraViewModel.showGallerySelect) {
             GallerySelect(
-                modifier = modifier,
                 onImageUri = { uri ->
                     cameraViewModel.onshowGallerySelect(false)
                     cameraViewModel.onimageUri(uri)
                 }
             )
         } else {
-            Box(modifier = modifier) {
+            Box() {
                 CameraXScreen(
-                    modifier = modifier,
+                    padding = padding,
                     onImageFile = { file ->
                        cameraViewModel.onimageUri(file.toUri())
                       //  Log.d("eee","2"+ file.toUri().toString())

@@ -50,7 +50,8 @@ fun AppTheme(
 
 @Composable
 fun Theme(settingViewModel: SettingViewModel)  {
-    settingViewModel.setisDarkThemeMode(if(settingViewModel.darkTheme == Theme.SYSTEM_THEME.theme ||
+    settingViewModel.setisDarkThemeMode(
+        if(settingViewModel.darkTheme == Theme.SYSTEM_THEME.theme ||
         settingViewModel.darkTheme ==""){
         isSystemInDarkTheme()
     }else   settingViewModel.darkTheme == Theme.DARK.theme)

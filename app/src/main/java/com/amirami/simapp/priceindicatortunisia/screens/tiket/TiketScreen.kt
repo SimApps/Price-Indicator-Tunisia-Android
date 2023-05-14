@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,6 +37,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @Composable
 fun TiketScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     tiketViewModel: TiketViewModel = hiltViewModel(),
     cameraViewModel: CameraViewModel
@@ -47,13 +48,15 @@ fun TiketScreen(
         modifier = Modifier
             .fillMaxSize()
             // .background(Color.White)
-            .padding(16.dp)
-            .padding(bottom = 60.dp)
+            .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(modifier = Modifier.fillMaxWidth(), text = context.getString(R.string.tiketadvise))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = context.getString(R.string.tiketadvise)
+        )
         Spacer(modifier = Modifier.height(30.dp))
 
         //     OutlinedEditText(text = tiketViewModel.text,labl = R.string.Commentaires,tiketViewModel.ontext(it))

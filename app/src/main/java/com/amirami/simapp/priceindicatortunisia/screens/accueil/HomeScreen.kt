@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     productsViewModel: ProductsViewModel,
@@ -69,6 +70,7 @@ fun HomeScreen(
 
 
             HomeScreenContent(
+                padding = padding,
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
                 productsViewModel = productsViewModel,
@@ -82,6 +84,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
+    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     productsViewModel: ProductsViewModel,
@@ -94,6 +97,7 @@ fun HomeScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(padding)
 
         // .background(Color.White)
         //  .verticalScroll(rememberScrollState()),

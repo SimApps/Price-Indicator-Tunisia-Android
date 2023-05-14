@@ -11,6 +11,7 @@ import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -46,13 +47,13 @@ import java.util.*
 @ExperimentalCoroutinesApi
 @Composable
 fun CameraXScreen(
-    modifier: Modifier = Modifier,
+    padding: PaddingValues,
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     onImageFile: (File) -> Unit = { },
     barCodeViewModel: BarCodeViewModel
 ) {
     val context = LocalContext.current
-    Box(modifier = modifier) {
+    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
         val lifecycleOwner = LocalLifecycleOwner.current
         val coroutineScope = rememberCoroutineScope()
         var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }

@@ -7,7 +7,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -48,6 +47,8 @@ fun SearchView(
     val backStackEntry = navController.currentBackStackEntryAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val scope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val view = LocalView.current
 
     /**
      * to get previous screen
@@ -61,6 +62,7 @@ fun SearchView(
         ListScreens.Accueil.Route -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(true)
         }
+
         ListScreens.AddModify.Route -> {
             searchViewModel.onsearchViewVisibilityStatesChanged(true)
         }
@@ -70,12 +72,10 @@ fun SearchView(
         }
     }
 
-    val autoCompleteEntities = prodname.asAutoCompleteEntities(
-        filter = { item, query ->
-            //  item.lowercase(Locale.getDefault()).startsWith(query.lowercase(Locale.getDefault()))
-            item.lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))
-        }
-    )
+    val autoCompleteEntities = prodname.asAutoCompleteEntities(filter = { item, query ->
+        //  item.lowercase(Locale.getDefault()).startsWith(query.lowercase(Locale.getDefault()))
+        item.lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))
+    })
     if (barCodeViewModel.fidCardBarCodeInfo.value != "" && barCodeViewModel.sendBarCodeTo == HOME_SCREEN) {
         val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
             Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
@@ -85,24 +85,19 @@ fun SearchView(
             searchViewModel.onsearchValue(it)
             productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
 
-            val fidcard = FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
+            val fidcard =
+                FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
             barCodeViewModel.onfidCardInfo(fidcard)
         }
     }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    AnimatedVisibility(
-        visible = searchViewModel.searchViewVisibilityStates,
+    AnimatedVisibility(visible = searchViewModel.searchViewVisibilityStates,
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it }),
         content = {
-            AutoCompleteBox(
-                items = autoCompleteEntities,
-                itemContent = { prodNameList ->
-                    SearchAutoCompleteItem(prodNameList.value)
-                }
-            ) {
+            AutoCompleteBox(items = autoCompleteEntities, itemContent = { prodNameList ->
+                SearchAutoCompleteItem(prodNameList.value)
+            }) {
                 // var value by remember { mutableStateOf("") }
-                val view = LocalView.current
 
                 onItemSelected { item ->
                     item.value.let {
@@ -113,30 +108,47 @@ fun SearchView(
 
                     // searchViewModel.onsearchValue("")
 
+
+                    keyboardController?.hide()
                     scope.launch {
-                        keyboardController!!.hide()
-                        delay(100) //  delay here IS nessesary to hide keyboard + scope
+                        delay(100)
                         view.clearFocus()
                     }
+
                 }
 
-                IconsInSearchView(
-                    modifier = Modifier.testTag(AutoCompleteSearchBarTag),
+                IconsInSearchView(modifier = Modifier.testTag(AutoCompleteSearchBarTag),
+                    isSearching = isSearching,
                     value = searchViewModel.searchValue,
                     label = context.getString(R.string.search_hint),
                     onDoneActionClick = {
+                        keyboardController?.hide()
+                        scope.launch {
+                            delay(100)
+                            view.clearFocus()
+                        }
+
+                        if(searchViewModel.searchValue=="") return@IconsInSearchView
                         productsViewModel.getProds(
                             Functions.searchType(searchViewModel.searchValue),
                             searchViewModel.searchValue.capitalizeWords()
                         )
                         filter(searchViewModel.searchValue)
 
-                        view.clearFocus()
+
                     },
                     onClearClick = {
+
                         searchViewModel.onsearchValue("")
                         filter(searchViewModel.searchValue)
-                        view.clearFocus()
+                        keyboardController?.hide()
+
+                        scope.launch {
+                            delay(100)
+                            view.clearFocus()
+                        }
+
+
                     },
                     onScanClick = {
                         barCodeViewModel.onsendBarCodeTo(HOME_SCREEN)
@@ -149,16 +161,14 @@ fun SearchView(
                     onValueChanged = { query ->
                         searchViewModel.onsearchValue(query) // value = query
                         filter(searchViewModel.searchValue)
-                    }
-                )
+                    })
             }
-        }
-    )
+        })
 }
 
 @Composable
 fun SearchAutoCompleteItem(product: String?) {
-    Card{
+    Card {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

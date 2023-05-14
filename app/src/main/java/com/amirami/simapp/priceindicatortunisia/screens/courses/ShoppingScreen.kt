@@ -1,44 +1,52 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+    ExperimentalComposeUiApi::class
+)
 
 package com.amirami.simapp.priceindicatortunisia.screens.courses
 
 import android.content.Context
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.forEachGesture
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Discount
+import androidx.compose.material.icons.filled.FreeCancellation
 import androidx.compose.material.icons.filled.Minimize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.Percent
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Shop2
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -46,26 +54,21 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.InternalTextApi
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -77,21 +80,23 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUITS_FRAIS
+import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.convertStringToPriceFormat
+import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.stringToDouble
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.AnimatedText
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.CustomModifiers.customWidth
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 @Composable
 fun ShoppingScreen(
+    padding: PaddingValues,
     navController: NavHostController,
     productsViewModel: ProductsViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
@@ -103,6 +108,14 @@ fun ShoppingScreen(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(key1  = productsViewModel.shopLists, key2 = shoppingViewModel.calculateDiscount){
+
+
+        shoppingViewModel.calculatePrices(
+            context= context,
+            product= productsViewModel.shopLists
+        )
+    }
     if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -121,23 +134,90 @@ fun ShoppingScreen(
 
 
         Scaffold(
+            modifier = Modifier.padding(padding),
             topBar = { },
           //  scaffoldState = scaffoldState,
-            bottomBar = {},
+            bottomBar = {
+                AnimatedVisibility(
+                    visible = productsViewModel.shopLists.isNotEmpty(),
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically()
+                ) {
+                    BottomAppBar(
+                        actions = {
+                              IconButton(
+                                  onClick = {
+                                  shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
+                              }) {
+                                  Column(
+                                      verticalArrangement = Arrangement.Center,
+                                      horizontalAlignment = Alignment.CenterHorizontally) {
+                                      Icon(
+                                          imageVector= if(shoppingViewModel.calculateDiscount) Icons.Filled.Percent
+                                          else Icons.Filled.Money,
+                                          contentDescription = "Localized description")
+
+
+                                  }
+                              }
+
+
+
+                        },
+                        floatingActionButton = {
+
+                            FloatingActionButton(
+                                onClick = {
+                                    productsViewModel.DeleteAllProdFromShopList()
+                                },
+                                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                            ) {
+                                Icon(Icons.Filled.DeleteForever, "Localized description")
+                            }
+
+
+                        }
+                    )
+                }
+
+            },
             snackbarHost = {
                 DefaultSnackbar(
                     snackbarHostState,
                     modifier = Modifier
                 )
             }
-        ) { padding ->
+        ) {
 
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
             ) {
-                ProductShopList(snackbarHostState = snackbarHostState,
-                    productsViewModel, productDetailDialogViewModel, shoppingViewModel = shoppingViewModel)
+                LazyColumn(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        // .fillMaxWidth()
+                        .padding(3.dp, 6.dp, 3.dp, 6.dp),
+                    //   .fillMaxHeight()
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    shoppingViewModel.prices.sortByDescending { price -> stringToDouble(price.priceBill)  }
+                    items(shoppingViewModel.prices.size) { position ->
+
+                        Text(text = shoppingViewModel.prices[position].magasin + " : "+ convertStringToPriceFormat(shoppingViewModel.prices[position].priceBill) + " (-" + shoppingViewModel.prices[position].nbrMissingPrice+" prix)" + " "+ shoppingViewModel.prices[position].bonusfid)
+
+                    }
+                }
+
+
+                ProductShopList(
+                    snackbarHostState = snackbarHostState,
+                    productsViewModel,
+                    productDetailDialogViewModel,
+                    shoppingViewModel = shoppingViewModel)
             }
         }
 
@@ -251,51 +331,105 @@ fun ProductShopTiket(
             ) {
 
                 Icon(
-                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.10f).clickable {
-                        if (prodsResponse.typesub == PRODUITS_FRAIS) {
-                            if (prodsResponse.quantity - 0.1 <= 0.001) {
-                                productsViewModel.DeleteProdFromShopList(prodsResponse.id)
-                                setSnackBarData(coroutineScope = coroutineScope, snackbarHostState = snackbarHostState, prodsResponse = prodsResponse, context = context, productsViewModel = productsViewModel) //  errorToast(context = context, "delete")
-                            } else productsViewModel.UpdateProdQuantity(String.format("%.3f", BigDecimal.valueOf(prodsResponse.quantity) - BigDecimal.valueOf(0.1)).toDouble(), prodsResponse.id)
-                        } else {
-                            if (prodsResponse.quantity - 1 < 1) {
-                                setSnackBarData(coroutineScope = coroutineScope, snackbarHostState = snackbarHostState, prodsResponse = prodsResponse, context = context, productsViewModel = productsViewModel) //  errorToast(context = context, "delete")
-                            } else productsViewModel.UpdateProdQuantity(prodsResponse.quantity - 1, prodsResponse.id)
-                        }
-                      },
+                    modifier = Modifier
+                        .customWidth(LocalConfiguration.current, 0.10f)
+                        .clickable {
+                            if (prodsResponse.typesub == PRODUITS_FRAIS) {
+                                if (prodsResponse.quantity - 0.1 <= 0.001) {
+                                    productsViewModel.DeleteProdFromShopList(prodsResponse.id)
+                                    setSnackBarData(
+                                        coroutineScope = coroutineScope,
+                                        snackbarHostState = snackbarHostState,
+                                        prodsResponse = prodsResponse,
+                                        context = context,
+                                        productsViewModel = productsViewModel
+                                    ) //  errorToast(context = context, "delete")
+                                }
+                                //   else productsViewModel.UpdateProdQuantity(String.format("%.3f", BigDecimal.valueOf(prodsResponse.quantity) - BigDecimal.valueOf(0.1)).toDouble(), prodsResponse.id)
+                                else productsViewModel.UpdateProdQuantity(
+                                    prodsResponse.quantity - 0.1,
+                                    prodsResponse.id
+                                )
+                            } else {
+                                if (prodsResponse.quantity - 1 < 1) {
+                                    setSnackBarData(
+                                        coroutineScope = coroutineScope,
+                                        snackbarHostState = snackbarHostState,
+                                        prodsResponse = prodsResponse,
+                                        context = context,
+                                        productsViewModel = productsViewModel
+                                    ) //  errorToast(context = context, "delete")
+                                } else productsViewModel.UpdateProdQuantity(
+                                    prodsResponse.quantity - 1,
+                                    prodsResponse.id
+                                )
+                            }
+                        },
                     imageVector =  Icons.Default.Minimize,
                     contentDescription = "Add"
                 )
 
                 Spacer(modifier = Modifier.padding(start = 9.dp))
+                val keyboardController = LocalSoftwareKeyboardController.current
 
+              /*  AnimatedText(
+                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
+                label = context.getString(
+                    R.string.quantuty_en,
+                    removeAllDigitExeptX(prodsResponse.sieze)
+                ),
+                count = prodsResponse.quantity,
+                onValueChange = {
+                    productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
+                },
+                    )*/
                 OutlinedTextField(
                     value = prodsResponse.quantity.toString(),
                     onValueChange = {
-                        productsViewModel.UpdateProdQuantity(it.toDouble(), prodsResponse.id)
+                        productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
                     },
                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
-                    label = { Text(context.getString(
+                    label = { Text( context.getString(
                         R.string.quantuty_en,
                         removeAllDigitExeptX(prodsResponse.sieze)
                     )) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
-                    )
+                    ),
+                    keyboardActions = KeyboardActions{
+                        keyboardController?.hide()
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(start = 9.dp))
 
                 Icon(
-                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.10f).clickable {
-                    productsViewModel.UpdateProdQuantity(prodsResponse.quantity + 1, prodsResponse.id)
+                    modifier = Modifier
+                        .customWidth(LocalConfiguration.current, 0.10f)
+                        .clickable {
+                            productsViewModel.UpdateProdQuantity(
+                                prodsResponse.quantity + 1,
+                                prodsResponse.id
+                            )
 
-                        if (prodsResponse.typesub == PRODUITS_FRAIS) {
-                            productsViewModel.UpdateProdQuantity(String.format("%.3f", BigDecimal.valueOf(prodsResponse.quantity) + BigDecimal.valueOf(0.1)).toDouble(), prodsResponse.id)
-                        } else {
-                            productsViewModel.UpdateProdQuantity(prodsResponse.quantity + 1, prodsResponse.id)
-                        }
-                    },
+                            if (prodsResponse.typesub == PRODUITS_FRAIS) {
+                                productsViewModel.UpdateProdQuantity(
+                                    String
+                                        .format(
+                                            "%.3f",
+                                            BigDecimal.valueOf(prodsResponse.quantity) + BigDecimal.valueOf(
+                                                0.1
+                                            )
+                                        )
+                                        .toDouble(), prodsResponse.id
+                                )
+                            } else {
+                                productsViewModel.UpdateProdQuantity(
+                                    prodsResponse.quantity + 1,
+                                    prodsResponse.id
+                                )
+                            }
+                        },
                     imageVector =  Icons.Default.Add,
                     contentDescription = "Add"
                 )
@@ -361,3 +495,7 @@ fun setSnackBarData(coroutineScope: CoroutineScope,  snackbarHostState: Snackbar
         }
     }
 }
+
+
+
+

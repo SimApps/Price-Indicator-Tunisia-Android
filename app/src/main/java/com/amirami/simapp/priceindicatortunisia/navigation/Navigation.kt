@@ -1,7 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -36,10 +36,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 )
 @Composable
 fun Navigation(
-    modifier: Modifier,
+    padding: PaddingValues,
     navController: NavHostController,
     productsViewModel: ProductsViewModel,
-    settingViewModel : SettingViewModel
+    settingViewModel: SettingViewModel,
 ) {
     val cameraViewModel: CameraViewModel = hiltViewModel()
     val barCodeViewModel: BarCodeViewModel = hiltViewModel()
@@ -52,6 +52,7 @@ fun Navigation(
         composable(ListScreens.Accueil.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             HomeScreen(
+                padding = padding,
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
                 productsViewModel = productsViewModel,
@@ -62,6 +63,7 @@ fun Navigation(
         composable(ListScreens.AddModify.Route) {
             //   barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
             AddModifyScreen(
+                padding = padding,
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
                 addModifyViewModel = addModifyViewModel,
@@ -72,46 +74,82 @@ fun Navigation(
 
         composable(ListScreens.Courses.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            ShoppingScreen(navController = navController, productsViewModel = productsViewModel, productDetailDialogViewModel = productDetailDialogViewModel)
+            ShoppingScreen(
+                padding = padding,
+                navController = navController,
+                productsViewModel = productsViewModel,
+                productDetailDialogViewModel = productDetailDialogViewModel,
+            )
         }
 
         composable(ListScreens.CarteFidelite.Route) {
-            FidCardsScreen(navController, barCodeViewModel, fidCardRoomViewModel)
+            FidCardsScreen(
+                padding = padding,
+                navController = navController,
+                barCodeViewModel = barCodeViewModel,
+                fidCardRoomViewModel = fidCardRoomViewModel,
+            )
         }
 
         composable(ListScreens.Tiket.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            TiketScreen(navController, cameraViewModel = cameraViewModel)
+            TiketScreen(
+                padding = padding,
+                navController = navController,
+                cameraViewModel = cameraViewModel,
+            )
         }
 
         composable(ListScreens.Settings.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            SettingsScreen(settingViewModel = settingViewModel)
+            SettingsScreen(
+                padding = padding,
+                settingViewModel = settingViewModel,
+            )
         }
 
         composable(ListScreens.CameraX.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            CameraXScreen(barCodeViewModel = barCodeViewModel)
+            CameraXScreen(
+                padding = padding,
+                barCodeViewModel = barCodeViewModel,
+            )
         }
 
         composable(ListScreens.MainImageTiket.Route) {
             barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            MainImageTiket(navController, cameraViewModel = cameraViewModel, barCodeViewModel = barCodeViewModel)
+            MainImageTiket(
+                padding = padding,
+                navController = navController,
+                cameraViewModel = cameraViewModel,
+                barCodeViewModel = barCodeViewModel,
+            )
         }
 
         composable(ListScreens.BarCodeCameraPreview.Route) {
             //  fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            BarCodeCameraPreviewScreen(navController, barCodeViewModel)
+            BarCodeCameraPreviewScreen(
+                padding = padding,
+                navController = navController,
+                barCodeViewModel = barCodeViewModel,
+            )
         }
 
         composable(ListScreens.GeneratedBarcodeImage.Route) {
             //    fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-            GeneratedBarcodeImageScreen(barCodeViewModel)
+            GeneratedBarcodeImageScreen(
+                padding = padding,
+                barCodeViewModel = barCodeViewModel,
+            )
         }
 
 
         composable(ListScreens.PriceRemarques.Route) {
-            PriceRemarqScreen(navController = navController, addModifyViewModel = addModifyViewModel)
+            PriceRemarqScreen(
+                padding = padding,
+                navController = navController,
+                addModifyViewModel = addModifyViewModel,
+            )
         }
     }
 }

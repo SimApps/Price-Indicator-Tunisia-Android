@@ -13,6 +13,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 
     id("kotlin-kapt")
+
+    id("com.google.devtools.ksp")
 }
 
 
@@ -165,6 +167,7 @@ dependencies {
 
 
 
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.8.21-1.0.11")
 
 
 
@@ -191,7 +194,7 @@ dependencies {
     val room_version = "2.5.1"
 
     implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
 
