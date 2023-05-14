@@ -1,29 +1,38 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.amirami.simapp.priceindicatortunisia.BottomNavItem
-import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
@@ -60,88 +69,87 @@ fun BottomNavigationBar(
             bottomNavigationBarViewModel.onBottomNavigationBarStateChanged(true)
         }
     }
+    val bottomnavItems = listOf(
+        BottomNavItem(
+            name = "Accueil",
+            route = "Accueil",
+            icon = Icons.Default.Home,
+        ),
+        BottomNavItem(
+            name = "Courses",
+            route = "Courses",
+            icon = Icons.Default.ShoppingCart,
+            badgeCount = productsViewModel.shopLists.size,
+        ),
+
+        BottomNavItem(
+            name = "Cart Fid",
+            route = "Cartes de fidélitées",
+            icon = Icons.Default.CreditCard,
+        ),
+
+        BottomNavItem(
+            name = "Tiket",
+            route = "Tiket",
+            icon = Icons.Default.CameraAlt,
+        ),
+
+        BottomNavItem(
+            name = "Parametres",
+            route = "Parametres",
+            icon = Icons.Default.Settings,
+        ),
+    )
 
     AnimatedVisibility(
         visible = bottomNavigationBarViewModel.BottomNavigationBarStates,
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
-            BottomNavigation(
-                modifier = modifier.background(MaterialTheme.colorScheme.primary),
-                //   backgroundColor = Color.Black,
-                elevation = 5.dp
-            ) {
-                val bottomnavItems = listOf(
-                    BottomNavItem(
-                        name = "Accueil",
-                        route = "Accueil",
-                        icon = R.drawable.ic_homepage
-                    ),
-                    BottomNavItem(
-                        name = "Courses",
-                        route = "Courses",
-                        icon = R.drawable.ic_shopping_list,
-                        badgeCount = productsViewModel.shopLists.size
-                    ),
 
-                    BottomNavItem(
-                        name = "Cartes de fidélitées",
-                        route = "Cartes de fidélitées",
-                        icon = R.drawable.ic_giftcard
-                    ),
-
-                    BottomNavItem(
-                        name = "Tiket",
-                        route = "Tiket",
-                        icon = R.drawable.ic_take_a_picture
-                    ),
-
-                    BottomNavItem(
-                        name = "Parametres",
-                        route = "Parametres",
-                        icon = R.drawable.ic_settings
-                    )
-                )
-
-                bottomnavItems.forEach { item ->
+            NavigationBar {
+                bottomnavItems.forEachIndexed { index, item ->
                     val selected = item.route == backStackEntry.value?.destination?.route
-                    BottomNavigationItem(
-                        selected = selected,
-                        onClick = { onItemClick(item) },
-                        selectedContentColor = Color.Blue,
-                        unselectedContentColor = Color.DarkGray,
+
+                    NavigationBarItem(
                         icon = {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                if (item.badgeCount > 0) {
-                                    BadgedBox(
-                                        badge = {
-                                            Text(text = item.badgeCount.toString(), color = MaterialTheme.colorScheme.error)
-                                        }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = item.icon),
-                                            contentDescription = item.name
-                                        )
-                                    }
-                                } else {
+                            AnimatedVisibility(
+                                visible = item.badgeCount > 0,
+                                enter = fadeIn() + slideInVertically(),
+                                exit = fadeOut() + slideOutVertically()
+                            ) {
+                                BadgedBox(
+                                    badge = {
+                                        Text(text = item.badgeCount.toString())
+                                    },
+                                ) {
                                     Icon(
-                                        painter = painterResource(id = item.icon),
-                                        contentDescription = item.name
-                                    )
-                                }
-                                if (selected) {
-                                    Text(
-                                        text = item.name,
-                                        textAlign = TextAlign.Center,
-                                        fontSize = 10.sp,
-                                        color = MaterialTheme.colorScheme.onError
+                                        imageVector =  item.icon,
+                                        contentDescription = item.name,
                                     )
                                 }
                             }
+                            AnimatedVisibility(
+                                visible = item.badgeCount <= 0,
+                                enter = fadeIn() + slideInVertically(),
+                                exit = fadeOut() + slideOutVertically()
+                            ){
+                                Icon(
+                                    imageVector =  item.icon,
+                                    contentDescription = item.name,
+                                )
+                            }
+
                         }
+                        },
+                        label = { Text(item.name) },
+                        selected = selected,
+                        onClick = { onItemClick(item)}
                     )
                 }
             }
-        }
+
+        },
     )
 }

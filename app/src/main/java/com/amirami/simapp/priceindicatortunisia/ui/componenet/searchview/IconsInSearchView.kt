@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
@@ -54,7 +57,7 @@ fun IconsInSearchView(
         placeholder = { Text(text = label)},
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.search),
+                imageVector =  Icons.Default.Search,
                 contentDescription = ""
             )
         },
@@ -62,7 +65,7 @@ fun IconsInSearchView(
         trailingIcon ={
             if(value.isNotEmpty())
             Icon(
-                painter = painterResource(id = R.drawable.ic_close),
+                imageVector =  Icons.Default.Close,
                 contentDescription = "",
                 Modifier.clickable { onClearClick()}
             )

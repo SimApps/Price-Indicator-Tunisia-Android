@@ -44,43 +44,7 @@ fun GallerySelect(
         }
     }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Permission(
-            permission = Manifest.permission.CAMERA,
-            permissionNotAvailableContent = {
-                Column(modifier) {
-                    Text("O noes! No Photo Gallery!")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row {
-                        Button(
-                            modifier = Modifier.padding(4.dp),
-                            onClick = {
-                                context.startActivity(
-                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                        data = Uri.fromParts("package", context.packageName, null)
-                                    }
-                                )
-                            }
-                        ) {
-                            Text("Open Settings")
-                        }
-                        // If they don't want to grant permissions, this button will result in going back
-                        Button(
-                            modifier = Modifier.padding(4.dp),
-                            onClick = {
-                                onImageUri(EMPTY_IMAGE_URI)
-                            }
-                        ) {
-                            Text("Use Camera")
-                        }
-                    }
-                }
-                },
-            content = {
-                LaunchGallery()
-            })
 
-    } else {
         LaunchGallery()
-    }
+
 }

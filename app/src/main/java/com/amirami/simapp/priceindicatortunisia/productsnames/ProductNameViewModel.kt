@@ -13,14 +13,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
-import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.repository.BookRepository
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.repository.NameListRepository
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductNameViewModel @Inject constructor(
     private val useCasesProductName: UseCasesProductName,
-    private val repo: BookRepository
+    private val repo: NameListRepository
 ) : ViewModel() {
     var prodnameRemoteResponse by mutableStateOf<Response<ArrayList<String>>>(Response.NotInit)
         private set

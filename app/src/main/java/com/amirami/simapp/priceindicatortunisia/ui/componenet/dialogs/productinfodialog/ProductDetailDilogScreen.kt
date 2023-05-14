@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,7 +21,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.*
-import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.logopalcer
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
@@ -35,7 +35,6 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
         modifier = Modifier
             //   .fillMaxSize()
             .wrapContentHeight()
-            // .background(Color.White)
             .padding(16.dp)
             .padding(bottom = 60.dp)
             .verticalScroll(rememberScrollState())

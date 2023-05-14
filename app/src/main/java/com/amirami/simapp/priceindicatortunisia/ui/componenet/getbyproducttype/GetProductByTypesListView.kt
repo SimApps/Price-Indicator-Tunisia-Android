@@ -1,14 +1,13 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.getbyproducttype
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,8 +21,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.screens.addmodify.AddModifyViewModel
+import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_GET_PROD_BY_TYPES
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_SHOW_TYPES
 

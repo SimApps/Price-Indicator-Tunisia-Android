@@ -214,7 +214,7 @@
 
     <string name="proposition_ajouter_produit"> - Identifiant du produit %s \n - Nom du produit : %s \n - Nom du produit en Arabe : %s \n - Marque de produit : %s \n - Marque de produit en Arabe: %s \n - Catégorie de produit : %s \n - Sous Catégorie de produit : %s \n - Sous Sous Catégorie de produit : %s \n - Taille du produit : %s  \n - Description du produit : %s \n - Description du produit en Arabe : %s  \n \n \n - Prix dans Monoprix : %s TND\n - Monoprix Remarque: %s \n - Bonus dans la carte fidélité Monoprix : %s TND\n \n \n - Magasin géneral prix : %s TND\n - Magasin géneral remarque : %s \n - Bonus dans la carte fidélité Magasin géneral : %s TND\n \n \n - Carrefour prix : %s TND\n - Carrefour remarque : %s \n - Bonus dans la carte fidélité Carrefour : %s TND\n \n \n - Aziza prix : %s TND\n - Aziza remarque : %s \n - Bonus dans la carte fidélité Aziza : %s TND\n \n \n - Géant prix : %s TND\n - Géant remarque : %s \n - Bonus dans la carte fidélité Aziza : %s TND\n \n \n -  Mon Identifiant :   %s\n</string>
 
-    <string name="Lunitéest">L\'unité est : %s</string>
+    <string name="quantuty_en">Quantité : %s</string>
 
     <string name="ID_Name">Code-barres: %s Nom : %s </string>
 

@@ -29,8 +29,8 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_ADD
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.FlashLightComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.util.Permission
-import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
-import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ADD_FID_CARD_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.HOME_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.SHOPPING_LIST_SCREEN
@@ -108,101 +108,79 @@ fun BareCodeCameraView(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
-
-    Permission(
-        permission = Manifest.permission.CAMERA,
-        permissionNotAvailableContent = {
-            Column(modifier) {
-                Text(context.getString(R.string.pas_decamera))
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = {
-                        context.startActivity(
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", context.packageName, null)
-                            }
-                        )
-                    }
-                ) {
-                    Text(context.getString(R.string.go_tosetting))
-                }
+    AndroidView(
+        factory = { AndroidViewContext ->
+            PreviewView(AndroidViewContext).apply {
+                this.scaleType = PreviewView.ScaleType.FILL_CENTER
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
             }
         },
-        content = {
-            AndroidView(
-                factory = { AndroidViewContext ->
-                    PreviewView(AndroidViewContext).apply {
-                        this.scaleType = PreviewView.ScaleType.FILL_CENTER
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                        )
-                        implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                    }
-                },
-                modifier = Modifier.fillMaxSize(),
-                update = { previewView ->
+        modifier = Modifier.fillMaxSize(),
+        update = { previewView ->
 
 
-                    val cameraSelector: CameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
-                    val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
-                    val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
-                        ProcessCameraProvider.getInstance(context)
+            val cameraSelector: CameraSelector = CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build()
+            val cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+            val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> =
+                ProcessCameraProvider.getInstance(context)
 
-                    cameraProviderFuture.addListener({
-                        preview = Preview.Builder().build().also {
-                            it.setSurfaceProvider(previewView.surfaceProvider)
-                        }
-                        val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-                        val barcodeAnalyser = BarCodeAnalyser { barcodes ->
-                            barcodes.forEach { barcode ->
-
-                                barcode.rawValue?.let { barcodeValue ->
-                                    val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
-                                    barCodeViewModel.onfidCardInfo(fidcard)
-
-                                    when (barCodeViewModel.sendBarCodeTo) {
-                                        ADD_FID_CARD_SCREEN -> {
-                                            navController.navigate(ListScreens.CarteFidelite.Route)
-                                            barCodeViewModel.onfidCardActionInfo(FID_CARD_ACTION_ADD)
-                                        }
-                                        HOME_SCREEN -> navController.navigate(ListScreens.Accueil.Route)
-                                        SHOPPING_LIST_SCREEN -> navController.navigate(ListScreens.Courses.Route)
-                                    }
-                                }
-                            }
-                        }
-                        val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
-                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                            .build()
-                            .also {
-                                it.setAnalyzer(cameraExecutor, barcodeAnalyser)
-                            }
-
-
-                        try {
-                            cameraProvider.unbindAll()
-                            val camera = cameraProvider.bindToLifecycle(
-                                lifecycleOwner,
-                                cameraSelector,
-                                preview,
-                                imageAnalysis
-                            )
-
-
-                            if (camera.cameraInfo.hasFlashUnit()) {
-                                camera.cameraControl.enableTorch(barCodeViewModel.flashState)
-                            }
-                        } catch (e: Exception) {
-                            Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
-                        }
-                    }, ContextCompat.getMainExecutor(context))
+            cameraProviderFuture.addListener({
+                preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
                 }
-            )
+                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+                val barcodeAnalyser = BarCodeAnalyser { barcodes ->
+                    barcodes.forEach { barcode ->
+
+                        barcode.rawValue?.let { barcodeValue ->
+                            val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
+                            barCodeViewModel.onfidCardInfo(fidcard)
+
+                            when (barCodeViewModel.sendBarCodeTo) {
+                                ADD_FID_CARD_SCREEN -> {
+                                    navController.navigate(ListScreens.CarteFidelite.Route)
+                                    barCodeViewModel.onfidCardActionInfo(FID_CARD_ACTION_ADD)
+                                }
+                                HOME_SCREEN -> navController.navigate(ListScreens.Accueil.Route)
+                                SHOPPING_LIST_SCREEN -> navController.navigate(ListScreens.Courses.Route)
+                            }
+                        }
+                    }
+                }
+                val imageAnalysis: ImageAnalysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .also {
+                        it.setAnalyzer(cameraExecutor, barcodeAnalyser)
+                    }
+
+
+                try {
+                    cameraProvider.unbindAll()
+                    val camera = cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        imageAnalysis
+                    )
+
+
+                    if (camera.cameraInfo.hasFlashUnit()) {
+                        camera.cameraControl.enableTorch(barCodeViewModel.flashState)
+                    }
+                } catch (e: Exception) {
+                    Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
+                }
+            }, ContextCompat.getMainExecutor(context))
         }
     )
+
 }
 
 

@@ -52,88 +52,68 @@ fun CameraXScreen(
     barCodeViewModel: BarCodeViewModel
 ) {
     val context = LocalContext.current
-
-    Permission(
-        permission = Manifest.permission.CAMERA,
-        permissionNotAvailableContent = {
-            Column(modifier) {
-                Text("O noes! No Camera!")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                    onClick = {
-                        context.startActivity(
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", context.packageName, null)
-                            }
-                        )
-                    }
-                ) {
-                    Text("Open Settings")
+    Box(modifier = modifier) {
+        val lifecycleOwner = LocalLifecycleOwner.current
+        val coroutineScope = rememberCoroutineScope()
+        var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }
+        val imageCaptureUseCase by remember {
+            mutableStateOf(
+                ImageCapture.Builder()
+                    .setFlashMode(ImageCapture.FLASH_MODE_ON)
+                    .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
+                    .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                    .build()
+            )
+        }
+        if (barCodeViewModel.flashState) {
+            CameraPreview(
+                modifier = Modifier.fillMaxSize(),
+                onUseCase = {
+                    previewUseCase = it
                 }
-            } },
-        content = {
-            Box(modifier = modifier) {
-                val lifecycleOwner = LocalLifecycleOwner.current
-                val coroutineScope = rememberCoroutineScope()
-                var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }
-                val imageCaptureUseCase by remember {
-                    mutableStateOf(
-                        ImageCapture.Builder()
-                            .setFlashMode(ImageCapture.FLASH_MODE_ON)
-                            .setCaptureMode(CAPTURE_MODE_MAXIMIZE_QUALITY)
-                            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-                            .build()
-                    )
-                }
-                if (barCodeViewModel.flashState) {
-                    CameraPreview(
-                        modifier = Modifier.fillMaxSize(),
-                        onUseCase = {
-                            previewUseCase = it
-                        }
-                    )
-                } else CameraPreview(
-                    modifier = Modifier.fillMaxSize(),
-                    onUseCase = {
-                        previewUseCase = it
-                    }
-                )
-                CapturePictureButton(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(16.dp)
-                        .align(Alignment.BottomCenter),
-                    onClick = {
-                        coroutineScope.launch {
-                            imageCaptureUseCase.takePicture(context.executor).let {
-                                onImageFile(it)
-                                //  onImageFile(createImageFile(context))
+            )
+        } else CameraPreview(
+            modifier = Modifier.fillMaxSize(),
+            onUseCase = {
+                previewUseCase = it
+            }
+        )
+        CapturePictureButton(
+            modifier = Modifier
+                .size(100.dp)
+                .padding(16.dp)
+                .align(Alignment.BottomCenter),
+            onClick = {
+                coroutineScope.launch {
+                    imageCaptureUseCase.takePicture(context.executor).let {
+                        onImageFile(it)
+                        //  onImageFile(createImageFile(context))
 
-                                //     Log.d("eee","3"+ createImageFile(context).toUri().toString())
-                            }
-                        }
-                    }
-                )
-
-                LaunchedEffect(previewUseCase) {
-                    val cameraProvider = context.getCameraProvider()
-                    try {
-                        // Must unbind the use-cases before rebinding them.
-                        cameraProvider.unbindAll()
-                        val camera = cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            cameraSelector,
-                            previewUseCase,
-                            imageCaptureUseCase
-                        )
-                        camera.cameraControl.enableTorch(barCodeViewModel.flashState)
-                    } catch (ex: Exception) {
-                        Log.e("CameraCapture", "Failed to bind camera use cases", ex)
+                        //     Log.d("eee","3"+ createImageFile(context).toUri().toString())
                     }
                 }
             }
+        )
+
+        LaunchedEffect(previewUseCase) {
+            val cameraProvider = context.getCameraProvider()
+            try {
+                // Must unbind the use-cases before rebinding them.
+                cameraProvider.unbindAll()
+                val camera = cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    previewUseCase,
+                    imageCaptureUseCase
+                )
+                camera.cameraControl.enableTorch(barCodeViewModel.flashState)
+            } catch (ex: Exception) {
+                Log.e("CameraCapture", "Failed to bind camera use cases", ex)
+            }
         }
-    )
+    }
+
+
 }
 
 fun createImageFile(context: Context): File {

@@ -5,7 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
+import androidx.compose.material3.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -70,9 +72,8 @@ fun ProductTiket(
             // .fillMaxHeight()
             .fillMaxWidth()
             .clickable {
-                if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
-                    productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
-                } else productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
+
+               productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
 
                 productDetailDialogViewModel.onprodDetailDialogStatesChanged(product = prodsResponse)
             },
@@ -130,7 +131,7 @@ fun ProductTiket(
         //     Spacer(modifier = Modifier.padding(start = 12.dp))
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_add_to_cart),
+            imageVector =  Icons.Default.ShoppingCartCheckout,
             contentDescription = "",
             Modifier
                 .weight(1f)

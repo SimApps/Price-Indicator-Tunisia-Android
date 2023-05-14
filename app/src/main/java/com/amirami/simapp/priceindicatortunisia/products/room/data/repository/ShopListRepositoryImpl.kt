@@ -1,7 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.products.room.data.repository
 
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.products.room.data.network.ProdShopListDAO
+import com.amirami.simapp.priceindicatortunisia.products.room.data.dao.ProdShopListDAO
 import com.amirami.simapp.priceindicatortunisia.products.room.domain.repository.ShopListRepository
 import kotlinx.coroutines.flow.Flow
 

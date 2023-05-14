@@ -28,7 +28,7 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeVie
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.camera.CameraXScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.gallery.GallerySelect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.amirami.simapp.priceindicatortunisia.ui.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 

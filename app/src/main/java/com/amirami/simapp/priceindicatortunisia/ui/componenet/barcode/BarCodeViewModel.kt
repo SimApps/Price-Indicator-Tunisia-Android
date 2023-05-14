@@ -5,12 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import javax.inject.Inject
 
 
 class BarCodeViewModel @Inject constructor() : ViewModel() {
-
+    var showAddFidCard by mutableStateOf(false)
+    fun onShowAddFidCardChanged(value: Boolean) {
+        showAddFidCard = value
+    }
     var fidCardBarCodeInfo by mutableStateOf(FidCardEntity(name = "",value=  "",barecodeformat= -1,barecodetype= -1))
         private set
     fun onfidCardInfo(fidCardBarCodeInf: FidCardEntity) {
