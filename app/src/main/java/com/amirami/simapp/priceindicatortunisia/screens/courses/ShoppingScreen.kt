@@ -12,7 +12,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,15 +29,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.Discount
-import androidx.compose.material.icons.filled.FreeCancellation
 import androidx.compose.material.icons.filled.Minimize
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Percent
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Shop2
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -84,7 +78,6 @@ import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.convertStr
 import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.stringToDouble
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.AnimatedText
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.CustomModifiers.customWidth
@@ -127,7 +120,10 @@ fun ShoppingScreen(
 
             },
         ) {
-            ProductDetailDilogScreen(productDetailDialogViewModel, navController)
+            ProductDetailDilogScreen(
+                productsViewModel = productsViewModel,
+                productDetailDialogViewModel = productDetailDialogViewModel,
+                navController = navController)
 
         }
     }
@@ -277,7 +273,7 @@ fun ProductShopTiket(
                     productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
                 } else productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
 
-                productDetailDialogViewModel.onprodDetailDialogStatesChanged(product = prodsResponse)
+                productsViewModel.onSelectedProductChanged(product = prodsResponse)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

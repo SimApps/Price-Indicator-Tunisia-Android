@@ -22,14 +22,15 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.*
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.logopalcer
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
 
 @Composable
-fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogViewModel, navController: NavHostController) {
+fun ProductDetailDilogScreen(productsViewModel: ProductsViewModel, productDetailDialogViewModel: ProductDetailDialogViewModel, navController: NavHostController) {
     val context = LocalContext.current
-    val product = productDetailDialogViewModel.prodDetailDialogStates
+    val product = productsViewModel.selectedProductStates
 
     Column(
         modifier = Modifier
@@ -49,7 +50,7 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
                 modifier = Modifier
                     .size(150.dp)
                     .clip(RoundedCornerShape(10.dp)),
-                model = productDetailDialogViewModel.prodDetailDialogStates.imageurl,
+                model = product.imageurl,
                 contentDescription = "stringResource(R.string.description)"
             ) {
                 when (painter.state) {
@@ -68,15 +69,15 @@ fun ProductDetailDilogScreen(productDetailDialogViewModel: ProductDetailDialogVi
             }
 
             Column(modifier = Modifier.wrapContentSize()) {
-                Text(text = productDetailDialogViewModel.prodDetailDialogStates.sieze)
+                Text(text = product.sieze)
             }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
-        Text(text = productDetailDialogViewModel.prodDetailDialogStates.name)
+        Text(text = product.name)
         Spacer(modifier = Modifier.height(10.dp))
 
-        Text(text = typeToTxt(productDetailDialogViewModel.prodDetailDialogStates))
+        Text(text = typeToTxt(product))
 
         Spacer(modifier = Modifier.height(10.dp))
         ToggleBotton(productDetailDialogViewModel)

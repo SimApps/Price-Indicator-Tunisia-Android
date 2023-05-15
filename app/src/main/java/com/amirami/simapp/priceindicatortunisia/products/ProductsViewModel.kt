@@ -22,10 +22,7 @@ class ProductsViewModel @Inject constructor(
     private val shopListRepository: ShopListRepository
 ) : ViewModel() {
 
-    var prodResponse by mutableStateOf<Response<MutableList<ProductModel>>>(NotInit)
 
-    var prodataResponse by mutableStateOf<List<ProductModel>>(emptyList<ProductModel>())
-        private set
 
     var addProdResponse by mutableStateOf<Response<Void?>>(Success(null))
         private set
@@ -35,6 +32,9 @@ class ProductsViewModel @Inject constructor(
     var deleteProdResponse by mutableStateOf<Response<Void?>>(Success(null))
         private set
     var isLoading by mutableStateOf(false)
+        private set
+
+    var errorValue by mutableStateOf("")
         private set
 
     var shopLists by mutableStateOf(emptyList<ProductModel>())
@@ -49,22 +49,38 @@ class ProductsViewModel @Inject constructor(
         actionTypesListView = action
     }
 
+    var productListStates by mutableStateOf(emptyList<ProductModel>())
+
+    var selectedProductStates by mutableStateOf(ProductModel())
+
+    fun onSelectedProductChanged(product: ProductModel) {
+        selectedProductStates = product
+    }
     fun getProds(searchtype: String, searchtext: String) = viewModelScope.launch {
         useCasesProduct.getProduct(searchtype, searchtext).collect { response ->
-            prodResponse = response
 
-          /*  when (prodResponse) {
-                is NotInit -> isLoading = false
-                is Response.Loading ->  isLoading = true
+            when (response) {
+                is NotInit -> {
+                    errorValue = ""
+                    isLoading = false
+                }
+                is Response.Loading ->  {
+                    errorValue = ""
+                    isLoading = true
+                }
                 is Success -> {
                     isLoading = false
-
-                    prodataResponse = (prodResponse as Success<MutableList<Product>>).data
+                    errorValue = ""
+                    productListStates =  (response as Success<List<ProductModel>>).data
+                    selectedProductStates = (response as Success<List<ProductModel>>).data.first()
 
                 }
-                is Response.Error -> isLoading = false
+                is Response.Error -> {
+                    isLoading = false
+                    errorValue = (response as Response.Error).message
+                }
 
-            }*/
+            }
         }
     }
 

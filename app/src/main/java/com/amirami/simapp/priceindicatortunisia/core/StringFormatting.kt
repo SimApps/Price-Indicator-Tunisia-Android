@@ -11,7 +11,7 @@ object StringFormatting {
 
         format.maximumFractionDigits = 3
 
-        return if(input=="" /*|| input== "0.0"*/) "" else format.format(input.toDouble())
+        return if(input=="" /*|| input== "0.0"*/) "" else format.format(stringToDouble(input))
     }
 
     fun returnNAifEmpty(string: String?): String = if (!string.isNullOrBlank()) string else "N/A"
@@ -40,14 +40,15 @@ object StringFormatting {
     fun stringToDouble(value : String?):Double =
         if (
             value == "null"||
-            //value.isNullOrBlank() ||
+           value.isNullOrBlank() //||
        // value.isEmpty() ||
-        value.isNullOrEmpty()// ||
+       // value.isNullOrEmpty()// ||
        // !value.isDigitsOnly() ||
        // value.toDoubleOrNull() == null
     )
       0.0
-     else value.toDouble()
+     else value.replace(",",".")  .toDouble()
+
 
 
 }

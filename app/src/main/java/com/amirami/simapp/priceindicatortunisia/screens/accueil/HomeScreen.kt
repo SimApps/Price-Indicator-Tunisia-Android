@@ -61,7 +61,11 @@ fun HomeScreen(
 
             },
         ) {
-            ProductDetailDilogScreen(productDetailDialogViewModel,navController)
+            ProductDetailDilogScreen(
+                productsViewModel = productsViewModel,
+                productDetailDialogViewModel = productDetailDialogViewModel,
+                navController = navController
+            )
 
         }
     }
@@ -141,16 +145,16 @@ fun HomeScreenContent(
                     R.raw.no_internet_connection
                 )
             }
-            when (val prodsResponse = productsViewModel.prodResponse) {
-                is NotInit -> Log.d("dd", "Not Init")
-                is Loading -> ProgressBar()
-                is Success -> ProductList(
-                    prodsResponse = prodsResponse.data,
-                    productDetailDialogViewModel = productDetailDialogViewModel,
-                    productsViewModel = productsViewModel
-                )
-                is Error -> Functions.errorToast(context, prodsResponse.message)
-            }
+
+            if(productsViewModel.isLoading) ProgressBar()
+if(productsViewModel.errorValue !="")Functions.errorToast(context, productsViewModel.errorValue)
+            ProductList(
+                prodsResponse = productsViewModel.productListStates,
+                productDetailDialogViewModel = productDetailDialogViewModel,
+                productsViewModel = productsViewModel
+            )
+
+
 
         }
     }

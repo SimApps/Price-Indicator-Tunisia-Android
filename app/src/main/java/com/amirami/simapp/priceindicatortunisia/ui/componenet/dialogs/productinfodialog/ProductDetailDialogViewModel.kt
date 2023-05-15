@@ -15,11 +15,7 @@ class ProductDetailDialogViewModel() : ViewModel(), Parcelable {
         prodDetailDialogVisibilityStates = dialogvisibilityState
     }
 
-    var prodDetailDialogStates by mutableStateOf(ProductModel())
 
-    fun onprodDetailDialogStatesChanged(product: ProductModel) {
-        prodDetailDialogStates = product
-    }
 
     var prodDetailDialogInshopingStates by mutableStateOf(ProductModel())
     fun onprodDetailDialogInshopingStatesChanged(product: ProductModel) {

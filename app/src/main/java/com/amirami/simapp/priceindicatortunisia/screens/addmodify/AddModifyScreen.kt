@@ -90,7 +90,8 @@ fun AddModifyScreen(
     productNameViewModel: ProductNameViewModel = hiltViewModel(),
     addModifyViewModel: AddModifyViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
-    productTypesDialogViewModel: ProductTypesDialogViewModel = hiltViewModel()
+    productTypesDialogViewModel: ProductTypesDialogViewModel,
+    productsViewModel: ProductsViewModel
 
 ) {
     val context = LocalContext.current
@@ -128,7 +129,8 @@ fun AddModifyScreen(
                 productNameViewModel = productNameViewModel,
                 addModifyViewModel = addModifyViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel,
-                productTypesDialogViewModel = productTypesDialogViewModel
+                productTypesDialogViewModel = productTypesDialogViewModel,
+                productsViewModel = productsViewModel
             )
 
 
@@ -139,7 +141,7 @@ fun AddModifyScreenContent(
     padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
-    productsViewModel: ProductsViewModel = hiltViewModel(),
+    productsViewModel: ProductsViewModel,
     searchViewModel: SearchViewModel,
     productNameViewModel: ProductNameViewModel,
     addModifyViewModel: AddModifyViewModel,
@@ -147,7 +149,7 @@ fun AddModifyScreenContent(
     productTypesDialogViewModel: ProductTypesDialogViewModel
 ) {
     val context = LocalContext.current
-    val prodDetailDialogStates = productDetailDialogViewModel.prodDetailDialogStates
+    val prodDetailDialogStates = productsViewModel.selectedProductStates
 
     Column(
         modifier = Modifier
@@ -191,40 +193,14 @@ fun AddModifyScreenContent(
                     R.raw.no_internet_connection
                 )
             }
+if (productsViewModel.isLoading) ProgressBar()
+            ScreenContent(
+                navController = navController,
+                productModel = prodDetailDialogStates,
+                addModifyViewModel = addModifyViewModel,
+                productTypesDialogViewModel = productTypesDialogViewModel
+            )
 
-            when (val prodsResponse = productsViewModel.prodResponse) {
-                is Response.NotInit -> {
-                    Text("cxs size" +  addModifyViewModel.barcodeTextValue)
-                    Text(  "name" + prodDetailDialogStates.name)
-                    ScreenContent(
-                        navController = navController,
-                        productModel = prodDetailDialogStates,
-                        addModifyViewModel = addModifyViewModel,
-                        productTypesDialogViewModel = productTypesDialogViewModel
-                    )
-
-                   /* ScreenContent(
-                        productModel = ProductModel(),
-                        addModifyViewModel = addModifyViewModel
-                    )*/
-                }
-
-                is Response.Loading -> ProgressBar()
-
-                is Response.Success -> {
-
-                     Text("xx size" +  addModifyViewModel.barcodeTextValue)
-                     Text("data size" + prodsResponse.data.size.toString())
-                    ScreenContent(
-                        navController = navController,
-                        productModel = prodsResponse.data[0],
-                        addModifyViewModel = addModifyViewModel,
-                        productTypesDialogViewModel = productTypesDialogViewModel
-                    )
-                }
-
-                is Response.Error -> Functions.errorToast(context, prodsResponse.message)
-            }
         }
     }
 }
@@ -240,7 +216,7 @@ fun ScreenContent(
 
     EditTextInputComponent(
         modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.barcodeTextValue != "") addModifyViewModel.barcodeTextValue else productModel.id,
+        productModel.id,
         R.string.ScanproductIdoradditmanually,
         onValueChange = {
             addModifyViewModel.onbarcodeTextValue(it)
@@ -254,7 +230,7 @@ fun ScreenContent(
             //  .weight(2f)
             .size(85.dp)
             .clip(RoundedCornerShape(6.dp)),
-        model = if (productModel.imageurl == "") R.drawable.ic_photo else productModel.imageurl,
+        model = productModel.imageurl,
         contentDescription = "stringResource(R.string.description)"
     ) {
         when (painter.state) {
@@ -275,8 +251,8 @@ fun ScreenContent(
     }
     EditTextInputComponent(
         modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.nomProduitTextValue != "") addModifyViewModel.nomProduitTextValue else productModel.name,
-        R.string.Nomduproduit,
+      text = productModel.name,
+      stringId =   R.string.Nomduproduit,
         onValueChange = {
             productModel.name = it
             addModifyViewModel.onNomProduitTextValue(it)

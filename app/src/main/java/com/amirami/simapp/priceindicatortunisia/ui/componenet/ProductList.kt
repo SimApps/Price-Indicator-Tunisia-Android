@@ -33,7 +33,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
 
 @Composable
 fun ProductList(
-    prodsResponse: MutableList<ProductModel>,
+    prodsResponse: List<ProductModel>,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     productsViewModel: ProductsViewModel
 ) {
@@ -75,7 +75,7 @@ fun ProductTiket(
 
                productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
 
-                productDetailDialogViewModel.onprodDetailDialogStatesChanged(product = prodsResponse)
+                productsViewModel.onSelectedProductChanged(product = prodsResponse)
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
