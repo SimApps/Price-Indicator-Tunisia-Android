@@ -2,69 +2,56 @@
 
 package com.amirami.simapp.priceindicatortunisia.screens.addmodify
 
-import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.ui.CustomModifiers.customWidth
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.ClickableEditTextField
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomDropdownMenu
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.EditTextField
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
@@ -73,11 +60,10 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
-import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.Constants
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import kotlinx.coroutines.launch
 
 @Composable
@@ -97,10 +83,10 @@ fun AddModifyScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState()
 
 
-
+    val currentProduct = addModifyViewModel.currentProduct
 
     if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
         ModalBottomSheet(
@@ -109,29 +95,53 @@ fun AddModifyScreen(
                 scope.launch {
                     sheetState.hide()
                 }
-                productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
+                productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(false)
 
             },
         ) {
-            ProductTypesDialogScreen(productTypesDialogViewModel, navController, addModifyViewModel = addModifyViewModel)
+            ProductTypesDialogScreen(
+                productTypesDialogViewModel = productTypesDialogViewModel,
+                navController = navController,
+                addModifyViewModel = addModifyViewModel
+            )
 
         }
     }
 
 
+    LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
+        if (barCodeViewModel.fidCardBarCodeInfo.value != "") {
+            val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
+                Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
+            } else barCodeViewModel.fidCardBarCodeInfo.value
 
-            AddModifyScreenContent(
-                padding = padding,
-                navController = navController,
-                barCodeViewModel = barCodeViewModel,
-                //  productsViewModel = productsViewModel,
-                searchViewModel = searchViewModel,
-                productNameViewModel = productNameViewModel,
-                addModifyViewModel = addModifyViewModel,
-                productDetailDialogViewModel = productDetailDialogViewModel,
-                productTypesDialogViewModel = productTypesDialogViewModel,
-                productsViewModel = productsViewModel
-            )
+            barecodeValue.let {
+                searchViewModel.onsearchValue(it)
+                productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
+
+                val fidcard =
+                    FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
+                barCodeViewModel.onfidCardInfo(fidcard)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = productsViewModel.selectedProductStates){
+        addModifyViewModel.onCurrentProductChange(productsViewModel.selectedProductStates)
+    }
+    AddModifyScreenContent(
+        padding = padding,
+        navController = navController,
+        barCodeViewModel = barCodeViewModel,
+        //  productsViewModel = productsViewModel,
+        searchViewModel = searchViewModel,
+        productNameViewModel = productNameViewModel,
+        addModifyViewModel = addModifyViewModel,
+        productDetailDialogViewModel = productDetailDialogViewModel,
+        productTypesDialogViewModel = productTypesDialogViewModel,
+        productsViewModel = productsViewModel,
+        currentProduct = currentProduct
+    )
 
 
 }
@@ -146,28 +156,24 @@ fun AddModifyScreenContent(
     productNameViewModel: ProductNameViewModel,
     addModifyViewModel: AddModifyViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
-    productTypesDialogViewModel: ProductTypesDialogViewModel
+    productTypesDialogViewModel: ProductTypesDialogViewModel,
+    currentProduct: ProductModel
 ) {
     val context = LocalContext.current
-    val prodDetailDialogStates = productsViewModel.selectedProductStates
+
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            . padding(padding)
-        // .background(Color.White)
-        //  .verticalScroll(rememberScrollState()),
-        // verticalArrangement = Arrangement.Top,
-        //  horizontalAlignment = Alignment.Start
+            .padding(padding)
     ) {
         if (productNameViewModel.productLocalNames.isNotEmpty()) {
-            SearchView(
-                navController = navController,
+            SearchView(navController = navController,
                 barCodeViewModel = barCodeViewModel,
-                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }[0]!!),
+                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }
+                    .first()!!),
                 productsViewModel = productsViewModel,
-                searchViewModel = searchViewModel
-            )
+                searchViewModel = searchViewModel)
         }
 
         if (productNameViewModel.isLoading) {
@@ -180,7 +186,6 @@ fun AddModifyScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(9.dp, 0.dp, 9.dp, 0.dp)
-                // .background(Color.White)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -189,16 +194,15 @@ fun AddModifyScreenContent(
 
             if (productNameViewModel.message == Constants.ERREUR_CONNECTION) {
                 LottieComposable(
-                    250.dp,
-                    R.raw.no_internet_connection
+                    250.dp, R.raw.no_internet_connection
                 )
             }
-if (productsViewModel.isLoading) ProgressBar()
+            if (productsViewModel.isLoading) ProgressBar()
             ScreenContent(
                 navController = navController,
-                productModel = prodDetailDialogStates,
                 addModifyViewModel = addModifyViewModel,
-                productTypesDialogViewModel = productTypesDialogViewModel
+                productTypesDialogViewModel = productTypesDialogViewModel,
+                currentProduct = currentProduct
             )
 
         }
@@ -208,21 +212,28 @@ if (productsViewModel.isLoading) ProgressBar()
 @Composable
 fun ScreenContent(
     navController: NavHostController,
-    productModel: ProductModel,
     addModifyViewModel: AddModifyViewModel,
-    productTypesDialogViewModel: ProductTypesDialogViewModel
+    productTypesDialogViewModel: ProductTypesDialogViewModel,
+    currentProduct: ProductModel,
+    canModify : Boolean = false
 ) {
     val context = LocalContext.current
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        productModel.id,
-        R.string.ScanproductIdoradditmanually,
+    EditTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = currentProduct.id,
+        errorvalue = null,
+        label = stringResource(R.string.ScanproductIdoradditmanually),
         onValueChange = {
-            addModifyViewModel.onbarcodeTextValue(it)
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(id = it))
         },
         readOnly = true,
-        enabled = false
+        enabled = false,
+        showLeadingIcon = true,
+        leadingIcon = Icons.Default.QrCodeScanner,
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next
     )
 
     SubcomposeAsyncImage(
@@ -230,7 +241,7 @@ fun ScreenContent(
             //  .weight(2f)
             .size(85.dp)
             .clip(RoundedCornerShape(6.dp)),
-        model = productModel.imageurl,
+        model = currentProduct.imageurl,
         contentDescription = "stringResource(R.string.description)"
     ) {
         when (painter.state) {
@@ -249,584 +260,427 @@ fun ScreenContent(
             }
         }
     }
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-      text = productModel.name,
-      stringId =   R.string.Nomduproduit,
-        onValueChange = {
-            productModel.name = it
-            addModifyViewModel.onNomProduitTextValue(it)
-        }
-    )
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.nomProduitArabeTextValue != "") addModifyViewModel.nomProduitArabeTextValue else productModel.namearabe,
-        R.string.NomduproduitenArabe,
-        onValueChange = {
-            productModel.namearabe = it
-            addModifyViewModel.onNomProduitTextArabeValue(it)
-        }
-    )
-
-    Row(
+    EditTextField(
         modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.marquesTextValue != "") addModifyViewModel.marquesTextValue else productModel.marques,
-            R.string.marques,
-            onValueChange = {
-                productModel.marques = it
-                addModifyViewModel.onMarquesTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.marquesArabeTextValue != "") addModifyViewModel.marquesArabeTextValue else productModel.marquesarabe,
-            R.string.marquesenArabe,
-            onValueChange = {
-                productModel.marquesarabe = it
-                addModifyViewModel.onMarquesArabeTextValue(it)
-            }
-        )
-    }
-
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {
-                if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
-                    productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(false)
-                } else productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(true)
-
-                productTypesDialogViewModel.onprodTypesDialogStatesChanged(title = context.getString(R.string.Catégories), context.getString(R.string.Tous_les_Catégories))
-            },
-        returnProdType(addModifyViewModel, productModel),
-        R.string.Catégories,
+            .fillMaxWidth(),
+        text = currentProduct.name,
+        errorvalue = null,
+        label = stringResource(R.string.Nomduproduit),
         onValueChange = {
-            addModifyViewModel.onprodTypeTextValue(it)
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(name = it))
         },
         readOnly = false,
-        enabled = false
+        enabled = true,
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next
     )
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {
-                if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
-                    productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(false)
-                } else productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(true)
-
-                productTypesDialogViewModel.onprodTypesDialogStatesChanged(title = context.getString(R.string.SousCatégories), returnProdType(addModifyViewModel, productModel))
-            },
-        returnProdSubType(addModifyViewModel, productModel),
-        R.string.SousCatégories,
+    EditTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = currentProduct.namearabe,
+        errorvalue = null,
+        label = stringResource(R.string.NomduproduitenArabe),
         onValueChange = {
-            addModifyViewModel.onprodSubTypeTextValue(it)
-        },
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(namearabe = it))
+                        },
         readOnly = false,
-        enabled = false
+        enabled = true,
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next
     )
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {
-                if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
-                    productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(false)
-                } else productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(true)
-
-                productTypesDialogViewModel.onprodTypesDialogStatesChanged(title = context.getString(R.string.sousousCatégories), returnProdSubType(addModifyViewModel, productModel))
-            },
-        returnProdSubSubType(addModifyViewModel, productModel),
-        R.string.sousousCatégories,
-        onValueChange = {
-            addModifyViewModel.onprodSubSubTypeTextValue(it)
-        },
-        readOnly = false,
-        enabled = false
-    )
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().height(66.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
     ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.siezeTextValue != "") addModifyViewModel.siezeTextValue else Functions.replacesiez(productModel.sieze),
-            R.string.Volumepoidproduit,
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.5f),
+            text = currentProduct.marques,
+            errorvalue = null,
+            label = stringResource(R.string.marques),
             onValueChange = {
-                addModifyViewModel.onSiezeTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(marques = it))
             },
-            keyboardType = KeyboardType.Text
+            readOnly = false,
+            enabled = true,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
         )
         Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        DropDownMenu(
-            items = addModifyViewModel.mesureUnitList,
-            // selectedItem = addModifyViewModel.unitselected.value,
-            selectedItem = if (addModifyViewModel.unitselected.value != "")
-                addModifyViewModel.unitselected.value else Functions.removeAllDigitExeptX(productModel.sieze),
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.45f),
+            text = currentProduct.marquesarabe,
+            errorvalue = null,
+            label = stringResource(R.string.marquesenArabe),
             onValueChange = {
-                //  productModel.sieze = Functions.replacesiez(productModel.sieze) +Functions.removeAllDigitExeptX(it)
-
-                addModifyViewModel.unitselected.value = it
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(marquesarabe = it))
             },
-            stringId = R.string.Unite,
-            modifier = Modifier.weight(weight = 1f, fill = true)
+            readOnly = false,
+            enabled = true,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
         )
 
-        /*   EditTextInputComponent(
-               modifier = Modifier.weight(weight = 1f, fill = true),
-               if (addModifyViewModel.unitTextValue != "") addModifyViewModel.unitTextValue else Functions.removeAllDigitExeptX(productModel.sieze),
-               R.string.Unite,
-               onValueChange = {
-                   addModifyViewModel.onUnitTextValue(it)
-               }
-           )*/
     }
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.imageLinkTextValue != "") addModifyViewModel.imageLinkTextValue else productModel.imageurl,
-        R.string.Liendimage,
-        onValueChange = {
-            productModel.imageurl = it
-            addModifyViewModel.onimageLinkTextValue(it)
-        },
-        keyboardType = KeyboardType.Uri
-    )
+    ClickableEditTextField(
+    text  = currentProduct.type,
+    errorValue = null,
+    label =  context.getString(R.string.Catégories),
+    readOnly = true,
+    onClick= {
+        productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(!productTypesDialogViewModel.prodTypesDialogVisibilityStates)
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.prodDescriptionTextValue != "") addModifyViewModel.prodDescriptionTextValue else productModel.description,
-        R.string.Descriptionduproduit,
+        productTypesDialogViewModel.onprodTypesDialogStatesChanged(
+            title = context.getString(
+                R.string.Catégories
+            ), content =  context.getString(R.string.Tous_les_Catégories)
+        )
+    },
         onValueChange = {
-            productModel.description = it
-            addModifyViewModel.onprodDescriptionTextValue(it)
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(type = it))
+
         }
     )
 
-    EditTextInputComponent(
-        modifier = Modifier.fillMaxWidth(),
-        if (addModifyViewModel.prodDescriptionARTextValue != "") addModifyViewModel.prodDescriptionARTextValue else productModel.descriptionarabe,
-        R.string.DescriptionduproduitenArabe,
+
+    ClickableEditTextField(
+        text  = currentProduct.typesub,
+        errorValue = null,
+        label =  context.getString(R.string.SousCatégories),
+        readOnly = true,
+        onClick= {
+            productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(!productTypesDialogViewModel.prodTypesDialogVisibilityStates)
+
+            productTypesDialogViewModel.onprodTypesDialogStatesChanged(
+                title = context.getString(
+                    R.string.SousCatégories
+                ), content =  currentProduct.type
+            )
+        },
         onValueChange = {
-            productModel.descriptionarabe = it
-            addModifyViewModel.onprodDescriptionARTextValue(it)
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(typesub = it))
+
         }
     )
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.monoprixPriceTextValue != "")
-                addModifyViewModel.monoprixPriceTextValue else productModel.monoprixprice,
-            R.string.monoprix_prix,
-            onValueChange = {
-                productModel.monoprixprice = it
-                addModifyViewModel.onmonoprixPriceTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
 
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 2f, fill = true)
-                .clickable {
-                    addModifyViewModel.onmonoprixPromotionTextValue(productModel.monoprixremarq)
-                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_monoprix))
-                    addModifyViewModel.onMonoprixBonusSurCartFidTextValue(productModel.monoprixbonusfid)
-                    navController.navigate(ListScreens.PriceRemarques.Route)
-                },
-            if (addModifyViewModel.monoprixPromotionTextValue != "") addModifyViewModel.monoprixPromotionTextValue else productModel.monoprixremarq,
-            R.string.promotion_monoprix,
+    ClickableEditTextField(
+        text  = currentProduct.typesubsub,
+        errorValue = null,
+        label =  context.getString(R.string.sousousCatégories),
+        readOnly = true,
+        onClick= {
+            productTypesDialogViewModel.onprodTypesDialogVisibilityStatesChanged(!productTypesDialogViewModel.prodTypesDialogVisibilityStates)
+
+            productTypesDialogViewModel.onprodTypesDialogStatesChanged(
+                title = context.getString(
+                    R.string.sousousCatégories
+                ), content = currentProduct.typesub
+            )
+        },
+        onValueChange = {
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(typesubsub = it))
+        }
+    )
+
+
+
+    Row(
+        modifier = Modifier.fillMaxWidth().height(66.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
+    ) {
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.5f),
+            text = currentProduct.sieze,
+            errorvalue = null,
+            label = stringResource(R.string.Volumepoidproduit),
             onValueChange = {
-                productModel.monoprixremarq = it
-                addModifyViewModel.onmonoprixPromotionTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(sieze = it))
             },
             readOnly = false,
-            enabled = false
+            enabled = true,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
         )
+
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+
+        CustomDropdownMenu(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.45f),
+            text =  if (addModifyViewModel.unitselected != "") addModifyViewModel.unitselected
+            else Functions.removeAllDigitExeptX(currentProduct.sieze),
+            errorValue = null,
+            label = stringResource(R.string.Unite),
+            readOnly =  true,
+            onClickExpand = {
+                addModifyViewModel.onUnitExpandedChange(true)
+            },
+            dropDownMenu = {
+                DropdownMenu(
+                    expanded = addModifyViewModel.unitExpanded,
+                    onDismissRequest = {  addModifyViewModel.onUnitExpandedChange(false) }) {
+                    addModifyViewModel.mesureUnitList.forEach { item ->
+                        DropdownMenuItem(text = {
+                            Text(text = item)
+                        }, onClick = {
+                            addModifyViewModel.onUnitselectedChange(item)
+                            addModifyViewModel.onUnitExpandedChange(false)
+                        })
+                    }
+                }
+
+            }
+        )
+    }
+    EditTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = currentProduct.imageurl,
+        errorvalue = null,
+        label = stringResource(R.string.Liendimage),
+        onValueChange = {
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(imageurl = it))
+        },
+        readOnly = false,
+        enabled = true,
+        keyboardType = KeyboardType.Uri,
+        imeAction = ImeAction.Next
+    )
+
+    EditTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = currentProduct.description,
+        errorvalue = null,
+        label = stringResource(R.string.Descriptionduproduit),
+        onValueChange = {
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(description = it))
+        },
+        readOnly = false,
+        enabled = true,
+        keyboardType = KeyboardType.Uri,
+        imeAction = ImeAction.Next
+    )
+
+    EditTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = currentProduct.descriptionarabe,
+        errorvalue = null,
+        label = stringResource(R.string.DescriptionduproduitenArabe),
+        onValueChange = {
+            addModifyViewModel.onCurrentProductChange(currentProduct.copy(descriptionarabe = it))
+        },
+        readOnly = false,
+        enabled = true,
+        keyboardType = KeyboardType.Uri,
+        imeAction = ImeAction.Next
+    )
+
+
+    Row(
+        modifier = Modifier.fillMaxWidth().height(66.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
+    ) {
+
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.3f),
+            text = currentProduct.monoprixprice,
+            errorvalue = null,
+            label = stringResource(R.string.monoprix_prix),
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(monoprixprice = it))
+            },
+            readOnly = false,
+            enabled = true,
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next
+        )
+
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+        ClickableEditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.65f),
+            text  = currentProduct.monoprixremarq,
+            errorValue = null,
+            label =  context.getString(R.string.promotion_monoprix),
+            readOnly = true,
+            onClick= {
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_monoprix))
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(monoprixremarq = it))
+            }
+        )
+
     }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().height(66.dp)
+        ,
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
     ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.mgPriceTextValue != "") addModifyViewModel.mgPriceTextValue else productModel.mgprice,
-            R.string.mg_prix,
+        EditTextField(
+            modifier = Modifier
+                .customWidth(LocalConfiguration.current, 0.3f),
+            text = currentProduct.mgprice,
+            errorvalue = null,
+            label = stringResource(R.string.mg_prix),
             onValueChange = {
-                productModel.mgprice = it
-                addModifyViewModel.onMgPriceTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 2f, fill = true)
-                .clickable {
-                    addModifyViewModel.onMgPromotionTextValue(productModel.mgremarq)
-                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_mg))
-                    addModifyViewModel.onMgBonusSurCartFidTextValue(productModel.mgbonusfid)
-                    navController.navigate(ListScreens.PriceRemarques.Route)
-                },
-            if (addModifyViewModel.mgPromotionTextValue != "") addModifyViewModel.mgPromotionTextValue else productModel.mgremarq,
-            R.string.promotion_mg,
-            onValueChange = {
-                productModel.mgremarq = it
-                addModifyViewModel.onMgPromotionTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(mgprice = it))
             },
             readOnly = false,
-            enabled = false
+            enabled = true,
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next
         )
+
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+        ClickableEditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.65f),
+            text  = currentProduct.mgremarq,
+            errorValue = null,
+            label =  context.getString(R.string.promotion_mg),
+            readOnly = true,
+            onClick= {
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_mg))
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(mgremarq = it))
+            }
+        )
+
     }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().height(66.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
     ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.carrefourPriceTextValue != "") addModifyViewModel.carrefourPriceTextValue else productModel.carrefourprice,
-            R.string.carrefour_prix,
+        EditTextField(
+            modifier = Modifier
+                .customWidth(LocalConfiguration.current, 0.3f),
+            text = currentProduct.carrefourprice,
+            errorvalue = null,
+            label = stringResource(R.string.carrefour_prix),
             onValueChange = {
-                productModel.carrefourprice = it
-                addModifyViewModel.onCarrefourPriceTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 2f, fill = true)
-                .clickable {
-                    addModifyViewModel.onCarrefouPromotionTextValue(productModel.carrefourremarq)
-                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_carrefour))
-                    addModifyViewModel.onCarrefouBonusSurCartFidTextValue(productModel.carrefourbonusfid)
-                    navController.navigate(ListScreens.PriceRemarques.Route)
-                },
-            if (addModifyViewModel.carrefourPromotionTextValue != "") addModifyViewModel.carrefourPromotionTextValue else productModel.carrefourremarq,
-            R.string.promotion_carrefour,
-            onValueChange = {
-                productModel.carrefourremarq = it
-                addModifyViewModel.onCarrefouPromotionTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(carrefourprice = it))
             },
             readOnly = false,
-            enabled = false
+            enabled = true,
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next
         )
+
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+        ClickableEditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.65f),
+            text  = currentProduct.carrefourremarq,
+            errorValue = null,
+            label =  context.getString(R.string.promotion_carrefour),
+            readOnly = true,
+            onClick= {
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_carrefour))
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(carrefourremarq = it))
+            }
+        )
+
     }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth().height(66.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment= Alignment.CenterVertically,
     ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.azizaPriceTextValue != "") addModifyViewModel.azizaPriceTextValue else productModel.azzizaprice,
-            R.string.azziza_prix,
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.3f),
+            text = currentProduct.azzizaprice,
+            errorvalue = null,
+            label = stringResource(R.string.azziza_prix),
             onValueChange = {
-                productModel.azzizaprice = it
-                addModifyViewModel.onAzizaPriceTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 2f, fill = true)
-                .clickable {
-                    addModifyViewModel.onAzizaPromotionTextValue(productModel.azzizaremarq)
-                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_azziza))
-                    addModifyViewModel.onAzizaBonusSurCartFidTextValue(productModel.azzizabonusfid)
-                    navController.navigate(ListScreens.PriceRemarques.Route)
-                },
-            if (addModifyViewModel.azizaPromotionTextValue != "") addModifyViewModel.azizaPromotionTextValue else productModel.azzizaremarq,
-            R.string.promotion_azziza,
-            onValueChange = {
-                productModel.azzizaremarq = it
-                addModifyViewModel.onAzizaPromotionTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(azzizaprice = it))
             },
             readOnly = false,
-            enabled = false
+            enabled = true,
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next
         )
+
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+
+        ClickableEditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.65f),
+            text  = currentProduct.azzizaremarq,
+            errorValue = null,
+            label =  context.getString(R.string.promotion_azziza),
+            readOnly = true,
+            onClick= {
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_azziza))
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(azzizaremarq = it))
+            }
+        )
+
     }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-        // .background(Color.White)
-        // verticalAlignment = Arrangement.Top,
-        // horizontalAlignment = Alignment.CenterHorizontally
+        horizontalArrangement = Arrangement.SpaceAround,
+    verticalAlignment= Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().height(66.dp)
     ) {
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            if (addModifyViewModel.geantPriceTextValue != "") addModifyViewModel.geantPriceTextValue else productModel.geantprice,
-            R.string.Géant_prix,
+        EditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.3f),
+            text = currentProduct.geantprice,
+            errorvalue = null,
+            label = stringResource(R.string.Géant_prix),
             onValueChange = {
-                productModel.geantprice = it
-                addModifyViewModel.onGeantPriceTextValue(it)
-            }
-        )
-        Spacer(modifier = Modifier.padding(end = 9.dp))
-
-        EditTextInputComponent(
-            modifier = Modifier.weight(weight = 2f, fill = true)
-                .clickable {
-                    addModifyViewModel.onGeantPromotionTextValue(productModel.geantremarq)
-                    addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_Géant))
-                    addModifyViewModel.onGeantBonusSurCartFidTextValue(productModel.geantbonusfid)
-                    navController.navigate(ListScreens.PriceRemarques.Route)
-                },
-            if (addModifyViewModel.geantPromotionTextValue != "") addModifyViewModel.geantPromotionTextValue else productModel.geantremarq,
-            R.string.promotion_Géant,
-            onValueChange = {
-                productModel.geantremarq = it
-                addModifyViewModel.onGeantPromotionTextValue(it)
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(geantprice = it))
             },
             readOnly = false,
-            enabled = false
+            enabled = true,
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next
         )
+        Spacer(modifier = Modifier.padding(end = 9.dp))
+        ClickableEditTextField(
+            modifier = Modifier.customWidth(LocalConfiguration.current, 0.65f),
+            text  = currentProduct.geantremarq,
+            errorValue = null,
+            label =  context.getString(R.string.promotion_Géant),
+            readOnly = true,
+            onClick= {
+                addModifyViewModel.onMagasinValue(context.getString(R.string.promotion_Géant))
+                navController.navigate(ListScreens.PriceRemarques.Route)
+            },
+            onValueChange = {
+                addModifyViewModel.onCurrentProductChange(currentProduct.copy(geantremarq = it))
+            }
+        )
+
     }
 
     Spacer(modifier = Modifier.padding(bottom = 12.dp))
 }
 
-@Composable
-fun EditTextInputComponent(
-    modifier: Modifier,
-    text: String,
-    stringId: Int,
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    onValueChange: (String) -> Unit,
-    keyboardType: KeyboardType = KeyboardType.Text
-) {
-    Surface(color = Color.Transparent, modifier = modifier) {
-        val context = LocalContext.current
-        var isFocused by rememberSaveable { mutableStateOf(false) }
-        OutlinedTextField(
-            value = text, // shoppingViewModel.quantity.toString(),
-            onValueChange = {
-                onValueChange(it)
-            },
-            readOnly = readOnly,
-            enabled = enabled,
-            modifier = modifier.onFocusChanged { focusState ->
-                isFocused = when {
-                    focusState.isFocused -> //     println("I'm focused!")
-                        true
-
-                    focusState.hasFocus -> // println("A child of mine has focus!")
-                        true
-
-                    focusState.isCaptured -> false
-                    else -> false
-                }
-            },
-            label = { Text(context.getString(stringId), fontSize = 12.sp, maxLines = 1) },
-            trailingIcon = {
-                if (isFocused) {
-                    IconButton(onClick = { onValueChange("") }) {
-                        Icon(
-                            imageVector = Icons.Filled.Clear,
-                            contentDescription = stringResource(id = R.string.deleteshopinglist)
-                        )
-                    }
-                }
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType
-            )
-        )
-    }
-}
-
-@Composable
-fun DropDownMenu(
-    modifier: Modifier = Modifier,
-    items: List<String>,
-    selectedItem: String,
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    stringId: Int,
-    dropdownLabel: String = "",
-    onValueChange: (String) -> Unit
-) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    val context = LocalContext.current
-    var isFocused by rememberSaveable { mutableStateOf(false) }
-    /*  Box (modifier = modifier
-         // .fillMaxWidth()
-         // .padding(4.dp)
-      ){
-          Column {
-              if (dropdownLabel.isNotEmpty()){
-                  Text(dropdownLabel)
-              }
-              TextField(
-                  value = selectedItem,
-                  onValueChange = onValueChange,
-                  trailingIcon = {
-                      Icon(
-                        if(!expanded)  Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                          contentDescription = null
-                      )
-                  },
-                  modifier = Modifier.fillMaxWidth()
-              )
-
-          }
-          Spacer(modifier = Modifier
-              .matchParentSize()
-             // .background(Color.Transparent)
-              .clickable { expanded = true })
-          DropdownMenu(
-              expanded = expanded,
-              onDismissRequest = { expanded = false }
-          ) {
-              items.forEach {
-                      item -> DropdownMenuItem(
-                  onClick = {
-                      onValueChange(item)
-                      expanded = false
-                  },
-              ) {
-                  Text(text = item)
-              }
-              }
-          }
-      }
 
 
-  */
 
-    Box(
-        modifier = modifier
-        // .fillMaxWidth()
-        // .padding(4.dp)
-    ) {
-        Column {
-            if (dropdownLabel.isNotEmpty()) {
-                Text(dropdownLabel)
-            }
 
-            Surface(color = Color.Transparent, modifier = Modifier.fillMaxWidth()) {
-                OutlinedTextField(
-                    value = selectedItem, // shoppingViewModel.quantity.toString(),
-                    onValueChange = onValueChange,
-                    readOnly = readOnly,
-                    enabled = enabled,
-                    modifier = modifier.onFocusChanged { focusState ->
-                        isFocused = when {
-                            focusState.isFocused -> //     println("I'm focused!")
-                                true
 
-                            focusState.hasFocus -> // println("A child of mine has focus!")
-                                true
 
-                            focusState.isCaptured -> false
-                            else -> false
-                        }
-                    }
-                        .clickable { expanded = true },
-                    label = { Text(context.getString(stringId), fontSize = 12.sp, maxLines = 1) },
-                    trailingIcon = {
-                        Icon(
-                            if (!expanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp,
-                            contentDescription = null
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text
-                    )
-                )
-            }
-        }
-        Spacer(
-            modifier = Modifier
-                .matchParentSize()
-                // .background(Color.Transparent)
-                .clickable { expanded = true }
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            items.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(text = item)
-                    },
-                    onClick = {
-                        onValueChange(item)
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
-}
 
-@Composable
-fun TextFieldError(textError: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.width(16.dp))
-        androidx.compose.material3.Text(
-            text = textError,
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.error
-        )
-    }
-}
 
-fun returnProdType(addModifyViewModel: AddModifyViewModel, productModel: ProductModel): String {
-    return if (addModifyViewModel.prodTypeTextValue != "") {
-        productModel.type = addModifyViewModel.prodTypeTextValue
-        addModifyViewModel.prodTypeTextValue
-    } else productModel.type
-}
-
-fun returnProdSubType(addModifyViewModel: AddModifyViewModel, productModel: ProductModel): String {
-    return if (addModifyViewModel.prodSubTypeTextValue != "") {
-        productModel.typesub = addModifyViewModel.prodSubTypeTextValue
-        addModifyViewModel.prodSubTypeTextValue
-    } else productModel.typesub
-}
-
-fun returnProdSubSubType(addModifyViewModel: AddModifyViewModel, productModel: ProductModel): String {
-    return if (addModifyViewModel.prodSubSubTypeTextValue != "") {
-        productModel.typesubsub = addModifyViewModel.prodSubSubTypeTextValue
-        addModifyViewModel.prodSubSubTypeTextValue
-    } else productModel.typesubsub
-}
-
-/*  navController.backQueue.forEach { entry ->
-                 Log.d("TAcxG", "${entry.destination.route}")
-
-             }
-
-             if (navController.backQueue[navController.backQueue.size - 2].destination.route == ListScreens.Courses.Route) {
-             }*/

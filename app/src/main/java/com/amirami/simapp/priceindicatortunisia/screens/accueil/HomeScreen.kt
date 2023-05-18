@@ -2,23 +2,31 @@
 
 package com.amirami.simapp.priceindicatortunisia.screens.accueil
 
-import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.*
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProductList
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
@@ -32,16 +40,19 @@ import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     productsViewModel: ProductsViewModel,
-    searchViewModel: SearchViewModel = hiltViewModel(),
-    productNameViewModel: ProductNameViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel,
+    productNameViewModel: ProductNameViewModel,
+    addModifyViewModel : AddModifyViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel
 
 ) {
@@ -49,7 +60,21 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState()
+LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
+    if (barCodeViewModel.fidCardBarCodeInfo.value != "") {
+        val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
+            Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
+        } else barCodeViewModel.fidCardBarCodeInfo.value
 
+        barecodeValue.let {
+            searchViewModel.onsearchValue(it)
+            productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
+
+            val fidcard = FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
+            barCodeViewModel.onfidCardInfo(fidcard)
+        }
+    }
+}
     if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -62,9 +87,14 @@ fun HomeScreen(
             },
         ) {
             ProductDetailDilogScreen(
-                productsViewModel = productsViewModel,
-                productDetailDialogViewModel = productDetailDialogViewModel,
-                navController = navController
+               product =  productsViewModel.selectedProductStates,
+                onModifyClick = {
+                    navController.navigate(ListScreens.AddModify.Route)
+                },
+                selectedOption = productDetailDialogViewModel.selectedOption,
+                onSelectionChange = {
+                    productDetailDialogViewModel.onSelectionChange(it)
+                }
             )
 
         }
@@ -80,7 +110,8 @@ fun HomeScreen(
                 productsViewModel = productsViewModel,
                 searchViewModel = searchViewModel,
                 productNameViewModel = productNameViewModel,
-                productDetailDialogViewModel
+                productDetailDialogViewModel = productDetailDialogViewModel,
+                addModifyViewModel = addModifyViewModel
             )
         }
 
@@ -94,28 +125,32 @@ fun HomeScreenContent(
     productsViewModel: ProductsViewModel,
     searchViewModel: SearchViewModel,
     productNameViewModel: ProductNameViewModel,
-    productDetailDialogViewModel: ProductDetailDialogViewModel
+    productDetailDialogViewModel: ProductDetailDialogViewModel,
+    addModifyViewModel : AddModifyViewModel
 ) {
     val context = LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
+            .padding(padding),
 
         // .background(Color.White)
         //  .verticalScroll(rememberScrollState()),
         // verticalArrangement = Arrangement.Top,
-        //  horizontalAlignment = Alignment.Start
+          horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (productNameViewModel.productLocalNames.isNotEmpty()) {
             SearchView(
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
-                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }[0]!!),
+                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!),
                 productsViewModel = productsViewModel,
                 searchViewModel = searchViewModel
             )
+
+
+
         }
 
         if (productNameViewModel.isLoading) {
@@ -134,9 +169,13 @@ fun HomeScreenContent(
         ) {
             Spacer(modifier = Modifier.padding(top = 15.dp))
             productsViewModel.onActionTypesListViewChanged(ACTION_GET_PROD_BY_TYPES)
-            productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productFeauteredTypeArray))
+            productsViewModel.onTypesArraysChange(context.resources.getStringArray(R.array.productFeauteredTypeArray))
 
-            GetProductByTypesListView(productsViewModel, null,"")
+            GetProductByTypesListView(
+                productsViewModel = productsViewModel,
+                addModifyViewModel = addModifyViewModel,
+               from = ""
+            )
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             if (productNameViewModel.message == ERREUR_CONNECTION) {
@@ -151,7 +190,8 @@ if(productsViewModel.errorValue !="")Functions.errorToast(context, productsViewM
             ProductList(
                 prodsResponse = productsViewModel.productListStates,
                 productDetailDialogViewModel = productDetailDialogViewModel,
-                productsViewModel = productsViewModel
+                productsViewModel = productsViewModel,
+                addModifyViewModel = addModifyViewModel
             )
 
 

@@ -1,39 +1,45 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview
 
-import android.graphics.Rect
-import android.view.ViewTreeObserver
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.AutoCompleteBox
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.AutoCompleteSearchBarTag
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.utils.asAutoCompleteEntities
-import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.HOME_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(
     navController: NavHostController,
@@ -44,177 +50,122 @@ fun SearchView(
 
 ) {
     val context = LocalContext.current
-    val backStackEntry = navController.currentBackStackEntryAsState()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val scope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val view = LocalView.current
-
-    /**
-     * to get previous screen
-    navController.backQueue.forEach { entry ->
-    Log.d("TAG", "${entry.destination.route}")
-    }
-     */
-
-
-    when (navBackStackEntry?.destination?.route) {
-        ListScreens.Accueil.Route -> {
-            searchViewModel.onsearchViewVisibilityStatesChanged(true)
-        }
-
-        ListScreens.AddModify.Route -> {
-            searchViewModel.onsearchViewVisibilityStatesChanged(true)
-        }
-
-        else -> {
-            searchViewModel.onsearchViewVisibilityStatesChanged(false)
-        }
-    }
-
-    val autoCompleteEntities = prodname.asAutoCompleteEntities(filter = { item, query ->
-        //  item.lowercase(Locale.getDefault()).startsWith(query.lowercase(Locale.getDefault()))
-        item.lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))
-    })
-    if (barCodeViewModel.fidCardBarCodeInfo.value != "" && barCodeViewModel.sendBarCodeTo == HOME_SCREEN) {
-        val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
-            Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
-        } else barCodeViewModel.fidCardBarCodeInfo.value
-
-        barecodeValue.let {
+    SearchBar(
+        query = searchViewModel.searchValue ,
+        onQueryChange = {
             searchViewModel.onsearchValue(it)
-            productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
+        },
+        onSearch = {
+            if (searchViewModel.searchValue.isEmpty()) return@SearchBar
+            productsViewModel.getProds(
+                Functions.searchType(searchViewModel.searchValue),
+                searchViewModel.searchValue.capitalizeWords()
+            )
 
-            val fidcard =
-                FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
-            barCodeViewModel.onfidCardInfo(fidcard)
-        }
-    }
-    AnimatedVisibility(visible = searchViewModel.searchViewVisibilityStates,
-        enter = slideInVertically(initialOffsetY = { -it }),
-        exit = slideOutVertically(targetOffsetY = { -it }),
-        content = {
-            AutoCompleteBox(items = autoCompleteEntities, itemContent = { prodNameList ->
-                SearchAutoCompleteItem(prodNameList.value)
-            }) {
-                // var value by remember { mutableStateOf("") }
-
-                onItemSelected { item ->
-                    item.value.let {
-                        searchViewModel.onsearchValue(it)
-                        productsViewModel.getProds(Functions.searchType(it), it)
-                    }
-                    filter(searchViewModel.searchValue)
-
-                    // searchViewModel.onsearchValue("")
-
-
-                    keyboardController?.hide()
-                    scope.launch {
-                        delay(100)
-                        view.clearFocus()
-                    }
-
-                }
-
-                IconsInSearchView(modifier = Modifier.testTag(AutoCompleteSearchBarTag),
-                    isSearching = isSearching,
-                    value = searchViewModel.searchValue,
-                    label = context.getString(R.string.search_hint),
-                    onDoneActionClick = {
-                        keyboardController?.hide()
-                        scope.launch {
-                            delay(100)
-                            view.clearFocus()
-                        }
-
-                        if(searchViewModel.searchValue=="") return@IconsInSearchView
-                        productsViewModel.getProds(
-                            Functions.searchType(searchViewModel.searchValue),
-                            searchViewModel.searchValue.capitalizeWords()
+            searchViewModel.onSearchIsActive(false)
+        },
+        active = searchViewModel.searchIsActive,
+        onActiveChange = {
+            searchViewModel.onSearchIsActive(it)
+        },
+        placeholder = {
+            Text(text = context.getString(R.string.search_hint))
+        },
+        leadingIcon = {
+            Icon(
+                imageVector =  Icons.Default.Search,
+                contentDescription = ""
+            )
+        },
+        trailingIcon = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = searchViewModel.searchIsActive,
+                    enter = slideInVertically(initialOffsetY = { -it }),
+                    exit = slideOutVertically(targetOffsetY = { -it }),
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "",
+                            Modifier.clickable {
+                                if (searchViewModel.searchValue.isNotEmpty())
+                                    searchViewModel.onsearchValue("")
+                                else searchViewModel.onSearchIsActive(false)
+                            }
                         )
-                        filter(searchViewModel.searchValue)
-
-
-                    },
-                    onClearClick = {
-
-                        searchViewModel.onsearchValue("")
-                        filter(searchViewModel.searchValue)
-                        keyboardController?.hide()
-
-                        scope.launch {
-                            delay(100)
-                            view.clearFocus()
-                        }
-
-
-                    },
-                    onScanClick = {
-                        barCodeViewModel.onsendBarCodeTo(HOME_SCREEN)
-                        navController.navigate(ListScreens.BarCodeCameraPreview.Route)
-                    },
-                    onFocusChanged = { focusState ->
-                        //   isSearching = isKeyboardOpen != Keyboard.Closed
-                        isSearching = focusState.isFocused
-                    },
-                    onValueChanged = { query ->
-                        searchViewModel.onsearchValue(query) // value = query
-                        filter(searchViewModel.searchValue)
                     })
-            }
-        })
-}
 
-@Composable
-fun SearchAutoCompleteItem(product: String?) {
-    Card {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+
+                Spacer(modifier = Modifier.size(12.dp))
+
+                val composition by rememberLottieComposition(
+                    LottieCompositionSpec.RawRes(
+                        R.raw.barcode_scanner
+                    )
+                )
+                val progress by animateLottieCompositionAsState(
+                    composition = composition,
+                    restartOnPlay = false,
+                    iterations = Int.MAX_VALUE
+                )
+
+                LottieAnimation(
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(ListScreens.BarCodeCameraPreview.Route)
+                        }
+                        .size(40.dp),
+                    composition = composition,
+                    progress = { progress }
+                )
+
+            }
+
+
+
+        }
+    ) {
+        val finalListName =     if(searchViewModel.searchValue.isEmpty())
+            prodname
+        else prodname.filter { it.lowercase(Locale.getDefault()).contains(searchViewModel.searchValue.lowercase(Locale.getDefault())) }
+
+
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row {
-                Column {
-                    if (product != null) {
-                        Text(text = product)
+            items(finalListName.size) { position ->
+                Card {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .clickable {
+                                searchViewModel.onsearchValue(finalListName[position])
+                                productsViewModel.getProds(
+                                    Functions.searchType(finalListName[position]),
+                                    finalListName[position].capitalizeWords()
+                                )
+
+                                searchViewModel.onSearchIsActive(false)
+                            },
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Row {
+                            Column {
+
+                                Text(text = finalListName[position])
+
+                                // Text(text = product.phoneNumber, style = MaterialTheme.typography.subtitle2)
+                                // Text(text = product.email, style = MaterialTheme.typography.subtitle2)
+                            }
+                        }
                     }
-                    // Text(text = product.phoneNumber, style = MaterialTheme.typography.subtitle2)
-                    // Text(text = product.email, style = MaterialTheme.typography.subtitle2)
                 }
+
             }
         }
     }
-}
-
-enum class Keyboard {
-    Opened, Closed
-}
-
-//    val isKeyboardOpen by keyboardAsState()
-@Composable
-fun keyboardAsState(): State<Keyboard> {
-    val keyboardState = remember { mutableStateOf(Keyboard.Closed) }
-    val view = LocalView.current
-    DisposableEffect(view) {
-        val onGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
-            val rect = Rect()
-            view.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = view.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
-            keyboardState.value = if (keypadHeight > screenHeight * 0.15) {
-                Keyboard.Opened
-            } else {
-                Keyboard.Closed
-            }
-        }
-        view.viewTreeObserver.addOnGlobalLayoutListener(onGlobalListener)
-
-        onDispose {
-            view.viewTreeObserver.removeOnGlobalLayoutListener(onGlobalListener)
-        }
-    }
-
-    return keyboardState
 }

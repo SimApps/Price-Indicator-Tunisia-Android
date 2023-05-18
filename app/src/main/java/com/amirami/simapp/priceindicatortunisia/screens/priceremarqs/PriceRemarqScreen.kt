@@ -17,11 +17,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,15 +31,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.addmodify.EditTextInputComponent
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.EditTextField
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getNumberFromString
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getNumbersFromString
 
@@ -47,7 +49,8 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.getNumbersFromSt
 fun PriceRemarqScreen(
     padding : PaddingValues,
     navController: NavHostController,
-    addModifyViewModel: AddModifyViewModel) {
+    addModifyViewModel: AddModifyViewModel
+) {
     val context = LocalContext.current
 
     Column(
@@ -75,15 +78,21 @@ fun PriceRemarqScreen(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            EditTextInputComponent(
-                modifier = Modifier.width(100.dp),
-                getBonusFidelite(context, addModifyViewModel),
-                R.string.Prix,
+            EditTextField(
+                modifier = Modifier
+                    .width(100.dp),
+                text = getBonusFidelite(context, addModifyViewModel),
+                errorvalue = null,
+                label = stringResource(R.string.Prix),
                 onValueChange = {
                     onValueChangeBonusFidelite(context, addModifyViewModel, it)
                 },
-                keyboardType = KeyboardType.Number
+                readOnly = false,
+                enabled = true,
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
             )
+
 
             Spacer(modifier = Modifier.padding(end = 15.dp))
 
@@ -121,10 +130,8 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
         context.getString(R.string.Leprix)
     )
 
-    var index = radioBtnSteUp(context, getRemarque(context, addModifyViewModel), radioOptions)
-    Text(  "name " + index)
-    Text(  "cc " + addModifyViewModel.monoprixPromotionTextValue)
-    Text(  "C " + getRemarque(context, addModifyViewModel))
+    val index = radioBtnSteUp(context, getRemarque(context, addModifyViewModel), radioOptions)
+
 
     var selectedItem by remember { mutableStateOf(radioOptions[if (index == -1) 0 else index - 1]) }
 
@@ -166,86 +173,98 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
                 when (i) {
                     1, 3 -> Text(text = label)
                     2, 4, 6 -> {
-                        // val width = if (i == 2 || i == 6) 120.dp else 140.dp
-                        EditTextInputComponent(
-                            modifier = Modifier.fillMaxWidth(),
-                            //  if(index==i)   Functions.getNumberFromString(getRemarque(context, addModifyViewModel)).toString() else i.toString() + label+ index  ,
-                            if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
-                            //  if(index==i)   getRemarque(context, addModifyViewModel) else i.toString() + "N "+ index  ,
-
-                            if (i == 2) R.string.prixEnPromotion else if (i == 4)R.string.emegratuit else R.string.aveccartefid,
+                        EditTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
+                            errorvalue = null,
+                            label = stringResource(if (i == 2) R.string.prixEnPromotion else if (i == 4)R.string.emegratuit else R.string.aveccartefid),
                             onValueChange = {
-                                //  onValueChangeRemarq(context, addModifyViewModel, Functions.getNumberFromString(it).toString())
-                                onValueChangeRemarq(context, addModifyViewModel, getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
+                                onValueChangeRemarq(
+                                    context = context,
+                                    addModifyViewModel = addModifyViewModel,
+                                    value = getNumberFromString(it),
+                                    value2="",
+                                    i = radioBtnSteUp(context, label, radioOptions)
+                                )
                             },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next
                         )
-                        // Spacer(modifier = Modifier.padding(end = 15.dp))
-                        // Text(text = label)
                     }
                     5 -> {
                         Text(text = context.getString(R.string.tiree))
                         Spacer(modifier = Modifier.padding(end = 10.dp))
-                        EditTextInputComponent(
-                            modifier = Modifier.width(160.dp),
-                            if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
-                            R.string.Pourcentage,
+                        EditTextField(
+                            modifier = Modifier
+                                .width(160.dp),
+                            text = if (index == i) getNumberFromString(getRemarque(context, addModifyViewModel)) else "",
+                            errorvalue = null,
+                            label = stringResource(R.string.Pourcentage),
                             onValueChange = {
                                 onValueChangeRemarq(context, addModifyViewModel, getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
                             },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next
                         )
+
                         Spacer(modifier = Modifier.padding(end = 15.dp))
                         Text(text = label)
                     }
                     7 -> {
                         Text(text = label)
                         Spacer(modifier = Modifier.padding(end = 6.dp))
-                        EditTextInputComponent(
-                            modifier = Modifier.width(100.dp),
-                            if (index == i) getNumbersFromString(
+
+                        EditTextField(
+                            modifier = Modifier
+                                .width(160.dp),
+                            text =  if (index == i) getNumbersFromString(
                                 getRemarque(context, addModifyViewModel),
                                 context.getString(R.string.Leprix),
                                 context.getString(R.string.est)
                             ).toInt().toString() else "",
-                            R.string.Nombre,
+                            errorvalue = null,
+                            label = stringResource(R.string.Nombre),
                             onValueChange = {
                                 onValueChangeRemarq(context, addModifyViewModel, getNumberFromString(it),"", radioBtnSteUp(context, label, radioOptions))
                             },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next
                         )
+
                         Spacer(modifier = Modifier.padding(end = 6.dp))
 
                         Text(text = context.getString(R.string.est))
 
                         Spacer(modifier = Modifier.padding(end = 6.dp))
-                        EditTextInputComponent(
-                            modifier = Modifier.width(100.dp),
-                            if (index == i) getNumbersFromString(
+                        EditTextField(
+                            modifier = Modifier
+                                .width(100.dp),
+                            text =  if (index == i) getNumbersFromString(
                                 getRemarque(context, addModifyViewModel),
                                 context.getString(R.string.est),
                                 context.getString(R.string.TND)
                             ).toString() else "",
-                            R.string.Prix,
+                            errorvalue = null,
+                            label = stringResource(R.string.Prix),
                             onValueChange = {
-                                Log.d("ffffxs","it  "+ it)
-                                Log.d("ffffxs","ccc  "+ getNumbersFromString(getRemarque(context, addModifyViewModel), context.getString(R.string.Leprix), context.getString(R.string.est)).toString())
                                 onValueChangeRemarq(context,
                                     addModifyViewModel,
                                     getNumbersFromString(getRemarque(context, addModifyViewModel), context.getString(R.string.Leprix), context.getString(R.string.est)).toString(),
                                     getNumberFromString(it),
-                                    radioBtnSteUp(context, label, radioOptions))
-                                            },
+                                    radioBtnSteUp(context, label, radioOptions))                            },
                             enabled = selectedItem == label,
                             readOnly = selectedItem != label,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next
                         )
+
 
                         Spacer(modifier = Modifier.padding(end = 15.dp))
 
@@ -259,11 +278,11 @@ fun MyUI(addModifyViewModel: AddModifyViewModel) {
 
 fun getRemarque(context: Context, addModifyViewModel: AddModifyViewModel): String {
     return when (addModifyViewModel.magasinValue) {
-        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.monoprixPromotionTextValue
-        context.getString(R.string.promotion_mg) -> addModifyViewModel.mgPromotionTextValue
-        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.carrefourPromotionTextValue
-        context.getString(R.string.promotion_azziza) -> addModifyViewModel.azizaPromotionTextValue
-        context.getString(R.string.promotion_Géant) -> addModifyViewModel.geantPromotionTextValue
+        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.currentProduct.monoprixremarq
+        context.getString(R.string.promotion_mg) -> addModifyViewModel.currentProduct.mgremarq
+        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.currentProduct.carrefourremarq
+        context.getString(R.string.promotion_azziza) -> addModifyViewModel.currentProduct.azzizaremarq
+        context.getString(R.string.promotion_Géant) -> addModifyViewModel.currentProduct.geantremarq
         else -> ""
     }
 
@@ -314,16 +333,21 @@ fun getRemarque(context: Context, addModifyViewModel: AddModifyViewModel): Strin
 
 fun getBonusFidelite(context: Context, addModifyViewModel: AddModifyViewModel): String {
     return when (addModifyViewModel.magasinValue) {
-        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.monoprixBonusSurCartFidTextValue
-        context.getString(R.string.promotion_mg) -> addModifyViewModel.mgBonusSurCartFidTextValue
-        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.carrefourBonusSurCartFidTextValue
-        context.getString(R.string.promotion_azziza) -> addModifyViewModel.azizaBonusSurCartFidTextValue
-        context.getString(R.string.promotion_Géant) -> addModifyViewModel.geantBonusSurCartFidTextValue
+        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.currentProduct.monoprixbonusfid
+        context.getString(R.string.promotion_mg) -> addModifyViewModel.currentProduct.mgbonusfid
+        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.currentProduct.carrefourbonusfid
+        context.getString(R.string.promotion_azziza) -> addModifyViewModel.currentProduct.azzizabonusfid
+        context.getString(R.string.promotion_Géant) -> addModifyViewModel.currentProduct.geantbonusfid
         else -> ""
     }
 }
 
-fun onValueChangeRemarq(context: Context, addModifyViewModel: AddModifyViewModel, value: String, value2: String, i: Int) {
+fun onValueChangeRemarq(
+    context: Context,
+    addModifyViewModel: AddModifyViewModel,
+    value: String,
+    value2: String,
+    i: Int) {
     var valu = ""
 
     var valu2 = ""
@@ -346,26 +370,24 @@ fun onValueChangeRemarq(context: Context, addModifyViewModel: AddModifyViewModel
         7 -> context.getString(R.string.Leprix) + " " + valu + " " + context.getString(R.string.est) + " " + valu2 + " " + context.getString(R.string.TND)
         else -> ""
     }
-    Log.d("ffffxs","i = "+i+ "value "+ value)
-    Log.d("ffffxs","valu "+ valu)
-    Log.d("ffffxs", "result  "+result)
+
     when (addModifyViewModel.magasinValue) {
-        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.onmonoprixPromotionTextValue(result)
-        context.getString(R.string.promotion_mg) -> addModifyViewModel.onMgPromotionTextValue(result)
-        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.onCarrefouPromotionTextValue(result)
-        context.getString(R.string.promotion_azziza) -> addModifyViewModel.onAzizaPromotionTextValue(result)
-        context.getString(R.string.promotion_Géant) -> addModifyViewModel.onGeantPromotionTextValue(result)
+        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(monoprixremarq = result))
+        context.getString(R.string.promotion_mg) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(mgremarq = result))
+        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(carrefourremarq = result))
+        context.getString(R.string.promotion_azziza) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(azzizaremarq = result))
+        context.getString(R.string.promotion_Géant) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(geantremarq = result))
         else -> ""
     }
 }
 
-fun onValueChangeBonusFidelite(context: Context, addModifyViewModel: AddModifyViewModel, value: String) {
+fun onValueChangeBonusFidelite(context: Context, addModifyViewModel: AddModifyViewModel, result: String) {
     when (addModifyViewModel.magasinValue) {
-        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.onMonoprixBonusSurCartFidTextValue(value)
-        context.getString(R.string.promotion_mg) -> addModifyViewModel.onMgBonusSurCartFidTextValue(value)
-        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.onCarrefouBonusSurCartFidTextValue(value)
-        context.getString(R.string.promotion_azziza) -> addModifyViewModel.onAzizaBonusSurCartFidTextValue(value)
-        context.getString(R.string.promotion_Géant) -> addModifyViewModel.onGeantBonusSurCartFidTextValue(value)
+        context.getString(R.string.promotion_monoprix) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(monoprixbonusfid = result))
+        context.getString(R.string.promotion_mg) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(mgbonusfid = result))
+        context.getString(R.string.promotion_carrefour) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(carrefourbonusfid = result))
+        context.getString(R.string.promotion_azziza) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(azzizabonusfid = result))
+        context.getString(R.string.promotion_Géant) -> addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(geantbonusfid = result))
         else -> ""
     }
 }

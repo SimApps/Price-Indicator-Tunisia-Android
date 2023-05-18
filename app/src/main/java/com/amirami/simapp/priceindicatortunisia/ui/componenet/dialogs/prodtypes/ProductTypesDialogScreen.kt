@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -7,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,7 +32,8 @@ fun ProductTypesDialogScreen(
     val context = LocalContext.current
     val dialogTitle = productTypesDialogViewModel.prodTypesDialogTitleStates
     val dialogContent = productTypesDialogViewModel.prodTypesDialogContentStates
-
+Log.d("iillnnjbh","dialogTitle "+ dialogTitle)
+Log.d("iillnnjbh","dialogContent "+ dialogContent)
     Column(
         modifier = Modifier
             //   .fillMaxSize()
@@ -52,10 +54,13 @@ fun ProductTypesDialogScreen(
             dialogTitle == context.resources.getString(R.string.SousCatégories) ||
             dialogTitle == context.resources.getString(R.string.sousousCatégories)
         ) {
-            //  productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productTypeArray))
-            productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(arrayTypeLoader(dialogContent)))
-        } else productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productFeauteredTypeArray))
+            productsViewModel.onTypesArraysChange(context.resources.getStringArray(arrayTypeLoader(dialogContent)))
+        } else productsViewModel.onTypesArraysChange(context.resources.getStringArray(R.array.productFeauteredTypeArray))
 
-        GetProductByTypesListView(productsViewModel, addModifyViewModel= addModifyViewModel, dialogTitle)
+        GetProductByTypesListView(
+            productsViewModel = productsViewModel,
+            addModifyViewModel= addModifyViewModel,
+            from = dialogTitle
+        )
     }
 }

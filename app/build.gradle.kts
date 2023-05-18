@@ -141,6 +141,8 @@ dependencies {
     // real time database
     implementation("com.google.firebase:firebase-database-ktx")
 
+    implementation ("com.google.firebase:firebase-auth-ktx")
+
     // check internet connection
     implementation("com.github.SalahoAmro:NetDetect:1.0.0")
 
@@ -152,12 +154,14 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-
+  //  implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
 
     // Play Services
     implementation("com.google.android.gms:play-services-auth:20.5.0")
+
     // Firebase
     // implementation platform("com.google.firebase:firebase-bom:28.4.0")
     //  implementation "com.google.firebase:firebase-analytics-ktx"

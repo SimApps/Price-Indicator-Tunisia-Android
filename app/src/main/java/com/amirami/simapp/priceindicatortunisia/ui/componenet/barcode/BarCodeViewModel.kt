@@ -20,11 +20,6 @@ class BarCodeViewModel @Inject constructor() : ViewModel() {
         fidCardBarCodeInfo = fidCardBarCodeInf
     }
 
-    var sendBarCodeTo by mutableStateOf("")
-        private set
-    fun onsendBarCodeTo(sendBarCodeto: String) {
-        sendBarCodeTo = sendBarCodeto
-    }
 
 
     var BarCodeValue by mutableStateOf("")

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "515731319694",
+    "firebase_url": "https://price-indicator-tunisia-b2a04-default-rtdb.firebaseio.com",
     "project_id": "price-indicator-tunisia-b2a04",
     "storage_bucket": "price-indicator-tunisia-b2a04.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "515731319694-s6ndbraqnh2f86kj986imco7l911hhf5.apps.googleusercontent.com",
+          "client_id": "515731319694-jksksp5uj4f1vejhp4b561255vrqi6i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amirami.simapp.priceindicatortunisia",
+            "certificate_hash": "1891b9be7da42670c00dcf0a4c10f1b1da471421"
+          }
+        },
+        {
+          "client_id": "515731319694-i5j1a7m1132edilkbf1a901nh942qr4u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,12 +36,13 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "515731319694-s6ndbraqnh2f86kj986imco7l911hhf5.apps.googleusercontent.com",
+              "client_id": "515731319694-i5j1a7m1132edilkbf1a901nh942qr4u.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5900899997553420~1487344783"
     }
   ],
   "configuration_version": "1"

@@ -1,27 +1,27 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 
 @Composable
-fun ToggleBotton(productDetailDialogViewModel: ProductDetailDialogViewModel) {
+fun ToggleBotton(
+    selectedOption : String,
+    onSelectionChange : (String) -> Unit
+) {
     val context= LocalContext.current
     val states = listOf(
         ToggleButtonOption(context.getString(R.string.Prix),null)  ,
@@ -29,47 +29,34 @@ fun ToggleBotton(productDetailDialogViewModel: ProductDetailDialogViewModel) {
         ToggleButtonOption(context.getString(R.string.Bonus),null),
     )
 
-    var selectedOption by remember {
-        mutableStateOf(states[0])
-    }
-    val onSelectionChange = { text: ToggleButtonOption ->
-        selectedOption = text
-    }
 
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        modifier = Modifier
 
-    ) {
+
         Row(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(24.dp))
+            modifier= Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+    verticalAlignment = Alignment.CenterVertically,
         ) {
             states.forEach { text->
-                Text(
-                    text = text.text,
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(24.dp))
-                        .clickable {
-                            onSelectionChange(text)
-                            productDetailDialogViewModel.ontoggleBtnSelectedStatesStatesChanged(text.text)
+                AssistChip(
+                    onClick = {
+                        onSelectionChange(text.text)
+                    },
+                    label = { Text(text =text.text) },
+                    leadingIcon = {
+                        AnimatedVisibility(visible = text.text == selectedOption) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "filter by ",
+                                Modifier.size(AssistChipDefaults.IconSize)
+                            )
                         }
-                        .background(
-                            if (text == selectedOption) {
-                                MaterialTheme.colorScheme.onPrimary
-                            } else {
-                                MaterialTheme.colorScheme.onSecondary
-                            }
-                        )
-                        .padding(
-                            vertical = 12.dp,
-                            horizontal = 16.dp,
-                        )
-
+                    }
                 )
+
             }
         }
-    }
+
 }
 
 

@@ -28,7 +28,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION
 @Composable
 fun GetProductByTypesListView(
     productsViewModel: ProductsViewModel,
-    addModifyViewModel: AddModifyViewModel?,
+    addModifyViewModel: AddModifyViewModel,
     from : String
 ) {
     val context = LocalContext.current
@@ -63,7 +63,7 @@ fun remove(arr: Array<String>, index: Int): Array<String> {
 @Composable
 fun ProductTypeSingleListItem(item: String,
                               productsViewModel: ProductsViewModel,
-                              addModifyViewModel: AddModifyViewModel?,
+                              addModifyViewModel: AddModifyViewModel,
                               from : String) {
     val context = LocalContext.current
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(imageTypeLoader(item, context)))
@@ -93,23 +93,24 @@ fun ProductTypeSingleListItem(item: String,
 
                         }*/
 
-                        productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(arrayTypeLoader(item)))
+                        productsViewModel.onTypesArraysChange(context.resources.getStringArray(arrayTypeLoader(item)))
 
                         //    Toast.makeText(context, item+"c", Toast.LENGTH_LONG).show()
                     }
                 } else if (action == ACTION_SHOW_TYPES) {
                     when (from) {
                         context.resources.getString(R.string.Catégories) -> {
-                            addModifyViewModel!!.onprodTypeTextValue(item)
-                            addModifyViewModel.onprodSubTypeTextValue(" ")
-                            addModifyViewModel.onprodSubSubTypeTextValue(" ")
+                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(type = item))
+                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesub = " "))
+                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = " "))
                         }
                         context.resources.getString(R.string.SousCatégories) -> {
-                            addModifyViewModel!!.onprodSubTypeTextValue(item)
-                            addModifyViewModel.onprodSubSubTypeTextValue(" ")
+                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesub = item))
+                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = " "))
+
                         }
                         context.resources.getString(R.string.sousousCatégories) -> {
-                            addModifyViewModel!!.onprodSubSubTypeTextValue(item)
+                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = item))
                         }
                     }
 

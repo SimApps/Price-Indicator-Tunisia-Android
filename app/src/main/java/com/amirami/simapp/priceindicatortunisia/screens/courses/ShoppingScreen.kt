@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
     ExperimentalComposeUiApi::class
 )
 
@@ -76,8 +77,10 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUITS_FRAIS
 import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.convertStringToPriceFormat
 import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.stringToDouble
+import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
+import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.CustomModifiers.customWidth
@@ -93,6 +96,7 @@ fun ShoppingScreen(
     navController: NavHostController,
     productsViewModel: ProductsViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
+    addModifyViewModel: AddModifyViewModel,
     shoppingViewModel: ShoppingViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
@@ -101,12 +105,12 @@ fun ShoppingScreen(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1  = productsViewModel.shopLists, key2 = shoppingViewModel.calculateDiscount){
+    LaunchedEffect(key1 = productsViewModel.shopLists, key2 = shoppingViewModel.calculateDiscount) {
 
 
         shoppingViewModel.calculatePrices(
-            context= context,
-            product= productsViewModel.shopLists
+            context = context,
+            product = productsViewModel.shopLists
         )
     }
     if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
@@ -121,101 +125,114 @@ fun ShoppingScreen(
             },
         ) {
             ProductDetailDilogScreen(
-                productsViewModel = productsViewModel,
-                productDetailDialogViewModel = productDetailDialogViewModel,
-                navController = navController)
-
+                onModifyClick = {
+                    navController.navigate(ListScreens.AddModify.Route)
+                },
+                selectedOption = productDetailDialogViewModel.selectedOption,
+                product = productsViewModel.selectedProductStates,
+                onSelectionChange = {
+                    productDetailDialogViewModel.onSelectionChange(it)
+                }
+            )
         }
+
     }
 
 
-        Scaffold(
-            modifier = Modifier.padding(padding),
-            topBar = { },
-          //  scaffoldState = scaffoldState,
-            bottomBar = {
-                AnimatedVisibility(
-                    visible = productsViewModel.shopLists.isNotEmpty(),
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
-                ) {
-                    BottomAppBar(
-                        actions = {
-                              IconButton(
-                                  onClick = {
-                                  shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
-                              }) {
-                                  Column(
-                                      verticalArrangement = Arrangement.Center,
-                                      horizontalAlignment = Alignment.CenterHorizontally) {
-                                      Icon(
-                                          imageVector= if(shoppingViewModel.calculateDiscount) Icons.Filled.Percent
-                                          else Icons.Filled.Money,
-                                          contentDescription = "Localized description")
-
-
-                                  }
-                              }
-
-
-
-                        },
-                        floatingActionButton = {
-
-                            FloatingActionButton(
-                                onClick = {
-                                    productsViewModel.DeleteAllProdFromShopList()
-                                },
-                                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                            ) {
-                                Icon(Icons.Filled.DeleteForever, "Localized description")
-                            }
-
-
-                        }
-                    )
-                }
-
-            },
-            snackbarHost = {
-                DefaultSnackbar(
-                    snackbarHostState,
-                    modifier = Modifier
-                )
-            }
-        ) {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it),
+    Scaffold(
+        modifier = Modifier.padding(padding),
+        topBar = { },
+        //  scaffoldState = scaffoldState,
+        bottomBar = {
+            AnimatedVisibility(
+                visible = productsViewModel.shopLists.isNotEmpty(),
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        // .fillMaxWidth()
-                        .padding(3.dp, 6.dp, 3.dp, 6.dp),
-                    //   .fillMaxHeight()
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    shoppingViewModel.prices.sortByDescending { price -> stringToDouble(price.priceBill)  }
-                    items(shoppingViewModel.prices.size) { position ->
+                BottomAppBar(
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
+                            }) {
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = if (shoppingViewModel.calculateDiscount) Icons.Filled.Percent
+                                    else Icons.Filled.Money,
+                                    contentDescription = "Localized description"
+                                )
 
-                        Text(text = shoppingViewModel.prices[position].magasin + " : "+ convertStringToPriceFormat(shoppingViewModel.prices[position].priceBill) + " (-" + shoppingViewModel.prices[position].nbrMissingPrice+" prix)" + " "+ shoppingViewModel.prices[position].bonusfid)
+
+                            }
+                        }
+
+
+                    },
+                    floatingActionButton = {
+
+                        FloatingActionButton(
+                            onClick = {
+                                productsViewModel.DeleteAllProdFromShopList()
+                            },
+                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        ) {
+                            Icon(Icons.Filled.DeleteForever, "Localized description")
+                        }
+
 
                     }
-                }
-
-
-                ProductShopList(
-                    snackbarHostState = snackbarHostState,
-                    productsViewModel,
-                    productDetailDialogViewModel,
-                    shoppingViewModel = shoppingViewModel)
+                )
             }
+
+        },
+        snackbarHost = {
+            DefaultSnackbar(
+                snackbarHostState,
+                modifier = Modifier
+            )
         }
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    // .fillMaxWidth()
+                    .padding(3.dp, 6.dp, 3.dp, 6.dp),
+                //   .fillMaxHeight()
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                shoppingViewModel.prices.sortByDescending { price -> stringToDouble(price.priceBill) }
+                items(shoppingViewModel.prices.size) { position ->
+
+                    Text(
+                        text = shoppingViewModel.prices[position].magasin + " : " + convertStringToPriceFormat(
+                            shoppingViewModel.prices[position].priceBill
+                        ) + " (-" + shoppingViewModel.prices[position].nbrMissingPrice + " prix)" + " " + shoppingViewModel.prices[position].bonusfid
+                    )
+
+                }
+            }
+
+
+            ProductShopList(
+                snackbarHostState = snackbarHostState,
+                productsViewModel,
+                productDetailDialogViewModel,
+                shoppingViewModel = shoppingViewModel,
+                addModifyViewModel = addModifyViewModel
+            )
+        }
+    }
 
 }
 
@@ -224,7 +241,8 @@ fun ProductShopList(
     snackbarHostState: SnackbarHostState,
     productsViewModel: ProductsViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
-    shoppingViewModel: ShoppingViewModel
+    shoppingViewModel: ShoppingViewModel,
+    addModifyViewModel: AddModifyViewModel
 ) {
     val context = LocalContext.current
 
@@ -245,14 +263,15 @@ fun ProductShopList(
                 productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel,
                 shoppingViewModel = shoppingViewModel,
-                prodIndex = position
+                prodIndex = position,
+                addModifyViewModel = addModifyViewModel
 
             )
         }
     }
 }
 
-@OptIn(InternalTextApi::class)
+@OptIn(InternalTextApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ProductShopTiket(
     snackbarHostState: SnackbarHostState,
@@ -260,7 +279,8 @@ fun ProductShopTiket(
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     productsViewModel: ProductsViewModel,
     shoppingViewModel: ShoppingViewModel,
-    prodIndex: Int
+    prodIndex: Int,
+    addModifyViewModel: AddModifyViewModel
 ) {
     val context = LocalContext.current
     //  val (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
@@ -269,11 +289,13 @@ fun ProductShopTiket(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                if (productDetailDialogViewModel.prodDetailDialogVisibilityStates) {
-                    productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(false)
-                } else productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(true)
+
+                productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(!productDetailDialogViewModel.prodDetailDialogVisibilityStates)
+
 
                 productsViewModel.onSelectedProductChanged(product = prodsResponse)
+                addModifyViewModel.onCurrentProductChange(prodsResponse)
+
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -291,11 +313,13 @@ fun ProductShopTiket(
                 is AsyncImagePainter.State.Loading -> {
                     CircularProgressIndicator()
                 }
+
                 is AsyncImagePainter.State.Error -> {
                     SubcomposeAsyncImageContent(
                         painter = painterResource(id = R.drawable.ic_close)
                     )
                 }
+
                 else -> {
                     SubcomposeAsyncImageContent()
                 }
@@ -321,8 +345,8 @@ fun ProductShopTiket(
                 modifier = Modifier
                     .wrapContentWidth(),
 
-                  verticalAlignment = Alignment.CenterVertically,
-                   horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
 
             ) {
 
@@ -361,38 +385,42 @@ fun ProductShopTiket(
                                 )
                             }
                         },
-                    imageVector =  Icons.Default.Minimize,
+                    imageVector = Icons.Default.Minimize,
                     contentDescription = "Add"
                 )
 
                 Spacer(modifier = Modifier.padding(start = 9.dp))
                 val keyboardController = LocalSoftwareKeyboardController.current
 
-              /*  AnimatedText(
-                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
-                label = context.getString(
-                    R.string.quantuty_en,
-                    removeAllDigitExeptX(prodsResponse.sieze)
-                ),
-                count = prodsResponse.quantity,
-                onValueChange = {
-                    productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
-                },
-                    )*/
+                /*  AnimatedText(
+                      modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
+                  label = context.getString(
+                      R.string.quantuty_en,
+                      removeAllDigitExeptX(prodsResponse.sieze)
+                  ),
+                  count = prodsResponse.quantity,
+                  onValueChange = {
+                      productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
+                  },
+                      )*/
                 OutlinedTextField(
                     value = prodsResponse.quantity.toString(),
                     onValueChange = {
                         productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
                     },
-                   modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
-                    label = { Text( context.getString(
-                        R.string.quantuty_en,
-                        removeAllDigitExeptX(prodsResponse.sieze)
-                    )) },
+                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
+                    label = {
+                        Text(
+                            context.getString(
+                                R.string.quantuty_en,
+                                removeAllDigitExeptX(prodsResponse.sieze)
+                            )
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
                     ),
-                    keyboardActions = KeyboardActions{
+                    keyboardActions = KeyboardActions {
                         keyboardController?.hide()
                     }
                 )
@@ -426,7 +454,7 @@ fun ProductShopTiket(
                                 )
                             }
                         },
-                    imageVector =  Icons.Default.Add,
+                    imageVector = Icons.Default.Add,
                     contentDescription = "Add"
                 )
 
@@ -438,10 +466,6 @@ fun ProductShopTiket(
 
     }
 }
-
-
-
-
 
 
 @Composable
@@ -461,11 +485,11 @@ fun DefaultSnackbar(
                 },
                 action = {
 
-                        TextButton(onClick = { data.performAction() }) {
-                            Text(
-                                text = data.visuals.actionLabel?:"",
-                            )
-                        }
+                    TextButton(onClick = { data.performAction() }) {
+                        Text(
+                            text = data.visuals.actionLabel ?: "",
+                        )
+                    }
 
                 }
             )
@@ -477,7 +501,13 @@ fun DefaultSnackbar(
     )
 }
 
-fun setSnackBarData(coroutineScope: CoroutineScope,  snackbarHostState: SnackbarHostState, prodsResponse: ProductModel, context: Context, productsViewModel: ProductsViewModel) {
+fun setSnackBarData(
+    coroutineScope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    prodsResponse: ProductModel,
+    context: Context,
+    productsViewModel: ProductsViewModel
+) {
     coroutineScope.launch {
         val snackbarResult = snackbarHostState.showSnackbar(
             message = "Delete product : " + prodsResponse.name,

@@ -133,15 +133,8 @@ fun BareCodeCameraView(
                         barcode.rawValue?.let { barcodeValue ->
                             val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
                             barCodeViewModel.onfidCardInfo(fidcard)
+                         navController.navigateUp()
 
-                            when (barCodeViewModel.sendBarCodeTo) {
-                                ADD_FID_CARD_SCREEN -> {
-                                    navController.navigate(ListScreens.CarteFidelite.Route)
-                                    barCodeViewModel.onfidCardActionInfo(FID_CARD_ACTION_ADD)
-                                }
-                                HOME_SCREEN -> navController.navigate(ListScreens.Accueil.Route)
-                                SHOPPING_LIST_SCREEN -> navController.navigate(ListScreens.Courses.Route)
-                            }
                         }
                     }
                 }

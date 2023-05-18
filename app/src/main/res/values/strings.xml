@@ -1,4 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="web_client_id" tools:ignore="ExtraTranslation">515731319694-i5j1a7m1132edilkbf1a901nh942qr4u.apps.googleusercontent.com</string>
+
+
     <string name="app_name">Prix en Tunisie</string>
     <string name="app_version">0.121</string>
     <string name="app_version_settings">Version : 0.121</string>

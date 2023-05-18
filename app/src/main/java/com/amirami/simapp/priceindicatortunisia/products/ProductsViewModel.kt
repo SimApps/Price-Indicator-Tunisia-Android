@@ -55,7 +55,10 @@ class ProductsViewModel @Inject constructor(
 
     fun onSelectedProductChanged(product: ProductModel) {
         selectedProductStates = product
+
+
     }
+
     fun getProds(searchtype: String, searchtext: String) = viewModelScope.launch {
         useCasesProduct.getProduct(searchtype, searchtext).collect { response ->
 
@@ -124,9 +127,9 @@ class ProductsViewModel @Inject constructor(
         shopListRepository.updateProdQuantityInRoom(quantity, id)
     }
 
-    var typesArrays by mutableStateOf<Array<String>>(emptyList<String>().toTypedArray())
+    var typesArrays by mutableStateOf(emptyList<String>().toTypedArray())
 
-    fun onprodDetailDialogVisibilityStatesChanged(typesArray: Array<String>) {
+    fun onTypesArraysChange(typesArray: Array<String>) {
         typesArrays = typesArray
     }
 
@@ -135,7 +138,7 @@ class ProductsViewModel @Inject constructor(
 
     var typesModel by mutableStateOf(ProductModel())
 
-    fun onprodDetailDialogVisibilityStatesChanged(typeModel: ProductModel) {
+    fun onTypesArraysChange(typeModel: ProductModel) {
         typesModel = typeModel
     }
 }

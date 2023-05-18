@@ -184,11 +184,10 @@ fun FidCardsMainScreen(
                 ButtonWithBorder(
                     modifier = modifier.fillMaxWidth(),
                     onClicks = {
-                        barCodeViewModel.onsendBarCodeTo(ADD_FID_CARD_SCREEN)
                         navController.navigate(ListScreens.BarCodeCameraPreview.Route)
                     },
 
-                    context.getString(R.string.Ajoutezcartefidelite),
+                   text = context.getString(R.string.Ajoutezcartefidelite),
 
                     )
             })

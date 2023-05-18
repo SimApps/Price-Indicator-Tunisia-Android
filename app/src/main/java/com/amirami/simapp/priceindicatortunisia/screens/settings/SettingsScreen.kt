@@ -1,5 +1,10 @@
 package com.amirami.simapp.priceindicatortunisia.screens.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,10 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -21,28 +26,101 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
+import com.amirami.simapp.priceindicatortunisia.google_sign.SignInState
+import com.amirami.simapp.priceindicatortunisia.google_sign.UserData
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.TextWithIcon
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
+import com.pranavpandey.android.dynamic.toasts.DynamicToast
 
 @Composable
 fun SettingsScreen(
+    userData: UserData?,
+    googleAuthUiClient: GoogleAuthUiClient,
+    state: SignInState,
+    onSignInClick: () -> Unit,
+    onSignOut: () -> Unit,
+    resetState: () -> Unit,
     padding: PaddingValues,
     settingViewModel : SettingViewModel
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(key1 = state.signInError) {
+        state.signInError?.let { error ->
+            Toast.makeText(
+                context,
+                error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+    LaunchedEffect(key1 = state.isSignInSuccessful) {
+        if(state.isSignInSuccessful) {
+            Toast.makeText(
+                context,
+                "Sign in successful",
+                Toast.LENGTH_LONG
+            ).show()
 
+            resetState()
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
+            // .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
-    ) { Row(
+    ) {
+        AnimatedVisibility(visible = userData?.profilePictureUrl != null && state.isSignInSuccessful) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if(userData?.profilePictureUrl != null) {
+                    AsyncImage(
+                        model = userData.profilePictureUrl,
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                if(userData?.username != null) {
+                    Text(
+                        text = userData.username,
+                        textAlign = TextAlign.Center,
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+        }
+
+        
+        
+
+
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
@@ -91,24 +169,123 @@ fun SettingsScreen(
             )
         }
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.Connecter, R.drawable.ic_signin)
+        TextWithIcon(
+            text =  if(googleAuthUiClient.getSignedInUser() == null)
+                context.getString(R.string.Connecter)
+            else context.getString(R.string.Déconnecter),
+            icon = if(googleAuthUiClient.getSignedInUser() == null) R.drawable.ic_signin
+            else R.drawable.ic_signout,
+            onClick = {
+                if(googleAuthUiClient.getSignedInUser() == null)  onSignInClick()
+                else onSignOut()
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.nous_contacter_par_email, R.drawable.ic_send)
+        TextWithIcon(
+            text = context.getString(R.string.nous_contacter_par_email),
+            icon = R.drawable.ic_send,
+            onClick = {
+                reportProblem(context = context)
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.Qu_est_ce_que_application, R.drawable.ic_disclaimer)
+        TextWithIcon(
+            text = context.getString(R.string.Qu_est_ce_que_application),
+            icon = R.drawable.ic_disclaimer,
+            onClick = {
+
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.more_application, R.drawable.ic_baseline_shop_24)
+        TextWithIcon(
+            text = context.getString(R.string.more_application),
+            icon = R.drawable.ic_baseline_shop_24,
+            onClick = {
+                more_apps(context = context)
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.evaluez_application, R.drawable.ic_rate)
+        TextWithIcon(
+            text = context.getString(R.string.evaluez_application),
+            icon =  R.drawable.ic_rate,
+            onClick = {
+                rate(context = context)
+            }
+        )
 
         Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(R.string.licenses, R.drawable.ic_licenses)
+        TextWithIcon(
+            text = context.getString(R.string.licenses),
+            icon = R.drawable.ic_licenses,
+            onClick = {
+
+            }
+        )
 
     }
 
 
+}
+
+private fun rate(context : Context) {
+    val uri = Uri.parse("market://details?id=" + context.packageName)
+    val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+    goToMarket.addFlags(
+        (
+                Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                )
+    )
+    try {
+        context.startActivity(goToMarket)
+    } catch (e: ActivityNotFoundException) {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://play.google.com/store/apps/details?id=" + context.packageName)
+            )
+        )
+    }
+}
+
+
+private fun reportProblem(context : Context) {
+    try {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.app_email)))
+        intent.type = "message/rfc822" // "text/plain"
+
+        intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.Nous_Contacter))
+
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.Nous_contacter_Email)))
+    } catch (e: Exception) {
+        DynamicToast.makeError(context, e.toString(), 9).show()
+    }
+}
+
+private fun more_apps(context : Context) {
+    val uri = Uri.parse("https://play.google.com/store/apps/developer?id=AmiRami")
+    val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+    goToMarket.addFlags(
+        (
+                Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                )
+    )
+    try { context.startActivity(goToMarket) } catch (e: ActivityNotFoundException) {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/developer?id=AmiRami")
+            )
+        )
+    }
 }

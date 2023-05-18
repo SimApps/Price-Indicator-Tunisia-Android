@@ -1,36 +1,51 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog
 
 import android.content.Context
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.*
-import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
-import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.TextWithIcon
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.ToggleBotton
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.logopalcer
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.sortPrices
 
 @Composable
-fun ProductDetailDilogScreen(productsViewModel: ProductsViewModel, productDetailDialogViewModel: ProductDetailDialogViewModel, navController: NavHostController) {
+fun ProductDetailDilogScreen(
+    product: ProductModel,
+    onSelectionChange: (String) -> Unit,
+    onModifyClick: () -> Unit,
+    selectedOption : String
+) {
     val context = LocalContext.current
-    val product = productsViewModel.selectedProductStates
+
 
     Column(
         modifier = Modifier
@@ -80,23 +95,35 @@ fun ProductDetailDilogScreen(productsViewModel: ProductsViewModel, productDetail
         Text(text = typeToTxt(product))
 
         Spacer(modifier = Modifier.height(10.dp))
-        ToggleBotton(productDetailDialogViewModel)
+        ToggleBotton(
+            selectedOption = selectedOption,
+            onSelectionChange = {
+                onSelectionChange(it)
+
+            }
+        )
 
         Spacer(modifier = Modifier.height(10.dp))
-        when (productDetailDialogViewModel.toggleBtnSelectedStates) {
+        when (selectedOption) {
             context.getString(R.string.Prix) -> ShowProductWithoutBill(context, product)
             context.getString(R.string.Promotions) -> ShowremarqNoBill(context, product)
             context.getString(R.string.Bonus) -> ShowBonusNoBill(context, product)
         }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            ButtonWithBorder(
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically) {
+            Button(
                 modifier = Modifier.wrapContentWidth(),
-                onClicks = {
-                    navController.navigate(ListScreens.AddModify.Route)
-                },
-                text = context.getString(R.string.Modifier)
-            )
+                onClick = {
+                    onModifyClick()
+
+                })
+               {
+             Text(text =  context.getString(R.string.Modifier)  )
+                }
+
+
 
             if (product.monoprixPriceHistory.size >= 2 ||
                 product.mgpriceHistory.size >= 2 ||
@@ -124,7 +151,7 @@ fun typeToTxt(product: ProductModel): String {
 fun ShowProductWithoutBill(context: Context, product: ProductModel) {
     when {
         product.name.contains(context.getString(R.string.carrefour)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -141,14 +168,14 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                     R.string.NA
                 ),
 
-                icon = Functions.logopalcer(
+                icon = logopalcer(
                     context,
                     context.getString(R.string.carrefour)
                 )
             )
         }
         product.name.contains(context.getString(R.string.monoprix)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -165,14 +192,14 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                     R.string.NA
                 ),
 
-                icon = Functions.logopalcer(
+                icon = logopalcer(
                     context,
                     context.getString(R.string.monoprix)
                 )
             )
         }
         product.name.contains(context.getString(R.string.Géant)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -189,14 +216,14 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                     R.string.NA
                 ),
 
-                icon = Functions.logopalcer(
+                icon = logopalcer(
                     context,
                     context.getString(R.string.Géant)
                 )
             )
         }
         product.name.contains(context.getString(R.string.mg)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -213,14 +240,14 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                     R.string.NA
                 ),
 
-                icon = Functions.logopalcer(
+                icon = logopalcer(
                     context,
                     context.getString(R.string.mg)
                 )
             )
         }
         product.name.contains(context.getString(R.string.azziza)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -237,14 +264,14 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                     R.string.NA
                 ),
 
-                icon = Functions.logopalcer(
+                icon = logopalcer(
                     context,
                     context.getString(R.string.azziza)
                 )
             )
         }
         else -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -264,7 +291,7 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                 ) else context.getString(R.string.NA),
                 icon = logopalcer(context, sortPrices(context, product)[0].second)
             )
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -284,7 +311,7 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                 ) else context.getString(R.string.NA),
                 icon = logopalcer(context, sortPrices(context, product)[1].second)
             )
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -304,7 +331,7 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                 ) else context.getString(R.string.NA),
                 icon = logopalcer(context, sortPrices(context, product)[2].second)
             )
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -325,7 +352,7 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
                 icon = logopalcer(context, sortPrices(context, product)[3].second)
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPrixIsNorixtEmpty(
                         context,
                         Functions.pricenotdefined(
@@ -353,7 +380,7 @@ fun ShowProductWithoutBill(context: Context, product: ProductModel) {
 fun ShowremarqNoBill(context: Context, product: ProductModel) {
     when {
         product.name.contains(context.getString(R.string.carrefour)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.carrefourremarq
@@ -368,7 +395,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.monoprix)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.monoprixremarq
@@ -380,7 +407,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.Géant)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.geantremarq
@@ -395,7 +422,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.mg)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.mgremarq
@@ -410,7 +437,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.azziza)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.azzizaremarq
@@ -425,7 +452,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
             )
         }
         else -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.monoprixremarq
@@ -436,7 +463,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.ic_monoprix_logo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.mgremarq
@@ -450,7 +477,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.mglogo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.carrefourremarq
@@ -464,7 +491,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.logo_carrefour
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.azzizaremarq
@@ -478,7 +505,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.azizalogo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifPromtionIsNotEmpty(
                         context,
                         product.geantremarq
@@ -499,7 +526,7 @@ fun ShowremarqNoBill(context: Context, product: ProductModel) {
 fun ShowBonusNoBill(context: Context, product: ProductModel) {
     when {
         product.name.contains(context.getString(R.string.carrefour)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.carrefourbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.carrefourbonusfid, false),
                     "fidbonustring"
@@ -510,7 +537,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.monoprix)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.monoprixbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.monoprixbonusfid, false),
                     "fidbonustring"
@@ -521,7 +548,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.Géant)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.geantbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.geantbonusfid, false),
                     "fidbonustring"
@@ -532,7 +559,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.mg)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.mgbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.mgbonusfid, false),
                     "fidbonustring"
@@ -543,7 +570,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
             )
         }
         product.name.contains(context.getString(R.string.azziza)) -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.azzizabonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.azzizabonusfid, false),
                     "fidbonustring"
@@ -554,7 +581,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
             )
         }
         else -> {
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.monoprixbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.monoprixbonusfid, false),
                     "fidbonustring"
@@ -564,7 +591,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.ic_monoprix_logo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.mgbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.mgbonusfid, false),
                     "fidbonustring"
@@ -574,7 +601,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.mglogo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.carrefourbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.carrefourbonusfid, false),
                     "fidbonustring"
@@ -584,7 +611,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.logo_carrefour
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.azzizabonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.azzizabonusfid, false),
                     "fidbonustring"
@@ -594,7 +621,7 @@ fun ShowBonusNoBill(context: Context, product: ProductModel) {
                 icon = R.drawable.azizalogo
             )
 
-            TextWithIconString(
+            TextWithIcon(
                 text = if (checkifBonusIsNotEmpty(product.geantbonusfid)) Functions.showStringifNotEmpty(
                     Functions.pricenotdefined(context, product.geantbonusfid, false),
                     "fidbonustring"

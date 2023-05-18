@@ -10,6 +10,13 @@ import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 
 class ProductDetailDialogViewModel() : ViewModel(), Parcelable {
 
+
+    var selectedOption by mutableStateOf("Prix")
+    fun onSelectionChange(value: String) {
+        selectedOption = value
+    }
+
+
     var prodDetailDialogVisibilityStates by mutableStateOf(false)
     fun onprodDetailDialogVisibilityStatesChanged(dialogvisibilityState: Boolean) {
         prodDetailDialogVisibilityStates = dialogvisibilityState
@@ -22,14 +29,11 @@ class ProductDetailDialogViewModel() : ViewModel(), Parcelable {
         prodDetailDialogInshopingStates = product
     }
 
-    var toggleBtnSelectedStates by mutableStateOf("Prix")
 
     constructor(parcel: Parcel) : this() {
     }
 
-    fun ontoggleBtnSelectedStatesStatesChanged(toggleBtnSelected: String) {
-        toggleBtnSelectedStates = toggleBtnSelected
-    }
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
     }
