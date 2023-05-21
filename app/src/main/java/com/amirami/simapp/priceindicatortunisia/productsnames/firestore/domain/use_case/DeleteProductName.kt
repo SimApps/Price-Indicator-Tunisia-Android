@@ -5,5 +5,5 @@ import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.r
 class DeleteProductName(
     private val repo: ProductsNamesRepository
 ) {
-    suspend operator fun invoke(bookId: String) = repo.deleteBookFromFirestore(bookId)
+    suspend operator fun invoke(name: String) = repo.deleteProductNameFromFirestore(name)
 }

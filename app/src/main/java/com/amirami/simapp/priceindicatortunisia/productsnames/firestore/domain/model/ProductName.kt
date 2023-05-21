@@ -1,6 +1,6 @@
-package com.amirami.simapp.priceindicatortunisia.products.firestore.domain.model
+package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.model
 
-data class Book (
+data class ProductName (
   //  var id: String? = null,
   //  var title: String? = null,
   //  var author: String? = null

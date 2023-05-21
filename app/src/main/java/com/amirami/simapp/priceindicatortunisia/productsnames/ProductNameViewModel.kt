@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,13 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.core.Utils
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddListProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.DeleteProductNameResponse
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.use_case.UseCasesProductName
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.repository.NameListRepository
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,12 +29,12 @@ class ProductNameViewModel @Inject constructor(
 
 
 
-    var addProdNameRemoteResponse by mutableStateOf<Response<Void?>>(Response.Success(null))
+    var addProdNameRemoteResponse by mutableStateOf<AddProductNameResponse>(Response.Success(false))
         private set
-    var addProdsNamesRemoteResponse by mutableStateOf<Response<Void?>>(Response.Success(null))
+    var addListProdsNamesRemoteResponse by mutableStateOf<AddListProductNameResponse>(Response.Success(false))
         private set
 
-    var deleteProdNameRemoteResponse by mutableStateOf<Response<Void?>>(Response.Success(null))
+    var deleteProdNameRemoteResponse by mutableStateOf<DeleteProductNameResponse>(Response.Success(false))
         private set
 
     var productLocalNames by mutableStateOf(emptyList<ProductName>())
@@ -72,7 +74,7 @@ class ProductNameViewModel @Inject constructor(
 
 
                 }
-                is Response.Error -> {
+                is Response.Failure -> {
                     isLoading = false
                     message = prodNamesResponse.message
                     Utils.printMessage(prodNamesResponse.message)
@@ -81,22 +83,20 @@ class ProductNameViewModel @Inject constructor(
             }
         }
     }
-    fun addRemoteProductName(title: String, author: String) = viewModelScope.launch {
-        useCasesProductName.addProductName(title, author).collect { response ->
-            addProdNameRemoteResponse = response
-        }
+    fun addRemoteProductName(prodName: String) = viewModelScope.launch {
+        addProdNameRemoteResponse   = Response.Loading
+        addProdNameRemoteResponse =  useCasesProductName.addProductName(prodName)
     }
 
-    fun addRemoteProductsNames(title: String, author: String) = viewModelScope.launch {
-        useCasesProductName.addProductsNames(title, author).collect { response ->
-            addProdsNamesRemoteResponse = response
-        }
+    fun addRemoteListProductsNames(prodNameList : ArrayList<String>) = viewModelScope.launch {
+        addListProdsNamesRemoteResponse = Response.Loading
+        addListProdsNamesRemoteResponse =  useCasesProductName.addListProductsNames(prodNameList)
+
     }
 
-    fun deleteRemoteProdName(bookId: String) = viewModelScope.launch {
-        useCasesProductName.deleteProductName(bookId).collect { response ->
-            deleteProdNameRemoteResponse = response
-        }
+    fun deleteRemoteProdName(prodName: String) = viewModelScope.launch {
+        deleteProdNameRemoteResponse = Response.Loading
+        deleteProdNameRemoteResponse =   useCasesProductName.deleteProductName(prodName)
     }
 
     fun getLocalProdNames() = viewModelScope.launch {
@@ -105,7 +105,6 @@ class ProductNameViewModel @Inject constructor(
 
 
             if(productLocalNames.isEmpty()){
-                Log.d("loklok","1remote")
                 getRemoteProdsNames()
             }
         }

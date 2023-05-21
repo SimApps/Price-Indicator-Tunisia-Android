@@ -1,26 +1,34 @@
 package com.amirami.simapp.priceindicatortunisia.screens.cartefidelite
 
-import android.content.Context
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_ADD
-import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_DELETE
-import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_MODIFY
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.utils.Functions
-import java.math.BigDecimal
 
 @Composable
 fun AddFidCardBottomSheetLayout(
-    barCodeViewModel: BarCodeViewModel,
-    fidCardRoomViewModel: FidCardRoomViewModel
+    onShowAddFidCardChanged : (Boolean) -> Unit,
+    upsertFidCard : (FidCardEntity) -> Unit,
+    onfidCardInfo : (FidCardEntity) -> Unit,
+    fidCardBarCodeInfo : FidCardEntity
 ) {
     val context = LocalContext.current
 
@@ -28,104 +36,117 @@ fun AddFidCardBottomSheetLayout(
 
     Column(
         modifier = Modifier
-            //   .fillMaxSize()
+              .fillMaxWidth()
             .wrapContentHeight()
             // .background(Color.White)
             .padding(16.dp)
-            .padding(bottom = 60.dp)
+            .padding(bottom = 60.dp),
         //    .verticalScroll(rememberScrollState()),
-        // verticalArrangement = Arrangement.Top,
-        //   horizontalAlignment = Alignment.Start
+         verticalArrangement = Arrangement.Top,
+           horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(30.dp))
-        Text(text =when (barCodeViewModel.fidCardAction) {
-            FID_CARD_ACTION_MODIFY -> context.getString(R.string.modifierCarteFIDELITE)
-            FID_CARD_ACTION_ADD ->  context.getString(R.string.Ajoutezcartefidelite)
-            else -> context.getString(R.string.Voulez_vous_suprimer_cette_carte_fid)
-        }
-               )
+        Text(context.getString(R.string.Ajoutezcartefidelite) )
         Spacer(modifier = Modifier.height(30.dp))
 
         OutlinedTextField(
-            value = barCodeViewModel.fidCardBarCodeInfo.name,// if( fidCardRoomViewModel.fidCardByValue.name!="") fidCardRoomViewModel.fidCardByValue.name else barCodeViewModel.fidCardBarCodeInfo.name ,
+            value = fidCardBarCodeInfo.name,// if( fidCardRoomViewModel.fidCardByValue.name!="") fidCardRoomViewModel.fidCardByValue.name else fidCardBarCodeInfo.name ,
             onValueChange = {
-                barCodeViewModel.onfidCardInfo(
-                     FidCardEntity(
-                        name = when(barCodeViewModel.fidCardAction) {
-                            FID_CARD_ACTION_DELETE ->  barCodeViewModel.fidCardBarCodeInfo.name
+                onfidCardInfo(
+                    fidCardBarCodeInfo.copy(name =it)
+                   /* FidCardEntity(
+                        name = when(fidCardAction) {
+                            FID_CARD_ACTION_DELETE ->  fidCardBarCodeInfo.name
                             else -> it
                         } ,
-                        value = barCodeViewModel.fidCardBarCodeInfo.value,
-                        barecodeformat = barCodeViewModel.fidCardBarCodeInfo.barecodeformat,
-                        barecodetype = barCodeViewModel.fidCardBarCodeInfo.barecodetype
-                    )
-
+                        value = fidCardBarCodeInfo.value,
+                        barecodeformat = fidCardBarCodeInfo.barecodeformat,
+                        barecodetype = fidCardBarCodeInfo.barecodetype
+                    )*/
                 )
+                
             },
-            label = { Text(context.getString(R.string.Nom)) }
+            label = { Text(context.getString(R.string.Nom)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                autoCorrect = true,
+                imeAction = ImeAction.Next
+            )
         )
 
 
         Spacer(modifier = Modifier.height(30.dp))
 
         OutlinedTextField(
-            value = barCodeViewModel.fidCardBarCodeInfo.value,
+            value = fidCardBarCodeInfo.value,
             onValueChange = {
-                barCodeViewModel.onfidCardInfo(
+               onfidCardInfo(
                         FidCardEntity(
-                        name = barCodeViewModel.fidCardBarCodeInfo.name,
-                        value = when(barCodeViewModel.fidCardAction) {
-                            FID_CARD_ACTION_DELETE ->  barCodeViewModel.fidCardBarCodeInfo.value
-                            else -> it
-                        },//barCodeViewModel.fidCardBarCodeInfo.value,//
-                        barecodeformat = barCodeViewModel.fidCardBarCodeInfo.barecodeformat,
-                        barecodetype = barCodeViewModel.fidCardBarCodeInfo.barecodetype
+                        name = fidCardBarCodeInfo.name,
+                        value = it,//fidCardBarCodeInfo.value,//
+                        barecodeformat = fidCardBarCodeInfo.barecodeformat,
+                        barecodetype = fidCardBarCodeInfo.barecodetype
                     )
 
                 )
             },
-            label = { Text(context.getString(R.string.codebarre)) }
+            label = { Text(context.getString(R.string.codebarre)) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                autoCorrect = true,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions {
+                if(fidCardBarCodeInfo.name!="" && fidCardBarCodeInfo.value!="")
+                clickDone(
+                    onShowAddFidCardChanged  = {
+                        onShowAddFidCardChanged(false)
+                    },
+                    fidCardBarCodeInfo = fidCardBarCodeInfo,
+                    upsertFidCard = {
+                        upsertFidCard(fidCardBarCodeInfo)
+                    }
+                )
+                else Toast.makeText(context, "Entré nom et code à barre !",Toast.LENGTH_LONG).show()
+            }
         )
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(){
+
             Button(
-                enabled = if(barCodeViewModel.fidCardAction!=context.getString(R.string.supprimer))
-                    barCodeViewModel.fidCardBarCodeInfo.name!="" && barCodeViewModel.fidCardBarCodeInfo.value!=""
-                else true,
+                enabled = fidCardBarCodeInfo.name!="" && fidCardBarCodeInfo.value!="",
                 onClick = {
 
-                    when (barCodeViewModel.fidCardAction) {
-                        FID_CARD_ACTION_DELETE -> barCodeViewModel.fidCardBarCodeInfo.value.let { fidCardRoomViewModel.deleteFidCardByValue(it) }
-                        else -> fidCardRoomViewModel.upsertFidCard(barCodeViewModel.fidCardBarCodeInfo)
+                    clickDone(
+                        onShowAddFidCardChanged  = {
+                            onShowAddFidCardChanged(false)
+                        },
+                    fidCardBarCodeInfo = fidCardBarCodeInfo,
+                    upsertFidCard = {
+                        upsertFidCard(fidCardBarCodeInfo)
                     }
+                    )
 
-                    barCodeViewModel.onShowAddFidCardChanged(false)
 
             }) {
-                Text(text = when (barCodeViewModel.fidCardAction) {
-                    FID_CARD_ACTION_MODIFY -> context.getString(R.string.Modifier)
-                    FID_CARD_ACTION_ADD -> context.getString(R.string.Ajouter)
-                    else -> context.getString(R.string.supprimer)
-                }
+                Text(text = context.getString(R.string.Ajouter) + " / " +context.getString(R.string.Modifier)
                 )
             }
-            if(barCodeViewModel.fidCardAction == FID_CARD_ACTION_DELETE){
-                Spacer(modifier = Modifier.height(30.dp))
 
-                Button(onClick = {
-                    barCodeViewModel.onShowAddFidCardChanged(false)
-                }) {
-                    Text(text =  context.getString(R.string.Annulé) )
-                }
-            }
 
-        }
+
 
     }
 
 }
-
+fun clickDone(
+    onShowAddFidCardChanged : (Boolean) -> Unit,
+    fidCardBarCodeInfo : FidCardEntity,
+              upsertFidCard : (FidCardEntity) -> Unit
+    ) {
+    upsertFidCard(fidCardBarCodeInfo)
+    onShowAddFidCardChanged(false)
+}
 
 
 

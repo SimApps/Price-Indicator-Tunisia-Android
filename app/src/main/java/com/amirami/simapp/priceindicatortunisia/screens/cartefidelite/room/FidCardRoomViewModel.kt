@@ -21,7 +21,7 @@ class FidCardRoomViewModel @Inject constructor(
     var fidCards by mutableStateOf(emptyList<FidCardEntity>())
 
 
-    var fidCardByValue by mutableStateOf(FidCardEntity())
+
 
 init {
     getFidCard()
@@ -33,11 +33,7 @@ init {
         }
     }
 
-    fun getFidCardByValue(value: String) = viewModelScope.launch {
-        fidCardRoomBaseRepository.getByValue(value).collect { fidCrd ->
-            fidCardByValue = fidCrd
-        }
-    }
+
 
     fun deleteFidCardByValue(value: String) = viewModelScope.launch(Dispatchers.IO) {
         fidCardRoomBaseRepository.deletebyid(value)

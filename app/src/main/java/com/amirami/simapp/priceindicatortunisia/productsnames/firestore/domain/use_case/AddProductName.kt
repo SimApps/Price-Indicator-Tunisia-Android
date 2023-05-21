@@ -6,7 +6,6 @@ class AddProductName(
     private val repo: ProductsNamesRepository
 ) {
     suspend operator fun invoke(
-        title: String,
-        author: String
-    ) = repo.addProductNameToFirestore(title, author)
+        prodName:String
+    ) = repo.addProductNameToFirestore(prodName)
 }

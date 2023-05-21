@@ -1,35 +1,38 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.data.repository
 
+import com.amirami.simapp.priceindicatortunisia.core.Constants
+import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_ARRAYS
+import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_COLLECTION
+import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_DOCUMENT
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Failure
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Loading
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddListProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.DeleteProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.ProductsNamesRepository
+import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.model.Book
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.*
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.ProductsNamesRepository
-import com.amirami.simapp.priceindicatortunisia.core.Constants
-import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_DOCUMENT
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ProductsNamesRepositoryImpl @Inject constructor(
-    private val booksRef: CollectionReference
-): ProductsNamesRepository {
+    private val collectionRef: CollectionReference): ProductsNamesRepository {
     override fun getProductsNamesFromFirestore() = callbackFlow {
         trySend(Loading).isSuccess
-        val snapshotListener = booksRef.document(PRODUCTS_LIST_NAMES_DOCUMENT) /*.orderBy(TITLE)*/.addSnapshotListener { snapshot, e ->
+        val snapshotListener = collectionRef.document(PRODUCTS_LIST_NAMES_DOCUMENT) /*.orderBy(TITLE)*/.addSnapshotListener { snapshot, e ->
             val response = if (snapshot != null) {
                 if(snapshot.exists()) {
-                    Error("")
+                    Failure("")
                     Success(snapshot.get(Constants.PRODUCTS_LIST_NAMES_ARRAYS) as ArrayList<String>)
                 }
-                else  Error(ERREUR_CONNECTION)
-            } else Error(e?.message ?: e.toString())
+                else  Failure(ERREUR_CONNECTION)
+            } else Failure(e?.message ?: e.toString())
 
             trySend(response).isSuccess
         }
@@ -39,34 +42,26 @@ class ProductsNamesRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun addProductNameToFirestore(title: String, author: String) = flow {
-        try {
-            emit(Loading)
-            val id = booksRef.document().id
-            val book = Book(
-                PRODUCTS_LIST_NAMES_ARRAYS=title
-               // id = id,
-               // title = title,
-               // author = author
-            )
-            val addition = booksRef.document(id).set(book).await()
-            emit(Success(addition))
+    override suspend fun addProductNameToFirestore(prodName:String) : AddProductNameResponse = try {
+            collectionRef.document(PRODUCTS_LIST_NAMES_COLLECTION).update(PRODUCTS_LIST_NAMES_ARRAYS, FieldValue.arrayUnion(prodName)).await()
+            Success(true)
         } catch (e: Exception) {
-            emit(Error(e.message ?: e.toString()))
+            Failure(e.message?:"Erreur Add Product Name")
         }
+
+
+    override suspend fun addListProductsNamesToFirestore(prodNameList : ArrayList<String>): AddListProductNameResponse = try{
+        collectionRef.document(PRODUCTS_LIST_NAMES_COLLECTION).update(PRODUCTS_LIST_NAMES_ARRAYS, prodNameList).await()
+        Success(true)
+    }catch (e: Exception) {
+        Failure(e.message?:"Erreur Add List Product Name")
     }
 
-    override fun addProductsNamesToFirestore(title: String, author: String): Flow<Response<Void?>> {
-        TODO("Not yet implemented")
+    override suspend fun deleteProductNameFromFirestore(name: String): DeleteProductNameResponse = try {
+        collectionRef.document(PRODUCTS_LIST_NAMES_COLLECTION).update(PRODUCTS_LIST_NAMES_ARRAYS, FieldValue.arrayRemove(name)).await()
+        Success(true)
+    } catch (e: Exception) {
+        Failure(e.message?:"Erreur Delete Product Name")
     }
 
-    override fun deleteBookFromFirestore(bookId: String) = flow {
-        try {
-            emit(Loading)
-            val deletion = booksRef.document(bookId).delete().await()
-            emit(Success(deletion))
-        } catch (e: Exception) {
-            emit(Error(e.message ?: e.toString()))
-        }
-    }
 }

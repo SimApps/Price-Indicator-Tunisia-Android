@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.google.gms:google-services:4.3.14") // Google Services plugin
+        classpath("com.google.gms:google-services:4.3.15") // Google Services plugin
 
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.5")
         // NOTE: Do not place your application dependencies here; they belong

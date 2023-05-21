@@ -35,7 +35,7 @@ object AppModuleProductsNames {
     ) = UseCasesProductName(
         getProductsNames = GetProductsNames(repo),
         addProductName = AddProductName(repo),
-        addProductsNames = AddProductsNames(repo),
+        addListProductsNames = AddListProductsNames(repo),
         deleteProductName = DeleteProductName(repo)
     )
 }

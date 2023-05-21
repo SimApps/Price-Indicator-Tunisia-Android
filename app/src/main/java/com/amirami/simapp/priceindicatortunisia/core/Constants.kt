@@ -2,9 +2,7 @@ package com.amirami.simapp.priceindicatortunisia.core
 
 object Constants {
 
- const val  FID_CARD_ACTION_ADD = "add"
-    const val  FID_CARD_ACTION_MODIFY = "modify"
-    const val  FID_CARD_ACTION_DELETE = "delete"
+
 
     const val  FID_CARD_ACTION_RESETED = "reseted"
 

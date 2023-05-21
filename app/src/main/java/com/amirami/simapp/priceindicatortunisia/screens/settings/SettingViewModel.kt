@@ -1,8 +1,11 @@
 package com.amirami.simapp.priceindicatortunisia.screens.settings
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.datastore.preferences.abstraction.DataStoreRepository
@@ -48,8 +51,25 @@ class SettingViewModel@Inject constructor(
         private set
     fun setisDarkThemeMode(value : Boolean){
         isDarkTheme = value
+    }
 
 
 
+    var showCustomDialog: Boolean by mutableStateOf(false)
+        private set
+    fun onShowCustomDialogChange(value : Boolean){
+        showCustomDialog = value
+    }
+
+    var dialogueInfo by mutableStateOf(DialogueInfo())
+        private set
+    fun onDialogueInfoChange(value : DialogueInfo){
+        dialogueInfo = value
     }
 }
+
+data class DialogueInfo(
+    val title : String = "",
+    val msg : String = "",
+    val  imageVector: ImageVector = Icons.Default.ExitToApp
+)

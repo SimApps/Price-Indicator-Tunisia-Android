@@ -17,5 +17,5 @@ interface FidCardRoomBaseRepository {
 
     fun  getAll() : Flow<List<FidCardEntity>>
 
-    fun  getByValue(value: String) : Flow<FidCardEntity>
+    fun  getByValue(value: String) : Flow<FidCardEntity?>
 }

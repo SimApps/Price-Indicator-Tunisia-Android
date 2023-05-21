@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
@@ -41,8 +42,12 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInState
 import com.amirami.simapp.priceindicatortunisia.google_sign.UserData
+import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.TextWithIcon
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.CustomDialogue
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
+import com.amirami.simapp.priceindicatortunisia.utils.Converters
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 
 @Composable
@@ -50,6 +55,7 @@ fun SettingsScreen(
     userData: UserData?,
     googleAuthUiClient: GoogleAuthUiClient,
     state: SignInState,
+    productNameViewModel: ProductNameViewModel,
     onSignInClick: () -> Unit,
     onSignOut: () -> Unit,
     resetState: () -> Unit,
@@ -68,15 +74,34 @@ fun SettingsScreen(
     }
     LaunchedEffect(key1 = state.isSignInSuccessful) {
         if(state.isSignInSuccessful) {
-            Toast.makeText(
+          /*  Toast.makeText(
                 context,
                 "Sign in successful",
                 Toast.LENGTH_LONG
-            ).show()
+            ).show()*/
 
             resetState()
         }
     }
+
+if(settingViewModel.showCustomDialog)    CustomDialogue(
+      dialogueInfo = settingViewModel.dialogueInfo,
+        onDismiss = {
+            settingViewModel.onDialogueInfoChange(DialogueInfo())
+            settingViewModel.onShowCustomDialogChange(false)
+            },
+    onClick = {
+
+
+        if (settingViewModel.dialogueInfo.title == context.getString(R.string.nous_contacter_par_email))
+            reportProblem(context = context)
+
+        settingViewModel.onShowCustomDialogChange(false)
+        settingViewModel.onDialogueInfoChange(DialogueInfo())
+
+    }
+
+    )
 
     Column(
         modifier = Modifier
@@ -186,7 +211,15 @@ fun SettingsScreen(
             text = context.getString(R.string.nous_contacter_par_email),
             icon = R.drawable.ic_send,
             onClick = {
-                reportProblem(context = context)
+                settingViewModel.onDialogueInfoChange(
+                    DialogueInfo(
+                    title = context.getString(R.string.nous_contacter_par_email),
+                    msg =  context.getString(R.string.jai_un_probleme_message),
+                        imageVector =     Icons.Default.Email
+
+                ))
+                settingViewModel.onShowCustomDialogChange(true)
+
             }
         )
 
@@ -195,6 +228,14 @@ fun SettingsScreen(
             text = context.getString(R.string.Qu_est_ce_que_application),
             icon = R.drawable.ic_disclaimer,
             onClick = {
+                settingViewModel.onDialogueInfoChange(DialogueInfo(
+                    title = context.getString(R.string.Qu_est_ce_que_application),
+                    msg =  context.getString(
+                        R.string.Qu_est_ce_que_cette_application,
+                        Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!).size.toString()
+                    )
+                ))
+                settingViewModel.onShowCustomDialogChange(true)
 
             }
         )
@@ -222,7 +263,7 @@ fun SettingsScreen(
             text = context.getString(R.string.licenses),
             icon = R.drawable.ic_licenses,
             onClick = {
-
+                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             }
         )
 

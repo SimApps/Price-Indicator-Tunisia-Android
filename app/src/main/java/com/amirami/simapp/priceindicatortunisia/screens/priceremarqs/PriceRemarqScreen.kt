@@ -56,7 +56,7 @@ fun PriceRemarqScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-             .padding(padding)
+           //  .padding(padding)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start

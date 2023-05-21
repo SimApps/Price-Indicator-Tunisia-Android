@@ -81,6 +81,7 @@ import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.utils.CustomModifiers.customWidth
@@ -99,12 +100,15 @@ fun ShoppingScreen(
     addModifyViewModel: AddModifyViewModel,
     shoppingViewModel: ShoppingViewModel = hiltViewModel()
 ) {
+
+
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
+     val prodList =   productsViewModel.shopLists
     LaunchedEffect(key1 = productsViewModel.shopLists, key2 = shoppingViewModel.calculateDiscount) {
 
 
@@ -140,7 +144,9 @@ fun ShoppingScreen(
 
 
     Scaffold(
-        modifier = Modifier.padding(padding),
+        modifier = Modifier
+           // .padding(padding)
+        ,
         topBar = { },
         //  scaffoldState = scaffoldState,
         bottomBar = {
@@ -201,13 +207,13 @@ fun ShoppingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
+            verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LazyColumn(
                 modifier = Modifier
                     .wrapContentHeight()
-                    // .fillMaxWidth()
                     .padding(3.dp, 6.dp, 3.dp, 6.dp),
-                //   .fillMaxHeight()
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -223,13 +229,18 @@ fun ShoppingScreen(
                 }
             }
 
+        if(prodList.isEmpty())    LottieComposable(
+                size =  250.dp,
+                lottiefile = R.raw.empty
+            )
 
-            ProductShopList(
+       else      ProductShopList(
                 snackbarHostState = snackbarHostState,
-                productsViewModel,
-                productDetailDialogViewModel,
+                productsViewModel =  productsViewModel,
+                productDetailDialogViewModel = productDetailDialogViewModel,
                 shoppingViewModel = shoppingViewModel,
-                addModifyViewModel = addModifyViewModel
+                addModifyViewModel = addModifyViewModel,
+                 productList = prodList
             )
         }
     }
@@ -242,24 +253,23 @@ fun ProductShopList(
     productsViewModel: ProductsViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     shoppingViewModel: ShoppingViewModel,
-    addModifyViewModel: AddModifyViewModel
+    addModifyViewModel: AddModifyViewModel,
+    productList :  List<ProductModel>
 ) {
     val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
             .height(500.dp)
-            // .fillMaxWidth()
             .padding(3.dp, 6.dp, 3.dp, 6.dp),
-        //   .fillMaxHeight()
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(productsViewModel.shopLists.size) { position ->
+        items(productList.size) { position ->
 
             ProductShopTiket(
                 snackbarHostState = snackbarHostState,
-                productsViewModel.shopLists[position],
+                productList[position],
                 productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel,
                 shoppingViewModel = shoppingViewModel,

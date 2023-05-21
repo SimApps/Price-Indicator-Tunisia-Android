@@ -1,20 +1,25 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode
 
-import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import android.util.Log
 import android.view.ViewGroup
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,14 +31,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.core.Constants.FID_CARD_ACTION_ADD
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.FlashLightComposable
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.util.Permission
-import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ADD_FID_CARD_SCREEN
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.HOME_SCREEN
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.SHOPPING_LIST_SCREEN
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.FlashLightComposable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
@@ -133,6 +132,7 @@ fun BareCodeCameraView(
                         barcode.rawValue?.let { barcodeValue ->
                             val fidcard = FidCardEntity(barcodeValue, barcode.format, barcode.valueType)
                             barCodeViewModel.onfidCardInfo(fidcard)
+                            barCodeViewModel.onShowAddFidCardChanged(true)
                          navController.navigateUp()
 
                         }

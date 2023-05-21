@@ -4,11 +4,10 @@ import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.r
 
 
 
-class AddProductsNames(
+class AddListProductsNames(
     private val repo: ProductsNamesRepository
 ) {
     suspend operator fun invoke(
-        title: String,
-        author: String
-    ) = repo.addProductsNamesToFirestore(title, author)
+        prodNameList : ArrayList<String>
+    ) = repo.addListProductsNamesToFirestore(prodNameList)
 }

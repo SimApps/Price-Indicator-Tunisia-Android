@@ -17,7 +17,7 @@ class BookRepositoryImpl(
     override fun deleteAll()= fidCardDao.deleteAll()
 
     override fun getAll(): Flow<List<FidCardEntity>> = fidCardDao.get()
-    override fun getByValue(value: String): Flow<FidCardEntity>  = fidCardDao.getByValue(value)
+    override fun getByValue(value: String): Flow<FidCardEntity?> = fidCardDao.getByValue(value)
 
 
 

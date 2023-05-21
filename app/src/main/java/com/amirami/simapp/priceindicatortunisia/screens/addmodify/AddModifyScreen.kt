@@ -165,7 +165,7 @@ fun AddModifyScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
+            //.padding(padding)
     ) {
         if (productNameViewModel.productLocalNames.isNotEmpty()) {
             SearchView(navController = navController,

@@ -26,37 +26,25 @@ import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import java.math.BigDecimal
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object Functions {
     private var mInterstitialAd: InterstitialAd? = null
-    var nbrInterstitialAdShowed = 0
 
-    lateinit var database: DatabaseReference
-    var prod_name_array: ArrayList<String> = ArrayList()
 
-    var checkedradio: Int = -55
 
-    var bottomsheetStateInfo = "false"
 
-    //  var pricewithDicount = false
-    var commentaire = ""
-    var reopendialogue = true
 
     val userRecord = FirebaseAuth.getInstance()
 
-    var searchtext = ""
     var searchtype = "name"
 
     fun getCurrentDate(): String {
@@ -64,20 +52,6 @@ object Functions {
         return currentDate.toString() // DateFormat.getDateTimeInstance().format(currentDate) // formated
     }
 
-    fun getcurrentDate(): String {
-        val cal = Calendar.getInstance()
-        val dayOfMonth = cal[Calendar.DAY_OF_MONTH].toString()
-        val monthOfYear = cal[Calendar.MONTH].toString()
-        val year = cal[Calendar.YEAR].toString()
-
-        return "$dayOfMonth/$monthOfYear/$year"
-    }
-
-    fun formatDate(Date: String): String {
-        // SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())
-        // SimpleDateFormat("MM/yyyy", Locale.getDefault()).format(Date())
-        return DateFormat.getDateTimeInstance().format(Date.toLong())
-    }
 
     fun shortformateDate(Date: String): String {
         // SimpleDateFormat("d/MM/yyyy", Locale.getDefault()).format(Date())

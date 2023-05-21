@@ -76,7 +76,7 @@ android {
 dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
 
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
     implementation(platform("androidx.compose:compose-bom:2023.05.00"))
@@ -85,13 +85,12 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     // implementation ("androidx.compose.material3:material3")
     // Override Material Design 3 library version with a pre-release version
-    implementation("androidx.compose.material3:material3:1.1.0-rc01")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
     implementation("androidx.compose.ui:ui-util")
-    implementation("androidx.compose.material:material-icons-extended:1.5.0-alpha03")
+    implementation("androidx.compose.material:material-icons-extended:1.5.0-alpha04")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
@@ -217,16 +216,15 @@ dependencies {
 
 
     // Accompanist
-    val accompanist_version = "0.30.0"
 
-    implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
+    implementation("com.google.accompanist:accompanist-insets:0.30.0")
     //noinspection GradleDependency
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-pager:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-drawablepainter:$accompanist_version")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+    implementation("com.google.accompanist:accompanist-pager:0.30.0")
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.30.0")
 
     // If using indicators, also depend on
-    implementation("com.google.accompanist:accompanist-pager-indicators:$accompanist_version")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.0")
 
 
     //  Camerax dependencies
@@ -240,7 +238,7 @@ dependencies {
 
 
     // permission handling in compose
-    implementation("com.google.accompanist:accompanist-permissions:0.30.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.30.1")
 
 
     // MLKit
@@ -250,6 +248,11 @@ dependencies {
 // TO GENERATE BARCODE MAYBE SEE IF  I CAN USE : com.google.mlkit:barcode-scanning
     implementation("com.google.zxing:core:3.5.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21")
+
+
+
+    // GET LICENSE INFO
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
 }
 repositories {
     mavenCentral()

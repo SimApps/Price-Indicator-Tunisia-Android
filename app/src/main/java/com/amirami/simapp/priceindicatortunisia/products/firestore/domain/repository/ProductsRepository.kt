@@ -4,12 +4,14 @@ import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import kotlinx.coroutines.flow.Flow
 
+typealias AddProductResponse = Response<Boolean>
+typealias DeleteProductResponse = Response<Boolean>
+
 interface ProductsRepository {
     fun getProductFromFirestore(searchtype: String, searchtext: String): Flow<Response<MutableList<ProductModel>>>
 
-    fun addProductToFirestore(title: String, author: String): Flow<Response<Void?>>
+    suspend fun addProductToFirestore(product: ProductModel, id: String): AddProductResponse
 
-    fun addProductsToFirestore(title: String, author: String): Flow<Response<Void?>>
 
-    fun deleteProductFromFirestore(bookId: String): Flow<Response<Void?>>
+    suspend fun deleteProductFromFirestore(id: String): DeleteProductResponse
 }

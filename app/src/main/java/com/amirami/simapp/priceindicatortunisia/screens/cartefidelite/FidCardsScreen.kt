@@ -3,12 +3,29 @@
 package com.amirami.simapp.priceindicatortunisia.screens.cartefidelite
 
 import android.Manifest
-import android.util.Log
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -16,20 +33,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
-import com.amirami.simapp.priceindicatortunisia.core.Constants
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomAlertDialogue
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.EMPTY_IMAGE_URI
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.util.Permission
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ADD_FID_CARD_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.generateBarCode
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
@@ -44,7 +56,34 @@ fun FidCardsScreen(
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
-if(barCodeViewModel.showAddFidCard)
+    val context = LocalContext.current
+    /**
+     * to delete when find better solution to show bottom sheet after scan SEE ALSO NAVIGATION
+     */
+   // if (barCodeViewModel.fidCardAction != Constants.FID_CARD_ACTION_RESETED) {
+        LaunchedEffect(key1 = Unit) {
+
+            if(barCodeViewModel.fidCardBarCodeInfo!=FidCardEntity()){
+
+                barCodeViewModel.getFidCardByValue(barCodeViewModel.fidCardBarCodeInfo)
+            }
+
+        }
+  //  }
+
+    CustomAlertDialogue(
+        title = context.getString(R.string.Voulez_vous_suprimer_cette_carte_fid),
+        msg = barCodeViewModel.fidCardBarCodeInfo.value,
+        openDialog  = barCodeViewModel.showDeleteFidCard,
+    setDialogueVisibility = {
+        barCodeViewModel.onShowDeleteFidCardChanged(false)
+    },
+    customAction = {
+        fidCardRoomViewModel.deleteFidCardByValue(barCodeViewModel.fidCardBarCodeInfo.value)
+    }
+    )
+
+if(barCodeViewModel.fidCardBarCodeInfo!=FidCardEntity() && barCodeViewModel.showAddFidCard)
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = {
@@ -52,12 +91,21 @@ if(barCodeViewModel.showAddFidCard)
                 sheetState.hide()
             }
             barCodeViewModel.onShowAddFidCardChanged(false)
+            barCodeViewModel.onfidCardInfo(FidCardEntity())
 
         },
     ) {
         AddFidCardBottomSheetLayout(
-            barCodeViewModel = barCodeViewModel,
-            fidCardRoomViewModel
+            onShowAddFidCardChanged = {
+                barCodeViewModel.onShowAddFidCardChanged(it)
+            },
+            fidCardBarCodeInfo =barCodeViewModel.fidCardBarCodeInfo,
+            upsertFidCard = {
+                fidCardRoomViewModel.upsertFidCard(it)
+            },
+            onfidCardInfo = {
+                barCodeViewModel.onfidCardInfo(it)
+            }
         )
     }
 
@@ -87,23 +135,13 @@ fun FidCardsMainScreen(
     val context = LocalContext.current
 
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        restartOnPlay = true,
-        iterations = Int.MAX_VALUE
-    )
+
+
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(padding),
-         //   .background(Color.White)
-          //  .padding(16.dp),
-            //  .verticalScroll(rememberScrollState())
-          //  .wrapContentHeight(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
-        //   horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
          Text(text = context.getString(R.string.Info_cartefid_activity))
@@ -116,17 +154,12 @@ fun FidCardsMainScreen(
                if (it.isNotEmpty()) {
                    LazyColumn(
                        modifier = modifier
-                           .height(300.dp)
-                           //.fillMaxSize()
-                         //  .wrapContentHeight()
-                         //  .background(Color.Gray)
-                       //    .padding(10.dp)
-                   ,verticalArrangement = Arrangement.spacedBy(8.dp)
+                           .height(300.dp),
+                       verticalArrangement = Arrangement.spacedBy(8.dp)
                    ) {
                        items(it.size) { position ->
 
                            FidCardsListItem(
-                               //  icon = R.drawable.ic_share,
                                modifier,
                                navController,
                                barCodeViewModel,
@@ -136,42 +169,28 @@ fun FidCardsMainScreen(
                        }
                    }
                }
-               else LottieAnimation(
-                   modifier= modifier.size(250.dp),
-                   composition = composition,
-                   progress = { progress },
+               else LottieComposable(
+                   size =  250.dp,
+                   lottiefile = R.raw.empty
                )
            }
 
 
 
 
-            /**
-             * to delete when find better solution to show bottom sheet after scan SEE ALSO NAVIGATION
-             */
-            if (barCodeViewModel.fidCardAction != Constants.FID_CARD_ACTION_RESETED) {
-                LaunchedEffect(key1 = context) {
-                    barCodeViewModel.onShowAddFidCardChanged(true)
-                }
-            }
+
             Spacer(modifier = modifier.height(30.dp))
         Permission(
             permission = listOf(Manifest.permission.CAMERA),
             permissionNotAvailableContent = { permissionState->
                 Column(modifier) {
-                    androidx.compose.material.Text("O noes! No Photo Gallery!")
+                    Text("Il Faut Accepter la permission d'utiliser la caméra")
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
-                        androidx.compose.material.Button(
+                        Button(
                             modifier = Modifier.padding(4.dp),
                             onClick = {
                                 permissionState.launchMultiplePermissionRequest()
-
-                                /*  context.startActivity(
-                                      Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                          data = Uri.fromParts("package", context.packageName, null)
-                                      }
-                                  )*/
                             }
                         ) {
                             Text("Accé caméra ")
@@ -241,8 +260,7 @@ fun FidCardsListItem(
                         onClickLabel = "Delete Fid card",
                         onClick = {
                             barCodeViewModel.onfidCardInfo(barcod)
-                            barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_DELETE)
-                            barCodeViewModel.onShowAddFidCardChanged(true)
+                            barCodeViewModel.onShowDeleteFidCardChanged(true)
 
                         }
                     )
@@ -264,16 +282,11 @@ fun FidCardsListItem(
                         onClickLabel = "Edit Fid card",
                         onClick = {
                             barCodeViewModel.onfidCardInfo(barcod)
-                            barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_MODIFY)
 
                             barCodeViewModel.onShowAddFidCardChanged(true)
 
                         }
                     )
-
-                // .border(2.dp, Color.Black, CutCornerShape(12.dp))
-                //  .background(Color.DarkGray, CutCornerShape(6.dp))
-                //  .padding(18.dp)
             )
 
         }

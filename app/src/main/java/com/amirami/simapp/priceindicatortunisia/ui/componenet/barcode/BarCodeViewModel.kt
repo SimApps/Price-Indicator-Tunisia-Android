@@ -5,22 +5,40 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.repository.FidCardRoomBaseRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
+class BarCodeViewModel @Inject constructor(
+    private val fidCardRoomBaseRepository: FidCardRoomBaseRepository
+) : ViewModel() {
 
-class BarCodeViewModel @Inject constructor() : ViewModel() {
+    var showDeleteFidCard by mutableStateOf(false)
+    fun onShowDeleteFidCardChanged(value: Boolean) {
+        showDeleteFidCard = value
+    }
+
+
     var showAddFidCard by mutableStateOf(false)
     fun onShowAddFidCardChanged(value: Boolean) {
         showAddFidCard = value
     }
-    var fidCardBarCodeInfo by mutableStateOf(FidCardEntity(name = "",value=  "",barecodeformat= -1,barecodetype= -1))
+    var fidCardBarCodeInfo by mutableStateOf(FidCardEntity())
         private set
     fun onfidCardInfo(fidCardBarCodeInf: FidCardEntity) {
         fidCardBarCodeInfo = fidCardBarCodeInf
     }
 
-
+    //var fidCardByValue by mutableStateOf(FidCardEntity())
+    fun getFidCardByValue(value: FidCardEntity) = viewModelScope.launch {
+        fidCardRoomBaseRepository.getByValue(value.value).collect { fidCrd ->
+            fidCardBarCodeInfo = fidCrd ?: value
+        }
+    }
 
     var BarCodeValue by mutableStateOf("")
         private set

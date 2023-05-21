@@ -70,8 +70,8 @@ LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
             searchViewModel.onsearchValue(it)
             productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
 
-            val fidcard = FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
-            barCodeViewModel.onfidCardInfo(fidcard)
+
+            barCodeViewModel.onfidCardInfo(FidCardEntity())
         }
     }
 }
@@ -180,8 +180,8 @@ fun HomeScreenContent(
 
             if (productNameViewModel.message == ERREUR_CONNECTION) {
                 LottieComposable(
-                    250.dp,
-                    R.raw.no_internet_connection
+                    size =  250.dp,
+                    lottiefile = R.raw.no_internet_connection
                 )
             }
 

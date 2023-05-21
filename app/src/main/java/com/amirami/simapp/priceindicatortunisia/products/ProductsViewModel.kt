@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.NotInit
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
+import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.AddProductResponse
+import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.DeleteProductResponse
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.usecases.UseCasesProduct
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.products.room.domain.repository.ShopListRepository
@@ -24,18 +26,21 @@ class ProductsViewModel @Inject constructor(
 
 
 
-    var addProdResponse by mutableStateOf<Response<Void?>>(Success(null))
-        private set
-    var addProdsResponse by mutableStateOf<Response<Void?>>(Success(null))
+    var addProdResponse by mutableStateOf<AddProductResponse>(Success(false))
         private set
 
-    var deleteProdResponse by mutableStateOf<Response<Void?>>(Success(null))
+
+    var deleteProdResponse by mutableStateOf<DeleteProductResponse>(Success(false))
         private set
     var isLoading by mutableStateOf(false)
         private set
 
     var errorValue by mutableStateOf("")
         private set
+
+   fun resetErreurValue(){
+       errorValue = ""
+   }
 
     var shopLists by mutableStateOf(emptyList<ProductModel>())
 
@@ -78,31 +83,31 @@ class ProductsViewModel @Inject constructor(
                     selectedProductStates = (response as Success<List<ProductModel>>).data.first()
 
                 }
-                is Response.Error -> {
+                is Response.Failure -> {
                     isLoading = false
-                    errorValue = (response as Response.Error).message
+                    errorValue = (response as Response.Failure).message
                 }
 
             }
         }
     }
 
-    fun addProduct(title: String, author: String) = viewModelScope.launch {
-        useCasesProduct.addProduct(title, author).collect { response ->
+  /*  fun addProduct(product: ProductModel, id: String) = viewModelScope.launch {
+        useCasesProduct.addProduct(product, author).collect { response ->
             addProdResponse = response
         }
+    }*/
+
+    fun addProductRemote(product: ProductModel, id: String) = viewModelScope.launch {
+        addProdResponse = Response.Loading
+        addProdResponse =   useCasesProduct.addProduct(product, id)
     }
 
-    fun addProducts(title: String, author: String) = viewModelScope.launch {
-        useCasesProduct.addProducts(title, author).collect { response ->
-            addProdsResponse = response
-        }
-    }
 
-    fun deleteProd(bookId: String) = viewModelScope.launch {
-        useCasesProduct.deleteProduct(bookId).collect { response ->
-            deleteProdResponse = response
-        }
+
+    fun deleteProdRemote(id: String) = viewModelScope.launch {
+        deleteProdResponse = Response.Loading
+        deleteProdResponse =  useCasesProduct.deleteProduct(id)
     }
 
     fun getShopListProducts() = viewModelScope.launch {

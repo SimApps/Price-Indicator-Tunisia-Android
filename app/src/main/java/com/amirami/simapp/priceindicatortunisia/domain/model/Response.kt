@@ -10,7 +10,9 @@ sealed class Response<out T> {
         val data: T
     ): Response<T>()
 
-    data class Error(
+    data class Failure(
         val message: String
     ): Response<Nothing>()
+
+
 }

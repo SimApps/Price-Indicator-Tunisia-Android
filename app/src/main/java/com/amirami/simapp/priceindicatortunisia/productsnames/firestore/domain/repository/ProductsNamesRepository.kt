@@ -1,14 +1,17 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository
 
-import kotlinx.coroutines.flow.Flow
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
+import kotlinx.coroutines.flow.Flow
 
+typealias AddProductNameResponse = Response<Boolean>
+typealias AddListProductNameResponse = Response<Boolean>
+typealias DeleteProductNameResponse = Response<Boolean>
 interface ProductsNamesRepository {
     fun getProductsNamesFromFirestore(): Flow<Response<ArrayList<String>>>
 
-    fun addProductNameToFirestore(title: String, author: String): Flow<Response<Void?>>
+    suspend  fun addProductNameToFirestore(prodName : String): AddProductNameResponse
 
-    fun addProductsNamesToFirestore(title: String, author: String): Flow<Response<Void?>>
+    suspend   fun addListProductsNamesToFirestore(prodNameList : ArrayList<String>): AddListProductNameResponse
 
-    fun deleteBookFromFirestore(bookId: String): Flow<Response<Void?>>
+    suspend fun deleteProductNameFromFirestore(bookId: String): DeleteProductNameResponse
 }

@@ -3,6 +3,6 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.
 data class UseCasesProductName (
     val getProductsNames: GetProductsNames,
     val addProductName: AddProductName,
-    val addProductsNames: AddProductsNames,
+    val addListProductsNames: AddListProductsNames,
     val deleteProductName: DeleteProductName
 )
