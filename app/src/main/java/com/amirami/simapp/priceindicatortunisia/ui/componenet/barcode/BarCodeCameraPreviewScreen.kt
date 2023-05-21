@@ -8,7 +8,6 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +39,6 @@ import java.util.concurrent.Executors
 
 @Composable
 fun BarCodeCameraPreviewScreen(
-    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel
 ) {
@@ -49,7 +47,7 @@ fun BarCodeCameraPreviewScreen(
 
 
 
-    Box(modifier = Modifier.padding(padding)) {
+    Box(modifier = Modifier.padding(12.dp)) {
         // Call FlashLightComposable
         if (barCodeViewModel.flashState) {
             BareCodeCameraView(

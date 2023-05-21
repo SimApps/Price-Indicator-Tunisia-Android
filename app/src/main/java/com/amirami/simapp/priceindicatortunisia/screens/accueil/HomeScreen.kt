@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,11 +32,13 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProductList
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.getbyproducttype.GetProductByTypesListView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_GET_PROD_BY_TYPES
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
@@ -46,7 +49,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     productsViewModel: ProductsViewModel,
@@ -101,18 +103,39 @@ LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
     }
 
 
-
-
-            HomeScreenContent(
-                padding = padding,
+    Scaffold(
+        topBar = {
+            TopBar(
                 navController = navController,
-                barCodeViewModel = barCodeViewModel,
-                productsViewModel = productsViewModel,
-                searchViewModel = searchViewModel,
-                productNameViewModel = productNameViewModel,
-                productDetailDialogViewModel = productDetailDialogViewModel,
-                addModifyViewModel = addModifyViewModel
             )
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onItemClick = {
+                    productsViewModel.resetErreurValue()
+                    barCodeViewModel.onfidCardInfo(FidCardEntity())
+                    navController.navigate(it.route)
+                },
+
+                productsViewModel = productsViewModel
+            )
+        }
+
+    ) { padding ->
+        HomeScreenContent(
+            padding = padding,
+            navController = navController,
+            barCodeViewModel = barCodeViewModel,
+            productsViewModel = productsViewModel,
+            searchViewModel = searchViewModel,
+            productNameViewModel = productNameViewModel,
+            productDetailDialogViewModel = productDetailDialogViewModel,
+            addModifyViewModel = addModifyViewModel
+        )
+    }
+
+
         }
 
 

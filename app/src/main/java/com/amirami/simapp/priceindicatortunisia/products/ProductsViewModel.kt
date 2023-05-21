@@ -24,7 +24,7 @@ class ProductsViewModel @Inject constructor(
     private val shopListRepository: ShopListRepository
 ) : ViewModel() {
 
-
+    var addProductResponse by mutableStateOf<FirestoreResponseState<Boolean>>(FirestoreResponseState())
 
     var addProdResponse by mutableStateOf<AddProductResponse>(Success(false))
         private set
@@ -103,7 +103,21 @@ class ProductsViewModel @Inject constructor(
         addProdResponse =   useCasesProduct.addProduct(product, id)
     }
 
-
+    init {
+        res()
+    }
+    fun res(){
+        when(addProdResponse) {
+            is Response.Loading ->  addProductResponse = addProductResponse.copy(loading = true)
+            is Response.Success ->  addProductResponse = addProductResponse.copy(
+                loading = false,
+                data = true)
+            is Response.Failure -> {
+                addProductResponse = addProductResponse.copy(loading = false, error = errorValue)
+            }
+            else -> {}
+        }
+    }
 
     fun deleteProdRemote(id: String) = viewModelScope.launch {
         deleteProdResponse = Response.Loading
@@ -147,3 +161,9 @@ class ProductsViewModel @Inject constructor(
         typesModel = typeModel
     }
 }
+
+data class FirestoreResponseState<out T>(
+    val loading : Boolean = false,
+    val error : String? = null,
+    val data : T? = null
+)

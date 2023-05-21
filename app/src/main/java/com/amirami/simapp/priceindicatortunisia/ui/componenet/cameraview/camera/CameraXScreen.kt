@@ -1,24 +1,18 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.camera
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Environment
-import android.provider.Settings
 import android.util.Log
-import androidx.camera.core.*
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY
+import androidx.camera.core.Preview
+import androidx.camera.core.UseCase
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.util.Permission
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.plcoding.bottomnavwithbadges.ui.componenet.cameraview.camera.executor
 import com.plcoding.bottomnavwithbadges.ui.componenet.cameraview.camera.getCameraProvider
@@ -41,19 +34,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @ExperimentalPermissionsApi
 @ExperimentalCoroutinesApi
 @Composable
 fun CameraXScreen(
-    padding: PaddingValues,
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     onImageFile: (File) -> Unit = { },
     barCodeViewModel: BarCodeViewModel
 ) {
     val context = LocalContext.current
-    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+    Box(modifier = Modifier.fillMaxSize().padding(12.dp)) {
         val lifecycleOwner = LocalLifecycleOwner.current
         val coroutineScope = rememberCoroutineScope()
         var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }

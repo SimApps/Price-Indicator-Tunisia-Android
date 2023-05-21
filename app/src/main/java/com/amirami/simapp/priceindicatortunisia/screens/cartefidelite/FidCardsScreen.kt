@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -35,22 +36,25 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomAlertDialogue
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.util.Permission
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.generateBarCode
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 
 @Composable
 fun FidCardsScreen(
-    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
+    productsViewModel : ProductsViewModel,
     fidCardRoomViewModel: FidCardRoomViewModel
 ) {
 
@@ -108,14 +112,34 @@ if(barCodeViewModel.fidCardBarCodeInfo!=FidCardEntity() && barCodeViewModel.show
             }
         )
     }
+    Scaffold(
+        topBar = {
+            TopBar(
+                navController = navController,
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onItemClick = {
+                    productsViewModel.resetErreurValue()
+                    barCodeViewModel.onfidCardInfo(FidCardEntity())
+                    navController.navigate(it.route)
+                },
 
-    FidCardsMainScreen(
-        padding = padding,
-        modifier = Modifier,
-        navController = navController,
-        barCodeViewModel = barCodeViewModel,
-        fidCardRoomViewModel = fidCardRoomViewModel
-    )
+                productsViewModel = productsViewModel
+            )
+        }
+
+    ) { padding ->
+        FidCardsMainScreen(
+            padding = padding,
+            navController = navController,
+            barCodeViewModel = barCodeViewModel,
+            fidCardRoomViewModel = fidCardRoomViewModel
+        )
+
+    }
 
 
 }
@@ -124,7 +148,6 @@ if(barCodeViewModel.fidCardBarCodeInfo!=FidCardEntity() && barCodeViewModel.show
 @Composable
 fun FidCardsMainScreen(
     padding: PaddingValues,
-    modifier: Modifier,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     fidCardRoomViewModel: FidCardRoomViewModel
@@ -139,7 +162,7 @@ fun FidCardsMainScreen(
 
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(padding),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -153,14 +176,13 @@ fun FidCardsMainScreen(
         fidCardRoomViewModel.fidCards.let {
                if (it.isNotEmpty()) {
                    LazyColumn(
-                       modifier = modifier
+                       modifier = Modifier
                            .height(300.dp),
                        verticalArrangement = Arrangement.spacedBy(8.dp)
                    ) {
                        items(it.size) { position ->
 
                            FidCardsListItem(
-                               modifier,
                                navController,
                                barCodeViewModel,
                                it[position]
@@ -179,11 +201,11 @@ fun FidCardsMainScreen(
 
 
 
-            Spacer(modifier = modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(30.dp))
         Permission(
             permission = listOf(Manifest.permission.CAMERA),
             permissionNotAvailableContent = { permissionState->
-                Column(modifier) {
+                Column(Modifier) {
                     Text("Il Faut Accepter la permission d'utiliser la caméra")
                     Spacer(modifier = Modifier.height(8.dp))
                     Row {
@@ -201,7 +223,7 @@ fun FidCardsMainScreen(
             },
             content = {
                 ButtonWithBorder(
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     onClicks = {
                         navController.navigate(ListScreens.BarCodeCameraPreview.Route)
                     },
@@ -212,7 +234,7 @@ fun FidCardsMainScreen(
             })
 
 
-            Spacer(modifier = modifier.height(55.dp))
+            Spacer(modifier = Modifier.height(55.dp))
 
 
     }
@@ -220,7 +242,6 @@ fun FidCardsMainScreen(
 
 @Composable
 fun FidCardsListItem(
-    modifier: Modifier,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     barcod: FidCardEntity
@@ -229,7 +250,7 @@ fun FidCardsListItem(
 
     Card() {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .clickable(onClick = {
@@ -244,16 +265,16 @@ fun FidCardsListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             //   Icon(painter = painterResource(id = icon), contentDescription = "Share", tint = Color.White)
-            Spacer(modifier = modifier.width(9.dp))
+            Spacer(modifier = Modifier.width(9.dp))
             Text(text = barcod.name)
 
 
-            Spacer(modifier.weight(1f)) // height and background only for demonstration
+            Spacer(Modifier.weight(1f)) // height and background only for demonstration
 
             Image(
                 painter = painterResource(id = R.drawable.ic_delete),
                 contentDescription = "",
-                modifier = modifier
+                modifier = Modifier
                     .padding(18.dp)
                     .clickable(
                         enabled = true,
@@ -275,7 +296,7 @@ fun FidCardsListItem(
             Image(
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = "",
-                modifier = modifier
+                modifier = Modifier
                     .padding(1.dp)
                     .clickable(
                         enabled = true,

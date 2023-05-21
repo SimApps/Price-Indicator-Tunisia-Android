@@ -6,5 +6,5 @@ import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.reposi
 class GetProduct (
     private val repo: ProductsRepository
 ) {
-    suspend   operator  fun invoke(searchtype:String,searchtext:String) = repo.getProductFromFirestore(searchtype,searchtext)
+       operator  fun invoke(searchtype:String,searchtext:String) = repo.getProductFromFirestore(searchtype,searchtext)
 }

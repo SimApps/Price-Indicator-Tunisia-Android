@@ -15,13 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -43,6 +47,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
@@ -55,20 +60,22 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.EditTextField
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.Constants
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.getuserid
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddModifyScreen(
-    padding: PaddingValues,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
     // productsViewModel: ProductsViewModel,
@@ -129,19 +136,105 @@ fun AddModifyScreen(
     LaunchedEffect(key1 = productsViewModel.selectedProductStates){
         addModifyViewModel.onCurrentProductChange(productsViewModel.selectedProductStates)
     }
-    AddModifyScreenContent(
-        padding = padding,
-        navController = navController,
-        barCodeViewModel = barCodeViewModel,
-        //  productsViewModel = productsViewModel,
-        searchViewModel = searchViewModel,
-        productNameViewModel = productNameViewModel,
-        addModifyViewModel = addModifyViewModel,
-        productDetailDialogViewModel = productDetailDialogViewModel,
-        productTypesDialogViewModel = productTypesDialogViewModel,
-        productsViewModel = productsViewModel,
-        currentProduct = currentProduct
-    )
+
+    Scaffold(
+        topBar = {
+            TopBar(
+                navController = navController,
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onItemClick = {
+                    productsViewModel.resetErreurValue()
+                    barCodeViewModel.onfidCardInfo(FidCardEntity())
+                    navController.navigate(it.route)
+                },
+
+                productsViewModel = productsViewModel
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                
+                val product = ProductModel(
+                     id = "1",
+                 date = "",
+                 name = "Test 1 V",
+                 namearabe = "compose",
+                 marques = "COMPOSE",
+                 marquesarabe = "",
+                 quantity = 2.0,
+                 description = "",
+                 descriptionarabe = "",
+                 imageurl = "",
+                 type = "Alimentation",
+                 typesub = "Boissons",
+                 typesubsub = "Eaux",
+                 sieze = "ml",
+                 monoprixprice = "",
+                 monoprixremarq = "",
+                 mgprice = "",
+                 mgremarq = "",
+                 carrefourprice = "",
+                 carrefourremarq = "",
+                 azzizaprice = "",
+                 azzizaremarq = "",
+                 geantprice = "",
+                 geantremarq = "",
+                 monoprixremarqmodifdate = "",
+                 mgremarqmodifdate = "",
+                 carrefourremarqmodifdate = "",
+                 azzizaremarqmodifdate = "",
+                 geantremarqmodifdate = "",
+                 monoprixmodifdate = "",
+                 mgmodifdate = "",
+                 carrefourmodifdate = "",
+                 azzizamodifdate = "",
+                 geantmodifdate = "",
+                 monoprixbonusfid = "",
+                 mgbonusfid = "",
+                 carrefourbonusfid = "",
+                 azzizabonusfid = "",
+                 geantbonusfid = "",
+                 monoprixbonusfidmodifdate = "",
+                 mgbonusfidmodifdate = "",
+                 carrefourbonusfidmodifdate = "",
+                 azzizabonusfidmodifdate = "",
+                 geantbonusfidmodifdate = "",
+                 monoprixPricHistory = "",
+                 mgpricHistory = "",
+                 azizaPricHistory = "",
+                 carrefourPricHistory = "",
+                 geantPricHistory = ""
+                )
+                product.userid = getuserid()
+                productsViewModel.addProductRemote(product = product, id = "1")
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Save,
+                    contentDescription = ""
+                )
+            }
+        }
+
+    ) { padding ->
+        AddModifyScreenContent(
+            padding = padding,
+            navController = navController,
+            barCodeViewModel = barCodeViewModel,
+            //  productsViewModel = productsViewModel,
+            searchViewModel = searchViewModel,
+            productNameViewModel = productNameViewModel,
+            addModifyViewModel = addModifyViewModel,
+            productDetailDialogViewModel = productDetailDialogViewModel,
+            productTypesDialogViewModel = productTypesDialogViewModel,
+            productsViewModel = productsViewModel,
+            currentProduct = currentProduct
+        )
+    }
+
 
 
 }
@@ -160,8 +253,10 @@ fun AddModifyScreenContent(
     currentProduct: ProductModel
 ) {
     val context = LocalContext.current
+    
 
 
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -198,6 +293,16 @@ fun AddModifyScreenContent(
                 )
             }
             if (productsViewModel.isLoading) ProgressBar()
+
+
+            when(val addBookResponse = productsViewModel.addProdResponse) {
+                is Response.Loading -> ProgressBar()
+                is Response.Success -> Unit
+                is Response.Failure -> {
+                    Text(text = addBookResponse.message)
+                }
+                else -> {}
+            }
             ScreenContent(
                 navController = navController,
                 addModifyViewModel = addModifyViewModel,
@@ -293,7 +398,9 @@ fun ScreenContent(
 
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
     ) {
@@ -391,7 +498,9 @@ fun ScreenContent(
 
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
     ) {
@@ -485,7 +594,9 @@ fun ScreenContent(
 
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
     ) {
@@ -523,7 +634,9 @@ fun ScreenContent(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp)
         ,
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
@@ -562,7 +675,9 @@ fun ScreenContent(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
     ) {
@@ -600,7 +715,9 @@ fun ScreenContent(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(66.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment= Alignment.CenterVertically,
     ) {
@@ -640,7 +757,9 @@ fun ScreenContent(
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
     verticalAlignment= Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().height(66.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(66.dp)
     ) {
         EditTextField(
             modifier = Modifier.customWidth(LocalConfiguration.current, 0.3f),

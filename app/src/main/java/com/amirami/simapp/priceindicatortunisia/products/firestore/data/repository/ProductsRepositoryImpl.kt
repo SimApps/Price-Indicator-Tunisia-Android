@@ -8,6 +8,7 @@ import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.reposi
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -51,10 +52,9 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addProductToFirestore(product: ProductModel, id: String): AddProductResponse = try {
-
         collectionRef.document(id).set(product).await()
         Success(true)
-    } catch (e: Exception) {
+    } catch (e: FirebaseFirestoreException) {
         Failure(e.message?:"Erreur add Product")
     }
 

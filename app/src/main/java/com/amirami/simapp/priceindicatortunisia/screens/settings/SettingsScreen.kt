@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,14 +38,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInState
 import com.amirami.simapp.priceindicatortunisia.google_sign.UserData
+import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.TextWithIcon
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.CustomDialogue
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
 import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -55,11 +62,13 @@ fun SettingsScreen(
     userData: UserData?,
     googleAuthUiClient: GoogleAuthUiClient,
     state: SignInState,
+    barCodeViewModel: BarCodeViewModel,
+    productsViewModel: ProductsViewModel,
+    navController: NavHostController,
     productNameViewModel: ProductNameViewModel,
     onSignInClick: () -> Unit,
     onSignOut: () -> Unit,
     resetState: () -> Unit,
-    padding: PaddingValues,
     settingViewModel : SettingViewModel
 ) {
     val context = LocalContext.current
@@ -102,172 +111,193 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
     }
 
     )
+    Scaffold(
+        topBar = {
+            TopBar(
+                navController = navController,
+            )
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                onItemClick = {
+                    productsViewModel.resetErreurValue()
+                    barCodeViewModel.onfidCardInfo(FidCardEntity())
+                    navController.navigate(it.route)
+                },
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            // .padding(padding)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
-    ) {
-        AnimatedVisibility(visible = userData?.profilePictureUrl != null && state.isSignInSuccessful) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if(userData?.profilePictureUrl != null) {
-                    AsyncImage(
-                        model = userData.profilePictureUrl,
-                        contentDescription = "Profile picture",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                if(userData?.username != null) {
-                    Text(
-                        text = userData.username,
-                        textAlign = TextAlign.Center,
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
+                productsViewModel = productsViewModel
+            )
         }
 
-        
-        
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
         ) {
-            AssistChip(
-                onClick = { settingViewModel.setThemeMode(Theme.SYSTEM_THEME.theme) },
-                label = { Text("System") },
+            AnimatedVisibility(visible = userData?.profilePictureUrl != null && state.isSignInSuccessful) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if(userData?.profilePictureUrl != null) {
+                        AsyncImage(
+                            model = userData.profilePictureUrl,
+                            contentDescription = "Profile picture",
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    if(userData?.username != null) {
+                        Text(
+                            text = userData.username,
+                            textAlign = TextAlign.Center,
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+            }
 
-                leadingIcon = {
-                    AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.SYSTEM_THEME.theme) {
-                        Icon(
-                            Icons.Filled.Done,
-                            contentDescription = "System",
-                            Modifier.size(AssistChipDefaults.IconSize)
-                        )
+
+
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AssistChip(
+                    onClick = { settingViewModel.setThemeMode(Theme.SYSTEM_THEME.theme) },
+                    label = { Text("System") },
+
+                    leadingIcon = {
+                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.SYSTEM_THEME.theme) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "System",
+                                Modifier.size(AssistChipDefaults.IconSize)
+                            )
+                        }
                     }
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                AssistChip(
+                    onClick = { settingViewModel.setThemeMode(Theme.DARK.theme) },
+                    label = { Text("Dark") },
+                    leadingIcon = {
+                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.DARK.theme) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription ="Dark",
+                                Modifier.size(AssistChipDefaults.IconSize)
+                            )
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                AssistChip(
+                    onClick = { settingViewModel.setThemeMode(Theme.LIGHT.theme) },
+                    label = { Text("Light") },
+                    leadingIcon = {
+                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.LIGHT.theme) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "Light",
+                                Modifier.size(AssistChipDefaults.IconSize)
+                            )
+                        }
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text =  if(googleAuthUiClient.getSignedInUser() == null)
+                    context.getString(R.string.Connecter)
+                else context.getString(R.string.Déconnecter),
+                icon = if(googleAuthUiClient.getSignedInUser() == null) R.drawable.ic_signin
+                else R.drawable.ic_signout,
+                onClick = {
+                    if(googleAuthUiClient.getSignedInUser() == null)  onSignInClick()
+                    else onSignOut()
                 }
             )
-            Spacer(modifier = Modifier.width(6.dp))
-            AssistChip(
-                onClick = { settingViewModel.setThemeMode(Theme.DARK.theme) },
-                label = { Text("Dark") },
-                leadingIcon = {
-                    AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.DARK.theme) {
-                        Icon(
-                            Icons.Filled.Done,
-                            contentDescription ="Dark",
-                            Modifier.size(AssistChipDefaults.IconSize)
-                        )
-                    }
+
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text = context.getString(R.string.nous_contacter_par_email),
+                icon = R.drawable.ic_send,
+                onClick = {
+                    settingViewModel.onDialogueInfoChange(
+                        DialogueInfo(
+                            title = context.getString(R.string.nous_contacter_par_email),
+                            msg =  context.getString(R.string.jai_un_probleme_message),
+                            imageVector =     Icons.Default.Email
+
+                        ))
+                    settingViewModel.onShowCustomDialogChange(true)
+
                 }
             )
-            Spacer(modifier = Modifier.width(6.dp))
-            AssistChip(
-                onClick = { settingViewModel.setThemeMode(Theme.LIGHT.theme) },
-                label = { Text("Light") },
-                leadingIcon = {
-                    AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.LIGHT.theme) {
-                        Icon(
-                            Icons.Filled.Done,
-                            contentDescription = "Light",
-                            Modifier.size(AssistChipDefaults.IconSize)
+
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text = context.getString(R.string.Qu_est_ce_que_application),
+                icon = R.drawable.ic_disclaimer,
+                onClick = {
+                    settingViewModel.onDialogueInfoChange(DialogueInfo(
+                        title = context.getString(R.string.Qu_est_ce_que_application),
+                        msg =  context.getString(
+                            R.string.Qu_est_ce_que_cette_application,
+                            Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!).size.toString()
                         )
-                    }
+                    ))
+                    settingViewModel.onShowCustomDialogChange(true)
+
                 }
             )
+
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text = context.getString(R.string.more_application),
+                icon = R.drawable.ic_baseline_shop_24,
+                onClick = {
+                    more_apps(context = context)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text = context.getString(R.string.evaluez_application),
+                icon =  R.drawable.ic_rate,
+                onClick = {
+                    rate(context = context)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+            TextWithIcon(
+                text = context.getString(R.string.licenses),
+                icon = R.drawable.ic_licenses,
+                onClick = {
+                    context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                }
+            )
+
         }
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text =  if(googleAuthUiClient.getSignedInUser() == null)
-                context.getString(R.string.Connecter)
-            else context.getString(R.string.Déconnecter),
-            icon = if(googleAuthUiClient.getSignedInUser() == null) R.drawable.ic_signin
-            else R.drawable.ic_signout,
-            onClick = {
-                if(googleAuthUiClient.getSignedInUser() == null)  onSignInClick()
-                else onSignOut()
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text = context.getString(R.string.nous_contacter_par_email),
-            icon = R.drawable.ic_send,
-            onClick = {
-                settingViewModel.onDialogueInfoChange(
-                    DialogueInfo(
-                    title = context.getString(R.string.nous_contacter_par_email),
-                    msg =  context.getString(R.string.jai_un_probleme_message),
-                        imageVector =     Icons.Default.Email
-
-                ))
-                settingViewModel.onShowCustomDialogChange(true)
-
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text = context.getString(R.string.Qu_est_ce_que_application),
-            icon = R.drawable.ic_disclaimer,
-            onClick = {
-                settingViewModel.onDialogueInfoChange(DialogueInfo(
-                    title = context.getString(R.string.Qu_est_ce_que_application),
-                    msg =  context.getString(
-                        R.string.Qu_est_ce_que_cette_application,
-                        Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!).size.toString()
-                    )
-                ))
-                settingViewModel.onShowCustomDialogChange(true)
-
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text = context.getString(R.string.more_application),
-            icon = R.drawable.ic_baseline_shop_24,
-            onClick = {
-                more_apps(context = context)
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text = context.getString(R.string.evaluez_application),
-            icon =  R.drawable.ic_rate,
-            onClick = {
-                rate(context = context)
-            }
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-        TextWithIcon(
-            text = context.getString(R.string.licenses),
-            icon = R.drawable.ic_licenses,
-            onClick = {
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            }
-        )
-
     }
+
 
 
 }

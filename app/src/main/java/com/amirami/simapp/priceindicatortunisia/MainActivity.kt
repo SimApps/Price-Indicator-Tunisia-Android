@@ -8,20 +8,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.annotation.ExperimentalCoilApi
 import com.amirami.simapp.priceindicatortunisia.core.Constants
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInViewModel
@@ -34,7 +28,6 @@ import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewM
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.FidCardsScreen
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.GeneratedBarcodeImageScreen
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.screens.courses.ShoppingScreen
 import com.amirami.simapp.priceindicatortunisia.screens.priceremarqs.PriceRemarqScreen
 import com.amirami.simapp.priceindicatortunisia.screens.settings.SettingViewModel
@@ -42,21 +35,18 @@ import com.amirami.simapp.priceindicatortunisia.screens.settings.SettingsScreen
 import com.amirami.simapp.priceindicatortunisia.screens.tiket.TiketScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeCameraPreviewScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.MainImageTiket
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.camera.CameraXScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.ui.theme.AppTheme
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.gms.auth.api.identity.Identity
 import com.narify.netdetect.NetDetect
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -69,6 +59,7 @@ class MainActivity : ComponentActivity() {
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,239 +81,194 @@ class MainActivity : ComponentActivity() {
                 val productsViewModel: ProductsViewModel = hiltViewModel()
                 val barCodeViewModel: BarCodeViewModel = hiltViewModel()
 
-                MainScreen(
-                    navController, modifier = Modifier,
-                    productsViewModel= productsViewModel,
-                    settingViewModel = settingViewModel,
-                    barCodeViewModel = barCodeViewModel
-                )
 
-            }
-        }
-    }
+                val cameraViewModel: CameraViewModel = hiltViewModel()
+                val fidCardRoomViewModel: FidCardRoomViewModel = hiltViewModel()
 
-    @OptIn(ExperimentalPermissionsApi::class, ExperimentalCoroutinesApi::class,
-        ExperimentalCoilApi::class
-    )
-    @Composable
-    fun MainScreen(
-                   navController: NavHostController,
-                   modifier: Modifier,
-                   barCodeViewModel: BarCodeViewModel,
-                   productsViewModel: ProductsViewModel,
-                   settingViewModel: SettingViewModel) {
-        Scaffold(
-            modifier = modifier,
-            topBar = {
-                TopBar(
+                val productDetailDialogViewModel: ProductDetailDialogViewModel = hiltViewModel()
+                val productTypesDialogViewModel: ProductTypesDialogViewModel = hiltViewModel()
+                val addModifyViewModel: AddModifyViewModel = hiltViewModel()
+                val searchViewModel: SearchViewModel = hiltViewModel()
+                val productNameViewModel: ProductNameViewModel = hiltViewModel()
+                val signInViewModel = viewModel<SignInViewModel>()
+
+                NavHost(
                     navController = navController,
-                    modifier = modifier
-                )
-            },
-            bottomBar = {
-                BottomNavigationBar(
-                    modifier = modifier,
-                    navController = navController,
-                    onItemClick = {
-                        productsViewModel.resetErreurValue()
-                        barCodeViewModel.onfidCardInfo(FidCardEntity())
-                        navController.navigate(it.route)
-                    },
+                    startDestination = ListScreens.Accueil.Route
+                ) {
 
-                    productsViewModel = productsViewModel
-                )
-            }
-
-        ) { padding ->
-            val cameraViewModel: CameraViewModel = hiltViewModel()
-            val fidCardRoomViewModel: FidCardRoomViewModel = hiltViewModel()
-
-            val productDetailDialogViewModel: ProductDetailDialogViewModel = hiltViewModel()
-            val productTypesDialogViewModel: ProductTypesDialogViewModel = hiltViewModel()
-            val addModifyViewModel: AddModifyViewModel = hiltViewModel()
-            val searchViewModel: SearchViewModel = hiltViewModel()
-            val productNameViewModel: ProductNameViewModel = hiltViewModel()
-            val signInViewModel = viewModel<SignInViewModel>()
-
-            NavHost(
-                modifier = Modifier.padding(padding),
-                navController = navController,
-                startDestination = ListScreens.Accueil.Route
-            ) {
-
-                composable(ListScreens.Accueil.Route) {
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    HomeScreen(
-                        padding = padding,
-                        navController = navController,
-                        barCodeViewModel = barCodeViewModel,
-                        productsViewModel = productsViewModel,
-                        productDetailDialogViewModel = productDetailDialogViewModel,
-                        addModifyViewModel = addModifyViewModel,
-                        searchViewModel = searchViewModel,
-                        productNameViewModel = productNameViewModel
-                    )
-                }
-
-                composable(ListScreens.AddModify.Route) {
-                    //   barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    AddModifyScreen(
-                        padding = padding,
-                        navController = navController,
-                        barCodeViewModel = barCodeViewModel,
-                        addModifyViewModel = addModifyViewModel,
-                        // productsViewModel = productsViewModel,
-                        productDetailDialogViewModel = productDetailDialogViewModel,
-                        productTypesDialogViewModel = productTypesDialogViewModel,
-                        productsViewModel = productsViewModel
-                    )
-                }
-
-                composable(ListScreens.Courses.Route) {
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    ShoppingScreen(
-                        padding = padding,
-                        navController = navController,
-                        productsViewModel = productsViewModel,
-                        productDetailDialogViewModel = productDetailDialogViewModel,
-                        addModifyViewModel = addModifyViewModel
-                    )
-                }
-
-                composable(ListScreens.CarteFidelite.Route) {
-                    FidCardsScreen(
-                        padding = padding,
-                        navController = navController,
-                        barCodeViewModel = barCodeViewModel,
-                        fidCardRoomViewModel = fidCardRoomViewModel,
-                    )
-                }
-
-                composable(ListScreens.Tiket.Route) {
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    TiketScreen(
-                        padding = padding,
-                        navController = navController,
-                        cameraViewModel = cameraViewModel,
-                    )
-                }
-
-                composable(ListScreens.Settings.Route) {
-                    // val state by viewModel.state.collectAsStateWithLifecycle()
-                    val state = signInViewModel.state
-
-
-                    LaunchedEffect(key1 = Unit) {
-                        if (googleAuthUiClient.getSignedInUser() != null) {
-                            signInViewModel.onSetIsSigneIn()
-                        }
+                    composable(ListScreens.Accueil.Route) {
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        HomeScreen(
+                            navController = navController,
+                            barCodeViewModel = barCodeViewModel,
+                            productsViewModel = productsViewModel,
+                            productDetailDialogViewModel = productDetailDialogViewModel,
+                            addModifyViewModel = addModifyViewModel,
+                            searchViewModel = searchViewModel,
+                            productNameViewModel = productNameViewModel
+                        )
                     }
-                    val launcher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.StartIntentSenderForResult(),
-                        onResult = { result ->
-                            if (result.resultCode == RESULT_OK) {
-                                lifecycleScope.launch {
-                                    val signInResult = googleAuthUiClient.signInWithIntent(
-                                        intent = result.data ?: return@launch
-                                    )
-                                    signInViewModel.onSignInResult(signInResult)
 
+                    composable(ListScreens.AddModify.Route) {
+                        //   barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        AddModifyScreen(
+                            navController = navController,
+                            barCodeViewModel = barCodeViewModel,
+                            addModifyViewModel = addModifyViewModel,
+                            // productsViewModel = productsViewModel,
+                            productDetailDialogViewModel = productDetailDialogViewModel,
+                            productTypesDialogViewModel = productTypesDialogViewModel,
+                            productsViewModel = productsViewModel
+                        )
+                    }
+
+                    composable(ListScreens.Courses.Route) {
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        ShoppingScreen(
+                            navController = navController,
+                            productsViewModel = productsViewModel,
+                            productDetailDialogViewModel = productDetailDialogViewModel,
+                            addModifyViewModel = addModifyViewModel
+                        )
+                    }
+
+                    composable(ListScreens.CarteFidelite.Route) {
+                        FidCardsScreen(
+                            navController = navController,
+                            barCodeViewModel = barCodeViewModel,
+                            fidCardRoomViewModel = fidCardRoomViewModel,
+                            productsViewModel = productsViewModel
+                        )
+                    }
+
+                    composable(ListScreens.Tiket.Route) {
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        TiketScreen(
+                            navController = navController,
+                            cameraViewModel = cameraViewModel,
+                            productsViewModel = productsViewModel
+                        )
+                    }
+
+                    composable(ListScreens.Settings.Route) {
+                        // val state by viewModel.state.collectAsStateWithLifecycle()
+                        val state = signInViewModel.state
+
+
+                        LaunchedEffect(key1 = Unit) {
+                            if (googleAuthUiClient.getSignedInUser() != null) {
+                                signInViewModel.onSetIsSigneIn()
+                            }
+                        }
+                        val launcher = rememberLauncherForActivityResult(
+                            contract = ActivityResultContracts.StartIntentSenderForResult(),
+                            onResult = { result ->
+                                if (result.resultCode == RESULT_OK) {
+                                    lifecycleScope.launch {
+                                        val signInResult = googleAuthUiClient.signInWithIntent(
+                                            intent = result.data ?: return@launch
+                                        )
+                                        signInViewModel.onSignInResult(signInResult)
+
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
 
 
 
 
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    SettingsScreen(
-                        userData = googleAuthUiClient.getSignedInUser(),
-                        googleAuthUiClient = googleAuthUiClient,
-                        state = state,
-                        onSignInClick = {
-                            lifecycleScope.launch {
-                                val signInIntentSender = googleAuthUiClient.signIn()
-                                launcher.launch(
-                                    IntentSenderRequest.Builder(
-                                        signInIntentSender ?: return@launch
-                                    ).build()
-                                )
-                            }
-                        },
-                        onSignOut = {
-                            lifecycleScope.launch {
-                                googleAuthUiClient.signOut()
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Signed out",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                signInViewModel.resetState()
-                                //  navController.popBackStack()
-                            }
-                        },
-                        padding = padding,
-                        settingViewModel = settingViewModel,
-                        resetState = {
-                            //  signInViewModel.resetState()
-                        },
-                        productNameViewModel = productNameViewModel
-                    )
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        SettingsScreen(
+                            userData = googleAuthUiClient.getSignedInUser(),
+                            googleAuthUiClient = googleAuthUiClient,
+                            state = state,
+                            onSignInClick = {
+                                lifecycleScope.launch {
+                                    val signInIntentSender = googleAuthUiClient.signIn()
+                                    launcher.launch(
+                                        IntentSenderRequest.Builder(
+                                            signInIntentSender ?: return@launch
+                                        ).build()
+                                    )
+                                }
+                            },
+                            onSignOut = {
+                                lifecycleScope.launch {
+                                    googleAuthUiClient.signOut()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Signed out",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    signInViewModel.resetState()
+                                    //  navController.popBackStack()
+                                }
+                            },
+                            navController = navController,
+                            settingViewModel = settingViewModel,
+                            resetState = {
+                                //  signInViewModel.resetState()
+                            },
+                            productNameViewModel = productNameViewModel,
+                            barCodeViewModel = barCodeViewModel,
+                            productsViewModel = productsViewModel,
+                        )
+                    }
+
+                    composable(ListScreens.CameraX.Route) {
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        CameraXScreen(
+                            barCodeViewModel = barCodeViewModel,
+                        )
+                    }
+
+                    composable(ListScreens.MainImageTiket.Route) {
+                        barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        MainImageTiket(
+                            navController = navController,
+                            cameraViewModel = cameraViewModel,
+                            barCodeViewModel = barCodeViewModel,
+                            productsViewModel = productsViewModel
+                        )
+                    }
+
+                    composable(ListScreens.BarCodeCameraPreview.Route) {
+                        //  fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        BarCodeCameraPreviewScreen(
+                            navController = navController,
+                            barCodeViewModel = barCodeViewModel,
+                        )
+                    }
+
+                    composable(ListScreens.GeneratedBarcodeImage.Route) {
+                        //    fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
+                        GeneratedBarcodeImageScreen(
+                            barCodeViewModel = barCodeViewModel,
+                        )
+                    }
+
+
+                    composable(ListScreens.PriceRemarques.Route) {
+                        PriceRemarqScreen(
+                            navController = navController,
+                            addModifyViewModel = addModifyViewModel,
+                        )
+                    }
                 }
-
-                composable(ListScreens.CameraX.Route) {
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    CameraXScreen(
-                        padding = padding,
-                        barCodeViewModel = barCodeViewModel,
-                    )
-                }
-
-                composable(ListScreens.MainImageTiket.Route) {
-                    barCodeViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    MainImageTiket(
-                        padding = padding,
-                        navController = navController,
-                        cameraViewModel = cameraViewModel,
-                        barCodeViewModel = barCodeViewModel,
-                    )
-                }
-
-                composable(ListScreens.BarCodeCameraPreview.Route) {
-                    //  fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    BarCodeCameraPreviewScreen(
-                        padding = padding,
-                        navController = navController,
-                        barCodeViewModel = barCodeViewModel,
-                    )
-                }
-
-                composable(ListScreens.GeneratedBarcodeImage.Route) {
-                    //    fidCardsScreenViewModel.onfidCardActionInfo(Constants.FID_CARD_ACTION_RESETED)
-                    GeneratedBarcodeImageScreen(
-                        padding = padding,
-                        barCodeViewModel = barCodeViewModel,
-                    )
-                }
+                /*  Navigation(
+                      googleAuthUiClient = googleAuthUiClient,
+                      padding = it,
+                      navController = navController,
+                      productsViewModel = productsViewModel,
+                      settingViewModel = settingViewModel)*/
 
 
-                composable(ListScreens.PriceRemarques.Route) {
-                    PriceRemarqScreen(
-                        padding = padding,
-                        navController = navController,
-                        addModifyViewModel = addModifyViewModel,
-                    )
-                }
+
             }
-            /*  Navigation(
-                  googleAuthUiClient = googleAuthUiClient,
-                  padding = it,
-                  navController = navController,
-                  productsViewModel = productsViewModel,
-                  settingViewModel = settingViewModel)*/
-
         }
     }
+
 
 }

@@ -14,7 +14,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -82,8 +81,10 @@ import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDilogScreen
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.CustomModifiers.customWidth
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.removeAllDigitExeptX
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.succesToast
@@ -93,7 +94,6 @@ import java.math.BigDecimal
 
 @Composable
 fun ShoppingScreen(
-    padding: PaddingValues,
     navController: NavHostController,
     productsViewModel: ProductsViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
@@ -141,14 +141,12 @@ fun ShoppingScreen(
         }
 
     }
-
-
     Scaffold(
-        modifier = Modifier
-           // .padding(padding)
-        ,
-        topBar = { },
-        //  scaffoldState = scaffoldState,
+        topBar = {
+            TopBar(
+                navController = navController,
+            )
+        },
         bottomBar = {
             AnimatedVisibility(
                 visible = productsViewModel.shopLists.isNotEmpty(),
@@ -194,19 +192,31 @@ fun ShoppingScreen(
                 )
             }
 
+                BottomNavigationBar(
+                    navController = navController,
+                    onItemClick = {
+                        productsViewModel.resetErreurValue()
+                        navController.navigate(it.route)
+                    },
+
+                    productsViewModel = productsViewModel
+                )
+
         },
+
         snackbarHost = {
             DefaultSnackbar(
                 snackbarHostState,
                 modifier = Modifier
             )
         }
-    ) {
+
+    ) { padding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(padding),
             verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         ) {

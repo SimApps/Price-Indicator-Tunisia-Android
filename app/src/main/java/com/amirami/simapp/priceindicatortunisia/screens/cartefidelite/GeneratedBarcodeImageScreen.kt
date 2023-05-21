@@ -3,7 +3,6 @@ package com.amirami.simapp.priceindicatortunisia.screens.cartefidelite
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,13 +19,12 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeVie
 
 @Composable
 fun GeneratedBarcodeImageScreen(
-    padding: PaddingValues,
     barCodeViewModel: BarCodeViewModel
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
+            .padding(12.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
