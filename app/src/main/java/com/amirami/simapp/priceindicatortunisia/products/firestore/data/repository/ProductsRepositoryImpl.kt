@@ -1,7 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.products.firestore.data.repository
 
 import com.amirami.simapp.priceindicatortunisia.core.Constants.ID
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.*
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.AddProductResponse
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.DeleteProductResponse
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.ProductsRepository

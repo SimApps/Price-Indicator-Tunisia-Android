@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository
 
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import kotlinx.coroutines.flow.Flow
 

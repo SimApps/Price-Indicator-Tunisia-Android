@@ -1,12 +1,8 @@
 package com.amirami.simapp.priceindicatortunisia.utils
 
-import androidx.lifecycle.asLiveData
 import androidx.room.TypeConverter
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
-import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlin.collections.ArrayList
 

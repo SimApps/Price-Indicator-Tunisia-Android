@@ -5,9 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.NotInit
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.AddProductResponse
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.DeleteProductResponse
 import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.usecases.UseCasesProduct

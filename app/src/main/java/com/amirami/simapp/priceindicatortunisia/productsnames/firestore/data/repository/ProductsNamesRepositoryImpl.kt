@@ -4,9 +4,6 @@ import com.amirami.simapp.priceindicatortunisia.core.Constants
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_ARRAYS
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_COLLECTION
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_DOCUMENT
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Failure
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Loading
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddListProductNameResponse
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddProductNameResponse
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.DeleteProductNameResponse

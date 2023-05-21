@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository
 
-import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import kotlinx.coroutines.flow.Flow
 
 typealias AddProductNameResponse = Response<Boolean>
