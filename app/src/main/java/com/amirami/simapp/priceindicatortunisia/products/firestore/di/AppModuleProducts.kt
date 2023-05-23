@@ -24,11 +24,37 @@ object AppModuleProducts {
         db: FirebaseFirestore
     ) = db.collection(PRODUCTS_COLLECTION)
 
+   /* @Provides
+    fun provideQueryProductsByName(searchtext : String) = Firebase.firestore
+        .collection(PRODUCTS_COLLECTION)
+       .whereEqualTo(
+            Functions.searchtype,
+            searchtext
+        )
+        //  .orderBy(NAME_PROPERTY, Query.Direction.ASCENDING)
+        .limit(PAGE_SIZE.toLong())
+    @Provides
+    fun provideProductsPagingSource(
+        queryProductsByName: Query
+    ) = ProductsPagingSource(
+        queryProductsByName = queryProductsByName
+    )
+
+    @Provides
+    fun providePagingConfig() = PagingConfig(
+        pageSize = PAGE_SIZE
+    )*/
     @Provides
     @Singleton
     fun provideProductsRepository(
-        @Named("prod")  booksRef: CollectionReference
-    ): ProductsRepository = ProductsRepositoryImpl(booksRef)
+        @Named("prod")  booksRef: CollectionReference/*,
+        source: ProductsPagingSource,
+        config: PagingConfig*/
+    ): ProductsRepository = ProductsRepositoryImpl(
+        collectionRef = booksRef/*,
+        source = source,
+        config = config*/
+    )
 
     @Provides
     @Singleton

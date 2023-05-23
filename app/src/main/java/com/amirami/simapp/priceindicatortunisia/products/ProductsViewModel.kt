@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.products
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,11 +27,11 @@ class ProductsViewModel @Inject constructor(
 
     var addProductResponse by mutableStateOf<FirestoreResponseState<Boolean>>(FirestoreResponseState())
 
-    var addProdResponse by mutableStateOf<AddProductResponse>(Success(false))
+    var addProdResponse by mutableStateOf<AddProductResponse>(NotInit)
         private set
 
 
-    var deleteProdResponse by mutableStateOf<DeleteProductResponse>(Success(false))
+    var deleteProdResponse by mutableStateOf<DeleteProductResponse>(NotInit)
         private set
     var isLoading by mutableStateOf(false)
         private set
@@ -57,6 +58,7 @@ class ProductsViewModel @Inject constructor(
     var productListStates by mutableStateOf(emptyList<ProductModel>())
 
     var selectedProductStates by mutableStateOf(ProductModel())
+    var initialtSelectedProductStates by mutableStateOf(ProductModel())
 
     fun onSelectedProductChanged(product: ProductModel) {
         selectedProductStates = product
@@ -77,10 +79,12 @@ class ProductsViewModel @Inject constructor(
                     isLoading = true
                 }
                 is Success -> {
+                    Log.d("ioklnjhs","eeeeeeeeee")
                     isLoading = false
                     errorValue = ""
                     productListStates =  (response as Success<List<ProductModel>>).data
                     selectedProductStates = (response as Success<List<ProductModel>>).data.first()
+                    initialtSelectedProductStates = (response as Success<List<ProductModel>>).data.first()
 
                 }
                 is Response.Failure -> {
@@ -103,21 +107,7 @@ class ProductsViewModel @Inject constructor(
         addProdResponse =   useCasesProduct.addProduct(product, id)
     }
 
-    init {
-        res()
-    }
-    fun res(){
-        when(addProdResponse) {
-            is Response.Loading ->  addProductResponse = addProductResponse.copy(loading = true)
-            is Response.Success ->  addProductResponse = addProductResponse.copy(
-                loading = false,
-                data = true)
-            is Response.Failure -> {
-                addProductResponse = addProductResponse.copy(loading = false, error = errorValue)
-            }
-            else -> {}
-        }
-    }
+
 
     fun deleteProdRemote(id: String) = viewModelScope.launch {
         deleteProdResponse = Response.Loading

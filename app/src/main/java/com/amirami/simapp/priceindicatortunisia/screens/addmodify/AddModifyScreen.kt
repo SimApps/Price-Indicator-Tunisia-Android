@@ -2,6 +2,7 @@
 
 package com.amirami.simapp.priceindicatortunisia.screens.addmodify
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,6 +53,7 @@ import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.CustomModifiers.customWidth
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ClickableEditTextField
@@ -66,14 +68,14 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.Constants
-import com.amirami.simapp.priceindicatortunisia.utils.Converters
+import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getuserid
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddModifyScreen(
     navController: NavHostController,
@@ -93,7 +95,7 @@ fun AddModifyScreen(
     val sheetState = rememberModalBottomSheetState()
 
 
-    val currentProduct = addModifyViewModel.currentProduct
+    val currentProduct = productsViewModel.selectedProductStates//addModifyViewModel.currentProduct
 
     if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
         ModalBottomSheet(
@@ -117,6 +119,7 @@ fun AddModifyScreen(
 
 
     LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
+
         if (barCodeViewModel.fidCardBarCodeInfo.value != "") {
             val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
                 Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
@@ -133,15 +136,20 @@ fun AddModifyScreen(
         }
     }
 
-    LaunchedEffect(key1 = productsViewModel.selectedProductStates){
-        addModifyViewModel.onCurrentProductChange(productsViewModel.selectedProductStates)
-    }
+    //LaunchedEffect(key1 = productsViewModel.selectedProductStates){
+    //    onSelectedProductChanged(productsViewModel.selectedProductStates)
+
+   // }
 
     Scaffold(
         topBar = {
-            TopBar(
-                navController = navController,
-            )
+            if (productNameViewModel.productLocalNamesList.isNotEmpty()) {
+                SearchView(navController = navController,
+                    barCodeViewModel = barCodeViewModel,
+                    prodname = productNameViewModel.productLocalNamesList,
+                    productsViewModel = productsViewModel,
+                    searchViewModel = searchViewModel)
+            }
         },
         bottomBar = {
             BottomNavigationBar(
@@ -156,7 +164,8 @@ fun AddModifyScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
+            FloatingActionButton(
+                onClick = {
                 
                 val product = ProductModel(
                      id = "1",
@@ -209,8 +218,18 @@ fun AddModifyScreen(
                  carrefourPricHistory = "",
                  geantPricHistory = ""
                 )
-                product.userid = getuserid()
-                productsViewModel.addProductRemote(product = product, id = "1")
+
+              //  product.userid = getuserid()
+
+
+
+                    currentProduct.userid =getuserid()
+
+                    Log.d("rrfcvdx",currentProduct.id)
+                    Log.d("rrfcvdx",productsViewModel.selectedProductStates.id)
+                    Log.d("rrfcvdx",(productsViewModel.selectedProductStates != currentProduct).toString())
+              //  if(productsViewModel.selectedProductStates.id == prod.id && productsViewModel.selectedProductStates != prod)
+                productsViewModel.addProductRemote(product = currentProduct, id = currentProduct.id)
             }) {
                 Icon(
                     imageVector = Icons.Default.Save,
@@ -231,7 +250,8 @@ fun AddModifyScreen(
             productDetailDialogViewModel = productDetailDialogViewModel,
             productTypesDialogViewModel = productTypesDialogViewModel,
             productsViewModel = productsViewModel,
-            currentProduct = currentProduct
+            currentProduct = currentProduct,
+            initialProdToCompareWith = productsViewModel.initialtSelectedProductStates
         )
     }
 
@@ -250,7 +270,8 @@ fun AddModifyScreenContent(
     addModifyViewModel: AddModifyViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     productTypesDialogViewModel: ProductTypesDialogViewModel,
-    currentProduct: ProductModel
+    currentProduct: ProductModel,
+    initialProdToCompareWith : ProductModel
 ) {
     val context = LocalContext.current
     
@@ -260,31 +281,19 @@ fun AddModifyScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            //.padding(padding)
+            .padding(padding)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (productNameViewModel.productLocalNames.isNotEmpty()) {
-            SearchView(navController = navController,
-                barCodeViewModel = barCodeViewModel,
-                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }
-                    .first()!!),
-                productsViewModel = productsViewModel,
-                searchViewModel = searchViewModel)
-        }
+
 
         if (productNameViewModel.isLoading) {
             Spacer(modifier = Modifier.padding(top = 60.dp))
             ProgressBar()
         }
 
-        // THIS COLUM MAKE THE TYPE  LIST HIDE WHEN SCROLL DOWN
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(9.dp, 0.dp, 9.dp, 0.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
             if (productNameViewModel.message == Constants.ERREUR_CONNECTION) {
@@ -296,21 +305,60 @@ fun AddModifyScreenContent(
 
 
             when(val addBookResponse = productsViewModel.addProdResponse) {
-                is Response.Loading -> ProgressBar()
-                is Response.Success -> Unit
+                is Response.NotInit -> Text(text = "NOT INIT")
+                is Response.Loading -> {
+                    ProgressBar()
+                    Text(text = "Add Modify prod")
+                }
+                is Response.Success -> {
+
+                 val preveiewsProdame = initialProdToCompareWith.name
+                  val productName= currentProduct.name
+                    Log.d("hhjsns",productName)
+                    Log.d("hhjsns",preveiewsProdame)
+                 if ( productName!= preveiewsProdame) {
+
+                     productNameViewModel.deleteAllLocalProdName()
+                     productNameViewModel.deleteRemoteProdName(preveiewsProdame)
+
+
+
+                     productNameViewModel.addOneProductNamesToList(
+                         productName =productName,
+                         preveiewsProdame = preveiewsProdame
+                     )
+
+                     //TODO LISTEN TO ADD PRO NAME ADD TO FIRESTORE
+                     productNameViewModel.addRemoteProductName(productName)
+
+                     productNameViewModel.addLocalProdNames(
+                         ProductName(
+                             1,
+                             fromArrayList(productNameViewModel.productLocalNamesList)
+                         )
+                     )
+
+                    }
+
+                    Text(text = "Add Modify Succ")
+
+
+                }
                 is Response.Failure -> {
                     Text(text = addBookResponse.message)
                 }
-                else -> {}
             }
             ScreenContent(
                 navController = navController,
                 addModifyViewModel = addModifyViewModel,
                 productTypesDialogViewModel = productTypesDialogViewModel,
-                currentProduct = currentProduct
+                currentProduct = currentProduct,
+                onSelectedProductChanged = {
+                    productsViewModel.onSelectedProductChanged(it)
+                }
             )
 
-        }
+
     }
 }
 
@@ -318,9 +366,9 @@ fun AddModifyScreenContent(
 fun ScreenContent(
     navController: NavHostController,
     addModifyViewModel: AddModifyViewModel,
+    onSelectedProductChanged :(ProductModel) ->Unit,
     productTypesDialogViewModel: ProductTypesDialogViewModel,
-    currentProduct: ProductModel,
-    canModify : Boolean = false
+    currentProduct: ProductModel
 ) {
     val context = LocalContext.current
 
@@ -331,7 +379,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.ScanproductIdoradditmanually),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(id = it))
+            onSelectedProductChanged(currentProduct.copy(id = it))
         },
         readOnly = true,
         enabled = false,
@@ -373,7 +421,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.Nomduproduit),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(name = it))
+            onSelectedProductChanged(currentProduct.copy(name = it))
         },
         readOnly = false,
         enabled = true,
@@ -388,7 +436,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.NomduproduitenArabe),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(namearabe = it))
+            onSelectedProductChanged(currentProduct.copy(namearabe = it))
                         },
         readOnly = false,
         enabled = true,
@@ -410,7 +458,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.marques),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(marques = it))
+                onSelectedProductChanged(currentProduct.copy(marques = it))
             },
             readOnly = false,
             enabled = true,
@@ -424,7 +472,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.marquesenArabe),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(marquesarabe = it))
+                onSelectedProductChanged(currentProduct.copy(marquesarabe = it))
             },
             readOnly = false,
             enabled = true,
@@ -449,7 +497,7 @@ fun ScreenContent(
         )
     },
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(type = it))
+            onSelectedProductChanged(currentProduct.copy(type = it))
 
         }
     )
@@ -470,7 +518,7 @@ fun ScreenContent(
             )
         },
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(typesub = it))
+            onSelectedProductChanged(currentProduct.copy(typesub = it))
 
         }
     )
@@ -491,7 +539,7 @@ fun ScreenContent(
             )
         },
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(typesubsub = it))
+            onSelectedProductChanged(currentProduct.copy(typesubsub = it))
         }
     )
 
@@ -510,7 +558,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.Volumepoidproduit),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(sieze = it))
+                onSelectedProductChanged(currentProduct.copy(sieze = it))
             },
             readOnly = false,
             enabled = true,
@@ -554,7 +602,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.Liendimage),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(imageurl = it))
+            onSelectedProductChanged(currentProduct.copy(imageurl = it))
         },
         readOnly = false,
         enabled = true,
@@ -569,7 +617,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.Descriptionduproduit),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(description = it))
+            onSelectedProductChanged(currentProduct.copy(description = it))
         },
         readOnly = false,
         enabled = true,
@@ -584,7 +632,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.DescriptionduproduitenArabe),
         onValueChange = {
-            addModifyViewModel.onCurrentProductChange(currentProduct.copy(descriptionarabe = it))
+            onSelectedProductChanged(currentProduct.copy(descriptionarabe = it))
         },
         readOnly = false,
         enabled = true,
@@ -607,7 +655,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.monoprix_prix),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(monoprixprice = it))
+                onSelectedProductChanged(currentProduct.copy(monoprixprice = it))
             },
             readOnly = false,
             enabled = true,
@@ -627,7 +675,7 @@ fun ScreenContent(
                 navController.navigate(ListScreens.PriceRemarques.Route)
             },
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(monoprixremarq = it))
+                onSelectedProductChanged(currentProduct.copy(monoprixremarq = it))
             }
         )
 
@@ -648,7 +696,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.mg_prix),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(mgprice = it))
+                onSelectedProductChanged(currentProduct.copy(mgprice = it))
             },
             readOnly = false,
             enabled = true,
@@ -668,7 +716,7 @@ fun ScreenContent(
                 navController.navigate(ListScreens.PriceRemarques.Route)
             },
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(mgremarq = it))
+                onSelectedProductChanged(currentProduct.copy(mgremarq = it))
             }
         )
 
@@ -688,7 +736,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.carrefour_prix),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(carrefourprice = it))
+                onSelectedProductChanged(currentProduct.copy(carrefourprice = it))
             },
             readOnly = false,
             enabled = true,
@@ -708,7 +756,7 @@ fun ScreenContent(
                 navController.navigate(ListScreens.PriceRemarques.Route)
             },
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(carrefourremarq = it))
+                onSelectedProductChanged(currentProduct.copy(carrefourremarq = it))
             }
         )
 
@@ -727,7 +775,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.azziza_prix),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(azzizaprice = it))
+                onSelectedProductChanged(currentProduct.copy(azzizaprice = it))
             },
             readOnly = false,
             enabled = true,
@@ -748,7 +796,7 @@ fun ScreenContent(
                 navController.navigate(ListScreens.PriceRemarques.Route)
             },
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(azzizaremarq = it))
+                onSelectedProductChanged(currentProduct.copy(azzizaremarq = it))
             }
         )
 
@@ -767,7 +815,7 @@ fun ScreenContent(
             errorvalue = null,
             label = stringResource(R.string.Géant_prix),
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(geantprice = it))
+                onSelectedProductChanged(currentProduct.copy(geantprice = it))
             },
             readOnly = false,
             enabled = true,
@@ -786,7 +834,7 @@ fun ScreenContent(
                 navController.navigate(ListScreens.PriceRemarques.Route)
             },
             onValueChange = {
-                addModifyViewModel.onCurrentProductChange(currentProduct.copy(geantremarq = it))
+                onSelectedProductChanged(currentProduct.copy(geantremarq = it))
             }
         )
 

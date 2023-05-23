@@ -53,7 +53,6 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationba
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.CustomDialogue
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
-import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 
@@ -260,7 +259,7 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
                         title = context.getString(R.string.Qu_est_ce_que_application),
                         msg =  context.getString(
                             R.string.Qu_est_ce_que_cette_application,
-                            Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!).size.toString()
+                            productNameViewModel.productLocalNamesList.size.toString()
                         )
                     ))
                     settingViewModel.onShowCustomDialogChange(true)

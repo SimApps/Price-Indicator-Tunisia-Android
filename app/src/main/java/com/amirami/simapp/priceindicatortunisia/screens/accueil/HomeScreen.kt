@@ -41,7 +41,6 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchV
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar.TopBar
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_GET_PROD_BY_TYPES
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
-import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import kotlinx.coroutines.launch
@@ -163,11 +162,12 @@ fun HomeScreenContent(
         // verticalArrangement = Arrangement.Top,
           horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (productNameViewModel.productLocalNames.isNotEmpty()) {
+        if (productNameViewModel.productLocalNamesList.isNotEmpty()) {
             SearchView(
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
-                prodname = Converters.fromString(productNameViewModel.productLocalNames.map { it.name }.first()!!),
+               // prodname = Converters.fromString(productNameViewModel.productLocalNamesList.map { it.name }.first()!!),
+                prodname = productNameViewModel.productLocalNamesList,
                 productsViewModel = productsViewModel,
                 searchViewModel = searchViewModel
             )

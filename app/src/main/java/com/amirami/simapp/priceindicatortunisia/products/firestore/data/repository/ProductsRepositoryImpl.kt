@@ -22,7 +22,8 @@ class ProductsRepositoryImpl @Inject constructor(
     @Named("prod")   private val collectionRef: CollectionReference
 ): ProductsRepository {
 
-     override fun getProductFromFirestore(searchtype:String, searchtext:String) = callbackFlow {
+
+     override fun getProductFromFirestore(searchtype:String, searchtext:String)= callbackFlow {
           val source: Source = Source.CACHE
 
          trySend(Loading).isSuccess
@@ -50,6 +51,10 @@ class ProductsRepositoryImpl @Inject constructor(
 
 
     }
+
+
+
+
 
     override suspend fun addProductToFirestore(product: ProductModel, id: String): AddProductResponse = try {
         collectionRef.document(id).set(product).await()

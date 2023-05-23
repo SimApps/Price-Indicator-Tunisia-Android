@@ -314,7 +314,6 @@ fun ProductShopTiket(
 
 
                 productsViewModel.onSelectedProductChanged(product = prodsResponse)
-                addModifyViewModel.onCurrentProductChange(prodsResponse)
 
             },
         verticalAlignment = Alignment.CenterVertically,

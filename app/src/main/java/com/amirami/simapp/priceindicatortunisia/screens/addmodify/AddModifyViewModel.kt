@@ -1,12 +1,10 @@
 package com.amirami.simapp.priceindicatortunisia.screens.addmodify
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +20,7 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
     }
 
 
-    var magasinValue by mutableStateOf<String>("")
+    var magasinValue by mutableStateOf("")
         private set
     fun onMagasinValue(text: String) {
         magasinValue = text
@@ -30,7 +28,7 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
 
 
 
-    var unitselected by mutableStateOf<String>("")
+    var unitselected by mutableStateOf("")
     private set
     fun onUnitselectedChange(text: String) {
         unitselected = text
@@ -52,13 +50,6 @@ class AddModifyViewModel @Inject constructor() : ViewModel() {
     }
 
 
-    var currentProduct by mutableStateOf(ProductModel())
-        private set
-
-    fun onCurrentProductChange(prod: ProductModel) {
-        Log.d("iijnjb",prod.monoprixremarq)
-        currentProduct = prod
-    }
 
 
 

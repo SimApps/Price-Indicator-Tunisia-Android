@@ -1,4 +1,4 @@
-package com.amirami.simapp.priceindicatortunisia.remote_di
+package com.amirami.simapp.priceindicatortunisia.di
 
 import androidx.room.RoomDatabase
 import com.google.firebase.firestore.ktx.firestore

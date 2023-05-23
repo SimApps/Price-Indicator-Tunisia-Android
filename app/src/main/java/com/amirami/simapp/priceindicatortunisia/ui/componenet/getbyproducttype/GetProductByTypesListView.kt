@@ -21,6 +21,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
+import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_GET_PROD_BY_TYPES
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION_SHOW_TYPES
@@ -29,7 +30,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ACTION
 fun GetProductByTypesListView(
     productsViewModel: ProductsViewModel,
     addModifyViewModel: AddModifyViewModel,
-    from : String
+    from: String
 ) {
     val context = LocalContext.current
     val action = productsViewModel.actionTypesListView
@@ -42,14 +43,22 @@ fun GetProductByTypesListView(
     LazyRow() {
         items(item.size) { position ->
             ProductTypeSingleListItem(
+                action = productsViewModel.actionTypesListView,
                 item = item[position],
+                currentProduct = productsViewModel.selectedProductStates,
+                onSelectedProductChanged = {
+                    productsViewModel.onSelectedProductChanged(it)
+                },
                 productsViewModel = productsViewModel,
-                addModifyViewModel= addModifyViewModel,
-                from = from
+                from = from,
+                getProds = {
+                    productsViewModel.getProds("typesubsub", item[position])
+                }
             )
         }
     }
 }
+
 fun remove(arr: Array<String>, index: Int): Array<String> {
     if (index < 0 || index >= arr.size) {
         return arr
@@ -61,12 +70,24 @@ fun remove(arr: Array<String>, index: Int): Array<String> {
 }
 
 @Composable
-fun ProductTypeSingleListItem(item: String,
-                              productsViewModel: ProductsViewModel,
-                              addModifyViewModel: AddModifyViewModel,
-                              from : String) {
+fun ProductTypeSingleListItem(
+    item: String,
+    action: String,
+    currentProduct: ProductModel,
+    productsViewModel: ProductsViewModel,
+    onSelectedProductChanged: (ProductModel) -> Unit,
+    getProds: () -> Unit,
+    from: String
+) {
     val context = LocalContext.current
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(imageTypeLoader(item, context)))
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(
+            imageTypeLoader(
+                item,
+                context
+            )
+        )
+    )
 
     val progress by animateLottieCompositionAsState(
         composition = composition,
@@ -76,46 +97,56 @@ fun ProductTypeSingleListItem(item: String,
         ignoreSystemAnimatorScale = true,
         speed = 3f
     )
-    val action = productsViewModel.actionTypesListView
+    
     Column(
         modifier = Modifier
             .clickable {
                 if (action == ACTION_GET_PROD_BY_TYPES) {
                     //  if(item != "Tous les Catégories") productsViewModel.getProds("typesubsub", item)
-                    if (isInSubsubTypeArrays(context, item) && !isNotBackInSubsubTypeArrays(context, item)) {
+                    if (isInSubsubTypeArrays(context, item) && !isNotBackInSubsubTypeArrays(
+                            context,
+                            item
+                        )
+                    ) {
                         //   productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(arrayTypeLoader(item)))
                         //   Toast.makeText(context,"typesubsub"+ item+"c", Toast.LENGTH_LONG).show()
-
-                        productsViewModel.getProds("typesubsub", item)
+                        getProds()
+                        
                     } else {
-                       /* if (isInSubTypeArrays(context, item)){
-                            productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productTypeArray))
+                        /* if (isInSubTypeArrays(context, item)){
+                             productsViewModel.onprodDetailDialogVisibilityStatesChanged(context.resources.getStringArray(R.array.productTypeArray))
+ 
+                         }*/
 
-                        }*/
-
-                        productsViewModel.onTypesArraysChange(context.resources.getStringArray(arrayTypeLoader(item)))
+                        productsViewModel.onTypesArraysChange(
+                            context.resources.getStringArray(
+                                arrayTypeLoader(item)
+                            )
+                        )
 
                         //    Toast.makeText(context, item+"c", Toast.LENGTH_LONG).show()
                     }
                 } else if (action == ACTION_SHOW_TYPES) {
                     when (from) {
                         context.resources.getString(R.string.Catégories) -> {
-                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(type = item))
-                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesub = " "))
-                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = " "))
+                            onSelectedProductChanged(currentProduct.copy(type = item))
+                            onSelectedProductChanged(currentProduct.copy(typesub = " "))
+                            onSelectedProductChanged(currentProduct.copy(typesubsub = " "))
                         }
+
                         context.resources.getString(R.string.SousCatégories) -> {
-                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesub = item))
-                            addModifyViewModel.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = " "))
+                            onSelectedProductChanged(currentProduct.copy(typesub = item))
+                            onSelectedProductChanged(currentProduct.copy(typesubsub = " "))
 
                         }
+
                         context.resources.getString(R.string.sousousCatégories) -> {
-                            addModifyViewModel!!.onCurrentProductChange(addModifyViewModel.currentProduct.copy(typesubsub = item))
+                            onSelectedProductChanged(currentProduct.copy(typesubsub = item))
                         }
                     }
 
 
-                // Toast.makeText(context, item + "d", Toast.LENGTH_LONG).show()
+                    // Toast.makeText(context, item + "d", Toast.LENGTH_LONG).show()
                 }
 
                 /*if (argsFrom.topCategorie == "" && argsFrom.fromType == "typeFromMain") {
@@ -160,25 +191,25 @@ fun ProductTypeSingleListItem(item: String,
 */
 
                 /**
-                 if (item == "Tous les Catégories") goToProductTypesDialog()
-                 else {
-                 searchtext = item
-                 searchtype = "typesubsub"
-                 recyclerview()
+                if (item == "Tous les Catégories") goToProductTypesDialog()
+                else {
+                searchtext = item
+                searchtype = "typesubsub"
+                recyclerview()
 
-                 _binding.mainTxVwInfo.visibility = View.GONE
-                 }
+                _binding.mainTxVwInfo.visibility = View.GONE
+                }
                  */
 
                 /**
-                 if (item == "Tous les Catégories") goToProductTypesDialog()
-                 else {
-                 searchtext = item
-                 searchtype = "typesubsub"
-                 recyclerview()
+                if (item == "Tous les Catégories") goToProductTypesDialog()
+                else {
+                searchtext = item
+                searchtype = "typesubsub"
+                recyclerview()
 
-                 _binding.mainTxVwInfo.visibility = View.GONE
-                 }
+                _binding.mainTxVwInfo.visibility = View.GONE
+                }
                  */
             }
             .width(110.dp)
@@ -513,145 +544,145 @@ fun arrayTypeLoader(type: String): Int {
 
 private fun isInSubTypeArrays(context: Context, type: String): Boolean {
     return type in context.resources.getStringArray(R.array.subTypeArrayAlimentation) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayEntretientdelaMaison) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayHygièneetBeauté) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayBébé) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayCuisine) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayGrosElectroménager) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayPetitElectroménager) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayAnimalerie) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayHighTech) ||
-        type in context.resources.getStringArray(R.array.subTypeJardin) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayBricoetaccessoiresauto) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayFournituresScolaires) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayLingedeMaison) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayJeuxetJouets) ||
-        type in context.resources.getStringArray(R.array.subTypeArrayBagagerie) ||
-        type in context.resources.getStringArray(R.array.subTypeArraySportetLoisir)
+            type in context.resources.getStringArray(R.array.subTypeArrayEntretientdelaMaison) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayHygièneetBeauté) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayBébé) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayCuisine) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayGrosElectroménager) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayPetitElectroménager) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayAnimalerie) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayHighTech) ||
+            type in context.resources.getStringArray(R.array.subTypeJardin) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayBricoetaccessoiresauto) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayFournituresScolaires) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayLingedeMaison) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayJeuxetJouets) ||
+            type in context.resources.getStringArray(R.array.subTypeArrayBagagerie) ||
+            type in context.resources.getStringArray(R.array.subTypeArraySportetLoisir)
 }
 
 private fun isInSubsubTypeArrays(context: Context, type: String): Boolean {
     return type in context.resources.getStringArray(R.array.subsubTypeArrayBoissons) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsLaitiers) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayConserves) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSalée) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSucrée) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBiosansGlutenDiététique) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCrèmerieetFromages) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCharcuterie) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBoulangerieetPâtisserie) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsFrais) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArraySurgelés) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayOeufs) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsMénagers) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayLessivesetSoinsduLinge) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayDésodorisants) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayInsecticides) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretLingettesNettoyantes) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayAccessoiresMénagers) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayRangementduLinge) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayEntretiendesChaussures) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCheveux) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCorpsetvisage) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretCoton) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCouchesetLingettes) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayToilettesetSoins) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayRepas) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPuériculture) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayArtdelaTable) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCuisson) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBoitesdeConservation) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayUstensilesdeCuisine) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretEmballagesAlimentaires) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayRangementdelaCuisine) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayClimatisationetChauffage) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayRéfrigérateuretMiniBar) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCongélateur) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayLaveLinge) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayLaveVaisselle) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayCuisinièreetEncastrable) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayMicroOndeetMiniFour) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPetitDéjeuner) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayPréparationCulinaire) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayAppareildeCuisson) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBeautéetSanté) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayEntretienSolsetSurfaces) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArraySoinduLinge) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayAlimentationetRécompenses) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayHygièneetaccessoires) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayImageetSon) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayInformatiqueetAccessoires) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayTéléphonieetAccessoires) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayJardin) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayAutomobile) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBricolage) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayÉlectricité) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayLingedeMaison) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayJeuxetJouets) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayBagagerie) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArrayLoisir) ||
-        type in context.resources.getStringArray(R.array.subsubTypeArraySport)
+            type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsLaitiers) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayConserves) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSalée) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSucrée) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBiosansGlutenDiététique) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCrèmerieetFromages) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCharcuterie) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBoulangerieetPâtisserie) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsFrais) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArraySurgelés) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayOeufs) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayProduitsMénagers) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayLessivesetSoinsduLinge) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayDésodorisants) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayInsecticides) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretLingettesNettoyantes) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayAccessoiresMénagers) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayRangementduLinge) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayEntretiendesChaussures) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCheveux) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCorpsetvisage) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretCoton) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCouchesetLingettes) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayToilettesetSoins) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayRepas) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPuériculture) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayArtdelaTable) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCuisson) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBoitesdeConservation) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayUstensilesdeCuisine) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPapieretEmballagesAlimentaires) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayRangementdelaCuisine) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayClimatisationetChauffage) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayRéfrigérateuretMiniBar) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCongélateur) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayLaveLinge) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayLaveVaisselle) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayCuisinièreetEncastrable) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayMicroOndeetMiniFour) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPetitDéjeuner) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayPréparationCulinaire) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayAppareildeCuisson) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBeautéetSanté) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayEntretienSolsetSurfaces) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArraySoinduLinge) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayAlimentationetRécompenses) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayHygièneetaccessoires) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayImageetSon) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayInformatiqueetAccessoires) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayTéléphonieetAccessoires) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayJardin) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayAutomobile) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBricolage) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayÉlectricité) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayLingedeMaison) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayJeuxetJouets) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayBagagerie) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArrayLoisir) ||
+            type in context.resources.getStringArray(R.array.subsubTypeArraySport)
 }
 
 private fun isNotBackInSubsubTypeArrays(context: Context, type: String): Boolean {
     return type == context.resources.getStringArray(R.array.subsubTypeArrayBoissons)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsLaitiers)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsLaitiers)[0] ||
 
-        type == context.resources.getStringArray(R.array.subsubTypeArrayConserves)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSalée)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSucrée)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBiosansGlutenDiététique)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCrèmerieetFromages)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCharcuterie)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBoulangerieetPâtisserie)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsFrais)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArraySurgelés)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayOeufs)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsMénagers)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayLessivesetSoinsduLinge)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayDésodorisants)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayInsecticides)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayPapieretLingettesNettoyantes)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayAccessoiresMénagers)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayRangementduLinge)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayEntretiendesChaussures)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCheveux)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCorpsetvisage)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayPapieretCoton)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCouchesetLingettes)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayToilettesetSoins)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayRepas)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayPuériculture)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayArtdelaTable)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCuisson)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBoitesdeConservation)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayUstensilesdeCuisine)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayClimatisationetChauffage)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayRéfrigérateuretMiniBar)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCongélateur)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayLaveLinge)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayLaveVaisselle)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayCuisinièreetEncastrable)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayMicroOndeetMiniFour)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayPetitDéjeuner)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayPréparationCulinaire)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayAppareildeCuisson)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBeautéetSanté)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayEntretienSolsetSurfaces)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArraySoinduLinge)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayAlimentationetRécompenses)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayHygièneetaccessoires)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayImageetSon)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayInformatiqueetAccessoires)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayTéléphonieetAccessoires)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayJardin)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayAutomobile)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBricolage)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayÉlectricité)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayFournituresScolaires)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayLingedeMaison)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayJeuxetJouets)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayBagagerie)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArraySport)[0] ||
-        type == context.resources.getStringArray(R.array.subsubTypeArrayLoisir)[0]
+            type == context.resources.getStringArray(R.array.subsubTypeArrayConserves)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSalée)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayÉpicerieSucrée)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBiosansGlutenDiététique)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCrèmerieetFromages)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCharcuterie)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBoulangerieetPâtisserie)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsFrais)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArraySurgelés)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayOeufs)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayProduitsMénagers)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayLessivesetSoinsduLinge)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayDésodorisants)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayInsecticides)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayPapieretLingettesNettoyantes)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayAccessoiresMénagers)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayRangementduLinge)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayEntretiendesChaussures)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCheveux)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCorpsetvisage)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayPapieretCoton)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCouchesetLingettes)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayToilettesetSoins)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayRepas)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayPuériculture)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayArtdelaTable)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCuisson)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBoitesdeConservation)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayUstensilesdeCuisine)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayClimatisationetChauffage)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayRéfrigérateuretMiniBar)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCongélateur)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayLaveLinge)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayLaveVaisselle)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayCuisinièreetEncastrable)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayMicroOndeetMiniFour)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayPetitDéjeuner)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayPréparationCulinaire)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayAppareildeCuisson)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBeautéetSanté)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayEntretienSolsetSurfaces)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArraySoinduLinge)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayAlimentationetRécompenses)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayHygièneetaccessoires)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayImageetSon)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayInformatiqueetAccessoires)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayTéléphonieetAccessoires)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayJardin)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayAutomobile)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBricolage)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayÉlectricité)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayFournituresScolaires)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayLingedeMaison)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayJeuxetJouets)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayBagagerie)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArraySport)[0] ||
+            type == context.resources.getStringArray(R.array.subsubTypeArrayLoisir)[0]
 }

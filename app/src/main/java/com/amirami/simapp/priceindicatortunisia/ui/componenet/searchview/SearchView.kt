@@ -34,7 +34,6 @@ import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.HOME_SCREEN
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import java.util.Locale
@@ -44,13 +43,14 @@ import java.util.Locale
 fun SearchView(
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
-    prodname: ArrayList<String>,
+    prodname: List<String>,
     productsViewModel: ProductsViewModel,
     searchViewModel: SearchViewModel
 
 ) {
     val context = LocalContext.current
     SearchBar(
+        modifier = Modifier.fillMaxWidth(),
         query = searchViewModel.searchValue ,
         onQueryChange = {
             searchViewModel.onsearchValue(it)

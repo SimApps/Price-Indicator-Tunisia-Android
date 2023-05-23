@@ -1,6 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -29,16 +30,17 @@ class ProductNameViewModel @Inject constructor(
 
 
 
-    var addProdNameRemoteResponse by mutableStateOf<AddProductNameResponse>(Response.Success(false))
+    var addProdNameRemoteResponse by mutableStateOf<AddProductNameResponse>(Response.NotInit)
         private set
-    var addListProdsNamesRemoteResponse by mutableStateOf<AddListProductNameResponse>(Response.Success(false))
-        private set
-
-    var deleteProdNameRemoteResponse by mutableStateOf<DeleteProductNameResponse>(Response.Success(false))
+    var addListProdsNamesRemoteResponse by mutableStateOf<AddListProductNameResponse>(Response.NotInit)
         private set
 
-    var productLocalNames by mutableStateOf(emptyList<ProductName>())
+    var deleteProdNameRemoteResponse by mutableStateOf<DeleteProductNameResponse>(Response.NotInit)
+        private set
 
+  //  var productLocalNamesList by mutableStateOf(emptyList<ProductName>())
+    var productLocalNamesList = mutableStateListOf<String>()
+        private set
     var productLocalName by mutableStateOf(ProductName(0, ""))
 
 
@@ -48,7 +50,7 @@ class ProductNameViewModel @Inject constructor(
     var message by mutableStateOf("")
         private set
     init {
-        getLocalProdNames()
+        getLocalProdNamesList()
     }
 
     private fun getRemoteProdsNames() = viewModelScope.launch {
@@ -99,17 +101,26 @@ class ProductNameViewModel @Inject constructor(
         deleteProdNameRemoteResponse =   useCasesProductName.deleteProductName(prodName)
     }
 
-    fun getLocalProdNames() = viewModelScope.launch {
-        repo.getProdNamesFromRoom().collect { dbBooks ->
-            productLocalNames = dbBooks
+    fun getLocalProdNamesList() = viewModelScope.launch {
+        repo.getProdNamesFromRoom().collect { nameList ->
+            productLocalNamesList.addAll(
+                Converters.fromString(nameList.map { it.name }.first()?:"")
+            )
 
-
-            if(productLocalNames.isEmpty()){
+            if(productLocalNamesList.isEmpty()){
                 getRemoteProdsNames()
             }
         }
     }
 
+
+    fun addOneProductNamesToList(productName :String, preveiewsProdame : String){
+
+        if (productLocalNamesList.indexOf(preveiewsProdame) != -1) {
+         //   productLocalNamesList.first { it.name ==preveiewsProdame}.name = productName
+             productLocalNamesList[productLocalNamesList.indexOf(preveiewsProdame)] = productName
+        } else productLocalNamesList.add(productName)
+    }
     fun  getLocalProdName(id: Int) = viewModelScope.launch {
         repo.getProdNameFromRoom(id).collect { dbBook ->
             productLocalName = dbBook

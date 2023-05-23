@@ -253,6 +253,7 @@ class MainActivity : ComponentActivity() {
                     composable(ListScreens.PriceRemarques.Route) {
                         PriceRemarqScreen(
                             navController = navController,
+                            productsViewModel = productsViewModel,
                             addModifyViewModel = addModifyViewModel,
                         )
                     }
