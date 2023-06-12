@@ -9,10 +9,11 @@ interface NameListRepository {
     fun getProdNameFromRoom(id: Int): Flow<ProductName>
 
     fun addProdNamesToRoom(productName: ProductName)
+    fun addAllNames(productName: List<ProductName>)
 
-    fun updateProdNameInRoom(productName: ProductName)
+    fun updateProdNameInRoom(name: String, updatedName: String)
 
-    fun deleteProdNameFromRoom(productName: String)
+    fun deleteProdNameFromRoom(codeBare: String)
 
     fun  deleteAllProdNameFromRoom()
 

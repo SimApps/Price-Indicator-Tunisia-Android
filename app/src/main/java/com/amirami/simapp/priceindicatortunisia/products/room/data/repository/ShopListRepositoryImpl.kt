@@ -14,6 +14,7 @@ class ShopListRepositoryImpl(
     override fun getProdShopFromRoom(id: Int): Flow<ProductModel> = prodShopListDAO.getItemShopList(id)
 
     override fun addShopProdToRoom(productName: ProductModel) = prodShopListDAO.addProduct(productName)
+    override fun addAllProdToRoom(productName: List<ProductModel>) = prodShopListDAO.addAllProduct(productName)
 
     override fun updateShopListInRoom(productName: ProductModel) = prodShopListDAO.updateShopList(productName)
 

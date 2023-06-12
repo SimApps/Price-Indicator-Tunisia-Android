@@ -64,6 +64,7 @@ object AppModuleProducts {
         getProduct = GetProduct(repo),
         addProduct = AddProduct(repo),
         addProducts = AddProducts(repo),
-        deleteProduct = DeleteProduct(repo)
+        deleteProduct = DeleteProduct(repo),
+        getAllProduct = GetAllProduct(repo)
     )
 }

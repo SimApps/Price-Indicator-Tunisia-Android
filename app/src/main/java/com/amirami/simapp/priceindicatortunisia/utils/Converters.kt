@@ -1,6 +1,7 @@
 package com.amirami.simapp.priceindicatortunisia.utils
 
 import androidx.room.TypeConverter
+import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Date
@@ -20,7 +21,7 @@ object Converters {
 
 
     @TypeConverter
-    fun fromString(value: String): ArrayList<String> {
+    fun fromString(value: String): ArrayList<ProductModel> {
 
         val placeJson = if(value=="")"{}" else value
 
@@ -30,7 +31,7 @@ object Converters {
     }
 
     @TypeConverter
-    fun fromArrayList(list: List<String>): String {
+    fun fromArrayList(list: List<ProductModel>): String {
         val gson = Gson()
         return gson.toJson(list)
     }

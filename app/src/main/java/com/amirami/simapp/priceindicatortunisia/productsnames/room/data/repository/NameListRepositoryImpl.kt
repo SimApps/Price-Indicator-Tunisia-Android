@@ -9,13 +9,14 @@ class NameListRepositoryImpl(
 ) : NameListRepository {
     override fun getProdNamesFromRoom() = prodNamesDAO.getProdNames()
 
-    override fun getProdNameFromRoom(id: Int) = prodNamesDAO.getBook(id)
+    override fun getProdNameFromRoom(id: Int) = prodNamesDAO.getName(id)
 
-    override fun addProdNamesToRoom(productName: ProductName) = prodNamesDAO.addBook(productName)
+    override fun addProdNamesToRoom(productName: ProductName) = prodNamesDAO.addName(productName)
+    override fun addAllNames(productName: List<ProductName>) = prodNamesDAO.addAllNames(productName)
 
-    override fun updateProdNameInRoom(productName: ProductName) = prodNamesDAO.updateBook(productName)
+    override fun updateProdNameInRoom(name: String, updatedName: String) = prodNamesDAO.updateName(name = name, updatedName = updatedName)
 
-    override fun deleteProdNameFromRoom(productName: String) = prodNamesDAO.deleteProdName(productName)
+    override fun deleteProdNameFromRoom(codeBare: String) = prodNamesDAO.deleteProdName(codeBare)
 
     override fun deleteAllProdNameFromRoom() = prodNamesDAO.deleteAll()
 

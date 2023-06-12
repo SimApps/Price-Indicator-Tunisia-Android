@@ -52,7 +52,7 @@ fun GetProductByTypesListView(
                 productsViewModel = productsViewModel,
                 from = from,
                 getProds = {
-                    productsViewModel.getProds("typesubsub", item[position])
+                    productsViewModel.getProds("typesubsub", item[position],from = "get prod")
                 }
             )
         }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,6 +28,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -53,13 +55,11 @@ import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
-import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.ui.CustomModifiers.customWidth
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ClickableEditTextField
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomDropdownMenu
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.EditTextField
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
@@ -68,8 +68,6 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchView
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchViewModel
-import com.amirami.simapp.priceindicatortunisia.utils.Constants
-import com.amirami.simapp.priceindicatortunisia.utils.Converters.fromArrayList
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getuserid
@@ -94,9 +92,9 @@ fun AddModifyScreen(
 
     val sheetState = rememberModalBottomSheetState()
 
-
+val productLocalNamesList = productNameViewModel.productLocalNamesList
     val currentProduct = productsViewModel.selectedProductStates//addModifyViewModel.currentProduct
-
+    val initialProdToCompareWith  = productsViewModel.initialtSelectedProductStates
     if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -124,10 +122,9 @@ fun AddModifyScreen(
             val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
                 Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
             } else barCodeViewModel.fidCardBarCodeInfo.value
-
             barecodeValue.let {
                 searchViewModel.onsearchValue(it)
-                productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
+                productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords(),from = "add mod")
 
                 val fidcard =
                     FidCardEntity(name = "", value = "", barecodeformat = -1, barecodetype = -1)
@@ -143,12 +140,14 @@ fun AddModifyScreen(
 
     Scaffold(
         topBar = {
-            if (productNameViewModel.productLocalNamesList.isNotEmpty()) {
-                SearchView(navController = navController,
+            if (productLocalNamesList.isNotEmpty()) {
+                SearchView(
+                    navController = navController,
                     barCodeViewModel = barCodeViewModel,
-                    prodname = productNameViewModel.productLocalNamesList,
+                    prodname = productLocalNamesList.map { it.name?:"N/A" },
                     productsViewModel = productsViewModel,
-                    searchViewModel = searchViewModel)
+                    searchViewModel = searchViewModel
+                )
             }
         },
         bottomBar = {
@@ -164,81 +163,118 @@ fun AddModifyScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                
-                val product = ProductModel(
-                     id = "1",
-                 date = "",
-                 name = "Test 1 V",
-                 namearabe = "compose",
-                 marques = "COMPOSE",
-                 marquesarabe = "",
-                 quantity = 2.0,
-                 description = "",
-                 descriptionarabe = "",
-                 imageurl = "",
-                 type = "Alimentation",
-                 typesub = "Boissons",
-                 typesubsub = "Eaux",
-                 sieze = "ml",
-                 monoprixprice = "",
-                 monoprixremarq = "",
-                 mgprice = "",
-                 mgremarq = "",
-                 carrefourprice = "",
-                 carrefourremarq = "",
-                 azzizaprice = "",
-                 azzizaremarq = "",
-                 geantprice = "",
-                 geantremarq = "",
-                 monoprixremarqmodifdate = "",
-                 mgremarqmodifdate = "",
-                 carrefourremarqmodifdate = "",
-                 azzizaremarqmodifdate = "",
-                 geantremarqmodifdate = "",
-                 monoprixmodifdate = "",
-                 mgmodifdate = "",
-                 carrefourmodifdate = "",
-                 azzizamodifdate = "",
-                 geantmodifdate = "",
-                 monoprixbonusfid = "",
-                 mgbonusfid = "",
-                 carrefourbonusfid = "",
-                 azzizabonusfid = "",
-                 geantbonusfid = "",
-                 monoprixbonusfidmodifdate = "",
-                 mgbonusfidmodifdate = "",
-                 carrefourbonusfidmodifdate = "",
-                 azzizabonusfidmodifdate = "",
-                 geantbonusfidmodifdate = "",
-                 monoprixPricHistory = "",
-                 mgpricHistory = "",
-                 azizaPricHistory = "",
-                 carrefourPricHistory = "",
-                 geantPricHistory = ""
-                )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                SmallFloatingActionButton(
+                    onClick = {
+                        productsViewModel.deleteProdRemote(currentProduct.id)
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = ""
+                    )
+                }
 
-              //  product.userid = getuserid()
+                FloatingActionButton(
+                    onClick = {
+
+                        val product = ProductModel(
+                            id = "1",
+                            date = "",
+                            name = "Test 1 V",
+                            namearabe = "compose",
+                            marques = "COMPOSE",
+                            marquesarabe = "",
+                            quantity = 2.0,
+                            description = "",
+                            descriptionarabe = "",
+                            imageurl = "",
+                            type = "Alimentation",
+                            typesub = "Boissons",
+                            typesubsub = "Eaux",
+                            sieze = "ml",
+                            monoprixprice = "",
+                            monoprixremarq = "",
+                            mgprice = "",
+                            mgremarq = "",
+                            carrefourprice = "",
+                            carrefourremarq = "",
+                            azzizaprice = "",
+                            azzizaremarq = "",
+                            geantprice = "",
+                            geantremarq = "",
+                            monoprixremarqmodifdate = "",
+                            mgremarqmodifdate = "",
+                            carrefourremarqmodifdate = "",
+                            azzizaremarqmodifdate = "",
+                            geantremarqmodifdate = "",
+                            monoprixmodifdate = "",
+                            mgmodifdate = "",
+                            carrefourmodifdate = "",
+                            azzizamodifdate = "",
+                            geantmodifdate = "",
+                            monoprixbonusfid = "",
+                            mgbonusfid = "",
+                            carrefourbonusfid = "",
+                            azzizabonusfid = "",
+                            geantbonusfid = "",
+                            monoprixbonusfidmodifdate = "",
+                            mgbonusfidmodifdate = "",
+                            carrefourbonusfidmodifdate = "",
+                            azzizabonusfidmodifdate = "",
+                            geantbonusfidmodifdate = "",
+                            monoprixPricHistory = "",
+                            mgpricHistory = "",
+                            azizaPricHistory = "",
+                            carrefourPricHistory = "",
+                            geantPricHistory = ""
+                        )
+
+                        //  product.userid = getuserid()
 
 
 
-                    currentProduct.userid =getuserid()
+                        currentProduct.userid =getuserid()
 
-                    Log.d("rrfcvdx",currentProduct.id)
-                    Log.d("rrfcvdx",productsViewModel.selectedProductStates.id)
-                    Log.d("rrfcvdx",(productsViewModel.selectedProductStates != currentProduct).toString())
-              //  if(productsViewModel.selectedProductStates.id == prod.id && productsViewModel.selectedProductStates != prod)
-                productsViewModel.addProductRemote(product = currentProduct, id = currentProduct.id)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Save,
-                    contentDescription = ""
-                )
+
+                        Log.d("ioklnjhs",(initialProdToCompareWith != currentProduct).toString())
+                        //  if(productsViewModel.selectedProductStates.id == prod.id && productsViewModel.selectedProductStates != prod)
+                        productsViewModel.addProductRemote(product = currentProduct)
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Save,
+                        contentDescription = ""
+                    )
+                }
             }
+
         }
 
     ) { padding ->
+
+        when(val booksResponse = productsViewModel.getProductsResponse) {
+            is Response.NotInit ->{
+
+            }
+            is Response.Loading -> ProgressBar()
+            is Response.Success ->{
+                LaunchedEffect(key1 = booksResponse.data.first().id){
+                    productsViewModel.onSelectedProductChanged(booksResponse.data.first())
+                    productsViewModel.setInitialtProductStates(booksResponse.data.first())
+                }
+
+
+            }
+
+            is Response.Failure -> {
+                Functions.errorToast(context,booksResponse.message)
+
+
+            }
+            else -> {}
+        }
         AddModifyScreenContent(
             padding = padding,
             navController = navController,
@@ -251,8 +287,9 @@ fun AddModifyScreen(
             productTypesDialogViewModel = productTypesDialogViewModel,
             productsViewModel = productsViewModel,
             currentProduct = currentProduct,
-            initialProdToCompareWith = productsViewModel.initialtSelectedProductStates
+            initialProdToCompareWith = initialProdToCompareWith
         )
+
     }
 
 
@@ -274,8 +311,9 @@ fun AddModifyScreenContent(
     initialProdToCompareWith : ProductModel
 ) {
     val context = LocalContext.current
-    
 
+    val preveiewsProdame = initialProdToCompareWith.name.capitalizeWords()
+    val productName= currentProduct.name.capitalizeWords()
 
     
     Column(
@@ -288,66 +326,76 @@ fun AddModifyScreenContent(
     ) {
 
 
-        if (productNameViewModel.isLoading) {
-            Spacer(modifier = Modifier.padding(top = 60.dp))
-            ProgressBar()
-        }
 
 
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
-            if (productNameViewModel.message == Constants.ERREUR_CONNECTION) {
-                LottieComposable(
-                    250.dp, R.raw.no_internet_connection
-                )
+
+
+        when(val addBookResponse = productsViewModel.deleteProdResponse) {
+            is Response.NotInit -> {
+                Text(text = "NOT INIT DELETE")
             }
-            if (productsViewModel.isLoading) ProgressBar()
+            is Response.Loading -> {
+                ProgressBar()
+                Text(text = "DELETE LOAD")
+            }
+            is Response.Success -> {
 
 
+
+
+                    LaunchedEffect(key1 = productsViewModel.productNameWithBarCode){
+                        productNameViewModel.deleteRemoteProdName(initialProdToCompareWith.id)
+                    }
+
+                 productNameViewModel.deleteLocalProdName(initialProdToCompareWith.id)
+
+                Text(text = "DELETE Succ")
+            }
+            is Response.Failure -> {
+                Text(text = addBookResponse.message)
+            }
+        }
             when(val addBookResponse = productsViewModel.addProdResponse) {
-                is Response.NotInit -> Text(text = "NOT INIT")
+                is Response.NotInit -> {
+                    Text(text = "NOT INIT")
+                }
                 is Response.Loading -> {
                     ProgressBar()
                     Text(text = "Add Modify prod")
                 }
                 is Response.Success -> {
+                 if (productName!= preveiewsProdame) {
 
-                 val preveiewsProdame = initialProdToCompareWith.name
-                  val productName= currentProduct.name
-                    Log.d("hhjsns",productName)
-                    Log.d("hhjsns",preveiewsProdame)
-                 if ( productName!= preveiewsProdame) {
+                    // productNameViewModel.deleteRemoteProdName(preveiewsProdame)
 
-                     productNameViewModel.deleteAllLocalProdName()
-                     productNameViewModel.deleteRemoteProdName(preveiewsProdame)
+                    productNameViewModel.updatLocaleProdName(
+                        name = preveiewsProdame,
+                        updatedName = productName
+                    )
 
-
-
-                     productNameViewModel.addOneProductNamesToList(
-                         productName =productName,
-                         preveiewsProdame = preveiewsProdame
+                     productsViewModel.updateNameWithBareCode(
+                         bareCode = currentProduct.id,
+                         name = currentProduct.name
                      )
 
-                     //TODO LISTEN TO ADD PRO NAME ADD TO FIRESTORE
-                     productNameViewModel.addRemoteProductName(productName)
-
-                     productNameViewModel.addLocalProdNames(
-                         ProductName(
-                             1,
-                             fromArrayList(productNameViewModel.productLocalNamesList)
-                         )
-                     )
-
+                     LaunchedEffect(key1 = productsViewModel.productNameWithBarCode){
+                        productNameViewModel.addRemoteListProductsNamesBareCode(productsViewModel.productNameWithBarCode)
+                     }
                     }
 
                     Text(text = "Add Modify Succ")
-
-
                 }
                 is Response.Failure -> {
                     Text(text = addBookResponse.message)
                 }
             }
+
+
+
+
+
             ScreenContent(
                 navController = navController,
                 addModifyViewModel = addModifyViewModel,
@@ -421,7 +469,7 @@ fun ScreenContent(
         errorvalue = null,
         label = stringResource(R.string.Nomduproduit),
         onValueChange = {
-            onSelectedProductChanged(currentProduct.copy(name = it))
+            onSelectedProductChanged(currentProduct.copy(name = it.capitalizeWords()))
         },
         readOnly = false,
         enabled = true,

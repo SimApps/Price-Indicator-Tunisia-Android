@@ -9,6 +9,7 @@ interface ShopListRepository {
     fun getProdShopFromRoom(id: Int): Flow<ProductModel>
 
     fun addShopProdToRoom(productName: ProductModel)
+    fun addAllProdToRoom(productName:List<ProductModel>)
 
     fun updateShopListInRoom(productName: ProductModel)
 

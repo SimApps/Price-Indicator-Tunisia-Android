@@ -33,9 +33,10 @@ object AppModuleProductsNames {
     fun provideUseCases(
         repo: ProductsNamesRepository
     ) = UseCasesProductName(
-        getProductsNames = GetProductsNames(repo),
+        getProductsNamesBareCode = GetProductsNamesBareCode(repo),
         addProductName = AddProductName(repo),
         addListProductsNames = AddListProductsNames(repo),
-        deleteProductName = DeleteProductName(repo)
+        deleteProductName = DeleteProductName(repo),
+        addListProductsNamesBareCode = AddListProductsNamesBarCode(repo)
     )
 }

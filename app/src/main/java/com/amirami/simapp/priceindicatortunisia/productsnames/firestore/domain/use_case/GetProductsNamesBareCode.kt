@@ -2,8 +2,9 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.
 
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.ProductsNamesRepository
 
-class GetProductsNames (
+
+class GetProductsNamesBareCode (
     private val repo: ProductsNamesRepository
 ) {
-    operator fun invoke() = repo.getProductsNamesFromFirestore()
+    operator fun invoke() = repo.getProductsNamesBareCodeFromFirestore()
 }

@@ -85,9 +85,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     // implementation ("androidx.compose.material3:material3")
     // Override Material Design 3 library version with a pre-release version
-    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
     implementation("androidx.compose.ui:ui-util")
-    implementation("androidx.compose.material:material-icons-extended:1.5.0-alpha04")
+    implementation("androidx.compose.material:material-icons-extended:1.5.0-beta01")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
@@ -108,13 +108,13 @@ dependencies {
 
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
 
 
 // admob
-    implementation("com.google.android.gms:play-services-ads:22.0.0")
+    implementation("com.google.android.gms:play-services-ads:22.1.0")
     // custom toast
     implementation("com.pranavpandey.android:dynamic-toasts:4.1.3")
 
@@ -146,7 +146,7 @@ dependencies {
     implementation("com.github.SalahoAmro:NetDetect:1.0.0")
 
     // graph
-    implementation("com.github.blackfizz:eazegraph:1.2.2@aar")
+    implementation("com.github.blackfizz:eazegraph:1.2.3@aar")
     implementation("com.nineoldandroids:library:2.4.0")
 
 // GSON
@@ -170,7 +170,7 @@ dependencies {
 
 
 
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.8.21-1.0.11")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.8.22-1.0.11")
 
 
 
@@ -212,27 +212,27 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.46.1")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
-    implementation("com.airbnb.android:lottie-compose:6.0.0")
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 
 
     // Accompanist
 
-    implementation("com.google.accompanist:accompanist-insets:0.30.0")
+    implementation("com.google.accompanist:accompanist-insets:0.30.1")
     //noinspection GradleDependency
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
-    implementation("com.google.accompanist:accompanist-pager:0.30.0")
-    implementation("com.google.accompanist:accompanist-drawablepainter:0.30.0")
+    implementation("com.google.accompanist:accompanist-pager:0.30.1")
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.30.1")
 
     // If using indicators, also depend on
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
 
 
     //  Camerax dependencies
-    implementation("androidx.camera:camera-core:1.2.2")
-    implementation("androidx.camera:camera-camera2:1.2.2")
-    implementation("androidx.camera:camera-lifecycle:1.2.2")
-    implementation("androidx.camera:camera-view:1.3.0-alpha06")
-    implementation("androidx.camera:camera-extensions:1.3.0-alpha06")
+    implementation("androidx.camera:camera-core:1.2.3")
+    implementation("androidx.camera:camera-camera2:1.2.3")
+    implementation("androidx.camera:camera-lifecycle:1.2.3")
+    implementation("androidx.camera:camera-view:1.3.0-alpha07")
+    implementation("androidx.camera:camera-extensions:1.3.0-alpha07")
 
 
 
@@ -247,7 +247,7 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.1.0")
 // TO GENERATE BARCODE MAYBE SEE IF  I CAN USE : com.google.mlkit:barcode-scanning
     implementation("com.google.zxing:core:3.5.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22")
 
 
 

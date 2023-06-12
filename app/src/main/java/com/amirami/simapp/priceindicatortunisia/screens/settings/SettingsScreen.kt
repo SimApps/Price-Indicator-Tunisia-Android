@@ -67,6 +67,7 @@ fun SettingsScreen(
     productNameViewModel: ProductNameViewModel,
     onSignInClick: () -> Unit,
     onSignOut: () -> Unit,
+    ondeleteAccount: () -> Unit,
     resetState: () -> Unit,
     settingViewModel : SettingViewModel
 ) {
@@ -220,6 +221,8 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
                     }
                 )
             }
+
+
             Spacer(modifier = Modifier.height(30.dp))
             TextWithIcon(
                 text =  if(googleAuthUiClient.getSignedInUser() == null)
@@ -232,6 +235,21 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
                     else onSignOut()
                 }
             )
+
+
+            if(googleAuthUiClient.getSignedInUser() != null){
+                Spacer(modifier = Modifier.height(30.dp))
+
+                TextWithIcon(
+                    text =  context.getString(R.string.Supprimer_compte),
+                    icon = R.drawable.ic_signout,
+                    onClick = {
+                        ondeleteAccount()
+                    }
+                )
+            }
+
+
 
             Spacer(modifier = Modifier.height(30.dp))
             TextWithIcon(

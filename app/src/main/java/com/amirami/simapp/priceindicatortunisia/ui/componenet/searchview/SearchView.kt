@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview
 
+import android.util.Log
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
@@ -56,10 +57,11 @@ fun SearchView(
             searchViewModel.onsearchValue(it)
         },
         onSearch = {
+            Log.d("ioklnjhs","from")
             if (searchViewModel.searchValue.isEmpty()) return@SearchBar
             productsViewModel.getProds(
                 Functions.searchType(searchViewModel.searchValue),
-                searchViewModel.searchValue.capitalizeWords()
+                searchViewModel.searchValue.capitalizeWords(),from = "seach1"
             )
 
             searchViewModel.onSearchIsActive(false)
@@ -146,7 +148,7 @@ fun SearchView(
                                 searchViewModel.onsearchValue(finalListName[position])
                                 productsViewModel.getProds(
                                     Functions.searchType(finalListName[position]),
-                                    finalListName[position].capitalizeWords()
+                                    finalListName[position].capitalizeWords(),from = "seach2"
                                 )
 
                                 searchViewModel.onSearchIsActive(false)

@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.amirami.simapp.priceindicatortunisia.core.Constants
+import com.amirami.simapp.priceindicatortunisia.datastore.viewmodel.DataViewModel
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInViewModel
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val productNameViewModel: ProductNameViewModel = hiltViewModel()
                 val signInViewModel = viewModel<SignInViewModel>()
+                val dataViewModel = viewModel<DataViewModel>()
 
                 NavHost(
                     navController = navController,
@@ -106,7 +108,8 @@ class MainActivity : ComponentActivity() {
                             productDetailDialogViewModel = productDetailDialogViewModel,
                             addModifyViewModel = addModifyViewModel,
                             searchViewModel = searchViewModel,
-                            productNameViewModel = productNameViewModel
+                            productNameViewModel = productNameViewModel,
+                            dataViewModel = dataViewModel
                         )
                     }
 
@@ -214,6 +217,30 @@ class MainActivity : ComponentActivity() {
                             productNameViewModel = productNameViewModel,
                             barCodeViewModel = barCodeViewModel,
                             productsViewModel = productsViewModel,
+                            ondeleteAccount = {
+                              //  lifecycleScope.launch {
+                                   // val deleteAccountIntentSender = googleAuthUiClient.deleteAccount()
+                                lifecycleScope.launch {
+                                    googleAuthUiClient.signOut()
+                                }
+                                   if(googleAuthUiClient.deleteAccount().isSuccessful)
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Acount deleted",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        else
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Account not deleted",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                signInViewModel.resetState()
+
+
+                             //   }
+                            }
                         )
                     }
 

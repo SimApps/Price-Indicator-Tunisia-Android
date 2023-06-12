@@ -1,5 +1,6 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +15,6 @@ import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.r
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.use_case.UseCasesProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.repository.NameListRepository
-import com.amirami.simapp.priceindicatortunisia.utils.Converters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +25,7 @@ class ProductNameViewModel @Inject constructor(
     private val useCasesProductName: UseCasesProductName,
     private val repo: NameListRepository
 ) : ViewModel() {
-    var prodnameRemoteResponse by mutableStateOf<Response<ArrayList<String>>>(Response.NotInit)
-        private set
+
 
 
 
@@ -39,9 +38,9 @@ class ProductNameViewModel @Inject constructor(
         private set
 
   //  var productLocalNamesList by mutableStateOf(emptyList<ProductName>())
-    var productLocalNamesList = mutableStateListOf<String>()
+    var productLocalNamesList = mutableStateListOf<ProductName>()
         private set
-    var productLocalName by mutableStateOf(ProductName(0, ""))
+    var productLocalName by mutableStateOf(ProductName())
 
 
     var isLoading by mutableStateOf(false)
@@ -53,12 +52,14 @@ class ProductNameViewModel @Inject constructor(
         getLocalProdNamesList()
     }
 
-    private fun getRemoteProdsNames() = viewModelScope.launch {
-        isLoading = true
-        useCasesProductName.getProductsNames().collect { response ->
-            prodnameRemoteResponse = response
 
-            when (val prodNamesResponse =  prodnameRemoteResponse) {
+
+    private fun getRemoteProdsNamesBareCode() = viewModelScope.launch {
+        isLoading = true
+        useCasesProductName.getProductsNamesBareCode().collect { response ->
+
+
+            when (val prodNamesResponse =  response) {
                 is Response.NotInit ->  isLoading = false
                 is Response.Loading ->   isLoading = true
                 is Response.Success -> {
@@ -66,13 +67,27 @@ class ProductNameViewModel @Inject constructor(
                     message = ""
 
                     deleteAllLocalProdName()
+                    //addAllProdNames(prodNamesResponse.data)
 
-                    addLocalProdNames(
-                        ProductName(
-                            id = 1,
-                            Converters.fromArrayList(prodNamesResponse.data)
+                    prodNamesResponse.data.forEach { (key, value) ->
+                        // Do something with each key and value
+                        addLocalProdNames(
+                            ProductName(
+                                id = key,
+                                name = value
+                            )
                         )
-                    )
+                    }
+                  /*  for (name in prodNamesResponse.data) {
+                        addLocalProdNames(
+                            ProductName(
+                                id =
+                                //Converters.fromArrayList(prodNamesResponse.data)
+                                name = name
+                            )
+                        )
+                    }*/
+
 
 
                 }
@@ -85,7 +100,10 @@ class ProductNameViewModel @Inject constructor(
             }
         }
     }
+
+
     fun addRemoteProductName(prodName: String) = viewModelScope.launch {
+        Log.d("ioklnjhs","addRemoteProductName ")
         addProdNameRemoteResponse   = Response.Loading
         addProdNameRemoteResponse =  useCasesProductName.addProductName(prodName)
     }
@@ -94,6 +112,17 @@ class ProductNameViewModel @Inject constructor(
         addListProdsNamesRemoteResponse = Response.Loading
         addListProdsNamesRemoteResponse =  useCasesProductName.addListProductsNames(prodNameList)
 
+
+
+    }
+
+
+    fun addRemoteListProductsNamesBareCode(prodNameList : Map<String,String>) = viewModelScope.launch {
+        addListProdsNamesRemoteResponse = Response.Loading
+        addListProdsNamesRemoteResponse =  useCasesProductName.addListProductsNamesBareCode(prodNameList)
+
+
+
     }
 
     fun deleteRemoteProdName(prodName: String) = viewModelScope.launch {
@@ -101,45 +130,44 @@ class ProductNameViewModel @Inject constructor(
         deleteProdNameRemoteResponse =   useCasesProductName.deleteProductName(prodName)
     }
 
-    fun getLocalProdNamesList() = viewModelScope.launch {
+    private fun getLocalProdNamesList() = viewModelScope.launch {
         repo.getProdNamesFromRoom().collect { nameList ->
-            productLocalNamesList.addAll(
-                Converters.fromString(nameList.map { it.name }.first()?:"")
-            )
 
+            productLocalNamesList.clear()
+
+            productLocalNamesList.addAll(nameList)
+          //  addRemoteListProductsNamesBareCode(nameList.associate { it.id to it.name!! })
             if(productLocalNamesList.isEmpty()){
-                getRemoteProdsNames()
+                getRemoteProdsNamesBareCode()
+                return@collect
             }
         }
     }
 
 
-    fun addOneProductNamesToList(productName :String, preveiewsProdame : String){
 
-        if (productLocalNamesList.indexOf(preveiewsProdame) != -1) {
-         //   productLocalNamesList.first { it.name ==preveiewsProdame}.name = productName
-             productLocalNamesList[productLocalNamesList.indexOf(preveiewsProdame)] = productName
-        } else productLocalNamesList.add(productName)
-    }
     fun  getLocalProdName(id: Int) = viewModelScope.launch {
         repo.getProdNameFromRoom(id).collect { dbBook ->
             productLocalName = dbBook
         }
     }
 
-    fun addLocalProdNames(productName: ProductName) = viewModelScope.launch(Dispatchers.IO) {
+    private fun addLocalProdNames(productName: ProductName) = viewModelScope.launch(Dispatchers.IO) {
         repo.addProdNamesToRoom(productName)
     }
 
-    fun updatLocaleProdName(productName: ProductName) = viewModelScope.launch(Dispatchers.IO) {
-        repo.updateProdNameInRoom(productName)
+    fun addAllProdNames(productName: List<ProductName>) = viewModelScope.launch(Dispatchers.IO) {
+        repo.addAllNames(productName)
+    }
+    fun updatLocaleProdName(name: String, updatedName: String) = viewModelScope.launch(Dispatchers.IO) {
+        repo.updateProdNameInRoom(name = name, updatedName = updatedName)
     }
 
-    fun deleteLocalProdName(productName: String) = viewModelScope.launch(Dispatchers.IO) {
-        repo.deleteProdNameFromRoom(productName)
+    fun deleteLocalProdName(codeBar: String) = viewModelScope.launch(Dispatchers.IO) {
+        repo.deleteProdNameFromRoom(codeBar)
     }
 
-    fun deleteAllLocalProdName() = viewModelScope.launch(Dispatchers.IO) {
+    private fun deleteAllLocalProdName() = viewModelScope.launch(Dispatchers.IO) {
         repo.deleteAllProdNameFromRoom()
     }
 

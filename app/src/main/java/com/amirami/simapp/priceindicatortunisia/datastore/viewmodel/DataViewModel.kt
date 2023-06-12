@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.datastore.preferences.abstraction.DataStoreRepository
 import com.amirami.simapp.priceindicatortunisia.datastore.utils.DARK_THEME
+import com.amirami.simapp.priceindicatortunisia.datastore.utils.MAPNAME
 import com.amirami.simapp.priceindicatortunisia.utils.IoDispatcher
 
 
@@ -19,7 +20,15 @@ class DataViewModel @Inject constructor(
     private val repository: DataStoreRepository
 ) : ViewModel() {
 
+    fun getMAPNAME(): String = runBlocking {
+        repository.getString(MAPNAME)
+    }
 
+    fun saveMAPNAME(value: String) {
+        viewModelScope.launch(dispatcher) {
+            repository.putString(MAPNAME, value)
+        }
+    }
 
 
 

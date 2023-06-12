@@ -91,6 +91,7 @@
     <string name="Voulez_vous_suprimer_produit_liste_courses">Voulez-vous supprimer le produit de la liste des courses ?</string>
 
     <string name="Voulez_vous_suprimer_cette_carte_fid">Voulez-vous supprimer cette carte fidélité ?</string>
+        <string name="Voulez_vous_ajouter_produit">Voulez-vous Ajouter ce produit ?</string>
 
     <string name="Qu_est_ce_que_cette_application">Prix en Tunisie est un comparateur de prix indépendant que nous avons lancé en 2021 avec un objectif : vous permettre de comparer facilement les prix dans les magasins et grandes surfaces près de chez vous en fonction de votre liste de courses. Aujourd\'hui, notre application compare les prix de %s produits.</string>
 
@@ -123,6 +124,7 @@
     <string name="Descriptionduproduit">Description du produit</string>
 
     <string name="Déconnecter">Déconnecter</string>
+    <string name="Supprimer_compte">Suprimé utilisateur</string>
     <string name="Connecter">Connecter</string>
     <string name="licenses">Licences</string>
     <string name="Connexion_réussie">Connexion réussie</string>

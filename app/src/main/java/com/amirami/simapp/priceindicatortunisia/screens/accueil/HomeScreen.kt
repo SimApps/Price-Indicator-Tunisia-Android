@@ -23,11 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.datastore.viewmodel.DataViewModel
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
+import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
 import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomAlertDialogue
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProductList
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
@@ -54,14 +59,21 @@ fun HomeScreen(
     searchViewModel: SearchViewModel,
     productNameViewModel: ProductNameViewModel,
     addModifyViewModel : AddModifyViewModel,
+    dataViewModel : DataViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel
 
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val productLocalNamesList = productNameViewModel.productLocalNamesList
+    
+    LaunchedEffect(key1 = Unit){
+        productsViewModel.setProductNameWithBareCode(productLocalNamesList.associateBy({ it.id }, { it.name!! }))
 
+    }
+    
     val sheetState = rememberModalBottomSheetState()
-LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
+   LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
     if (barCodeViewModel.fidCardBarCodeInfo.value != "") {
         val barecodeValue = if (Functions.isNumber(barCodeViewModel.fidCardBarCodeInfo.value)) {
             Functions.removeLeadingZeroes(barCodeViewModel.fidCardBarCodeInfo.value)
@@ -69,7 +81,11 @@ LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
 
         barecodeValue.let {
             searchViewModel.onsearchValue(it)
-            productsViewModel.getProds(Functions.searchType(it), it.capitalizeWords())
+            productsViewModel.getProds(
+                searchtype = Functions.searchType(it),
+                searchtext = it.capitalizeWords(),
+                from = "homescreen"
+            )
 
 
             barCodeViewModel.onfidCardInfo(FidCardEntity())
@@ -122,6 +138,21 @@ LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
         }
 
     ) { padding ->
+
+        CustomAlertDialogue(
+            title = context.getString(R.string.Voulez_vous_ajouter_produit),
+            msg = searchViewModel.searchValue.capitalizeWords(),
+            openDialog  = productsViewModel.showAddNewProduct,
+            setDialogueVisibility = {
+               productsViewModel.resetGetProductsResponse()
+                productsViewModel.onShowAddNewProductChange(false)
+            },
+            customAction = {
+                productsViewModel.resetGetProductsResponse()
+              productsViewModel.onSelectedProductChanged(ProductModel(id = searchViewModel.searchValue))
+                navController.navigate(ListScreens.AddModify.Route)
+            }
+        )
         HomeScreenContent(
             padding = padding,
             navController = navController,
@@ -130,7 +161,9 @@ LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
             searchViewModel = searchViewModel,
             productNameViewModel = productNameViewModel,
             productDetailDialogViewModel = productDetailDialogViewModel,
-            addModifyViewModel = addModifyViewModel
+            addModifyViewModel = addModifyViewModel,
+            productLocalNamesList = productLocalNamesList,
+            dataViewModel = dataViewModel
         )
     }
 
@@ -148,7 +181,9 @@ fun HomeScreenContent(
     searchViewModel: SearchViewModel,
     productNameViewModel: ProductNameViewModel,
     productDetailDialogViewModel: ProductDetailDialogViewModel,
-    addModifyViewModel : AddModifyViewModel
+    addModifyViewModel : AddModifyViewModel,
+    productLocalNamesList : List<ProductName>,
+    dataViewModel: DataViewModel
 ) {
     val context = LocalContext.current
 
@@ -162,12 +197,12 @@ fun HomeScreenContent(
         // verticalArrangement = Arrangement.Top,
           horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (productNameViewModel.productLocalNamesList.isNotEmpty()) {
+        if (productLocalNamesList.isNotEmpty()) {
             SearchView(
                 navController = navController,
                 barCodeViewModel = barCodeViewModel,
                // prodname = Converters.fromString(productNameViewModel.productLocalNamesList.map { it.name }.first()!!),
-                prodname = productNameViewModel.productLocalNamesList,
+                prodname = productLocalNamesList.map { it.name?:"N/A" },
                 productsViewModel = productsViewModel,
                 searchViewModel = searchViewModel
             )
@@ -208,14 +243,32 @@ fun HomeScreenContent(
                 )
             }
 
-            if(productsViewModel.isLoading) ProgressBar()
-if(productsViewModel.errorValue !="")Functions.errorToast(context, productsViewModel.errorValue)
-            ProductList(
-                prodsResponse = productsViewModel.productListStates,
+          /*  ProductList(
+                prodsResponse =fromString(dataViewModel.getDarkTheme()) ,
                 productDetailDialogViewModel = productDetailDialogViewModel,
                 productsViewModel = productsViewModel,
                 addModifyViewModel = addModifyViewModel
-            )
+            )*/
+         when(val booksResponse = productsViewModel.getProductsResponse) {
+                is Response.Loading -> ProgressBar()
+                is Response.Success -> {
+                   // dataViewModel.saveDarkTheme(fromArrayList(booksResponse.data))
+                    ProductList(
+                        prodsResponse = booksResponse.data,
+                        productDetailDialogViewModel = productDetailDialogViewModel,
+                        productsViewModel = productsViewModel,
+                        addModifyViewModel = addModifyViewModel
+                    )
+                }
+                is Response.Failure -> {
+                    Functions.errorToast(context,booksResponse.message)
+                    if(booksResponse.message.contains("Code Barre"))
+                        productsViewModel.onShowAddNewProductChange(true)
+                }
+                else -> {}
+            }
+
+
 
 
 
