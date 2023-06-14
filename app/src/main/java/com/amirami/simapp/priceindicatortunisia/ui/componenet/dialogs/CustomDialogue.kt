@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat.startActivity
-import com.amirami.simapp.priceindicatortunisia.screens.settings.DialogueInfo
+import com.amirami.simapp.priceindicatortunisia.settings.DialogueInfo
 
 
 @Composable

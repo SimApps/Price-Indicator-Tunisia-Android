@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.NotInit
-import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.AddProductResponse
-import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.DeleteProductResponse
-import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.repository.GetProductResponse
-import com.amirami.simapp.priceindicatortunisia.products.firestore.domain.usecases.UseCasesProduct
+import com.amirami.simapp.priceindicatortunisia.products.firestore.repository.AddProductResponse
+import com.amirami.simapp.priceindicatortunisia.products.firestore.repository.DeleteProductResponse
+import com.amirami.simapp.priceindicatortunisia.products.firestore.repository.GetProductResponse
+import com.amirami.simapp.priceindicatortunisia.products.firestore.usecases.UseCasesProduct
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.products.room.domain.repository.ShopListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

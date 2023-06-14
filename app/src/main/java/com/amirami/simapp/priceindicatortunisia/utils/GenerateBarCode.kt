@@ -3,11 +3,11 @@ package com.amirami.simapp.priceindicatortunisia.utils
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 
 fun generateBarCode(barcod: FidCardEntity, barCodeViewModel: BarCodeViewModel)/*: Bitmap*/ {
 

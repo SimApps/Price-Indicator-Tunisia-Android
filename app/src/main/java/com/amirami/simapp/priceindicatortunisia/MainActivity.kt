@@ -16,24 +16,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
+import com.amirami.simapp.priceindicatortunisia.accueil.HomeScreen
+import com.amirami.simapp.priceindicatortunisia.addmodify.AddModifyScreen
+import com.amirami.simapp.priceindicatortunisia.addmodify.AddModifyViewModel
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.FidCardViewModel
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.views.FidCardsScreen
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.views.GeneratedBarcodeImageScreen
 import com.amirami.simapp.priceindicatortunisia.core.Constants
+import com.amirami.simapp.priceindicatortunisia.courses.ShoppingScreen
 import com.amirami.simapp.priceindicatortunisia.datastore.viewmodel.DataViewModel
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInViewModel
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
+import com.amirami.simapp.priceindicatortunisia.priceremarqs.PriceRemarqScreen
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.accueil.HomeScreen
-import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyScreen
-import com.amirami.simapp.priceindicatortunisia.screens.addmodify.AddModifyViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.FidCardsScreen
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.GeneratedBarcodeImageScreen
-import com.amirami.simapp.priceindicatortunisia.screens.cartefidelite.room.FidCardRoomViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.courses.ShoppingScreen
-import com.amirami.simapp.priceindicatortunisia.screens.priceremarqs.PriceRemarqScreen
-import com.amirami.simapp.priceindicatortunisia.screens.settings.SettingViewModel
-import com.amirami.simapp.priceindicatortunisia.screens.settings.SettingsScreen
-import com.amirami.simapp.priceindicatortunisia.screens.tiket.TiketScreen
+import com.amirami.simapp.priceindicatortunisia.settings.SettingViewModel
+import com.amirami.simapp.priceindicatortunisia.settings.SettingsScreen
+import com.amirami.simapp.priceindicatortunisia.tiket.TiketScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeCameraPreviewScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
@@ -48,6 +49,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.gms.auth.api.identity.Identity
 import com.narify.netdetect.NetDetect
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -60,7 +62,8 @@ class MainActivity : ComponentActivity() {
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
-    @OptIn(ExperimentalPermissionsApi::class)
+    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalPermissionsApi::class, ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -84,7 +87,7 @@ class MainActivity : ComponentActivity() {
 
 
                 val cameraViewModel: CameraViewModel = hiltViewModel()
-                val fidCardRoomViewModel: FidCardRoomViewModel = hiltViewModel()
+                val fidCardViewModel: FidCardViewModel = hiltViewModel()
 
                 val productDetailDialogViewModel: ProductDetailDialogViewModel = hiltViewModel()
                 val productTypesDialogViewModel: ProductTypesDialogViewModel = hiltViewModel()
@@ -140,7 +143,7 @@ class MainActivity : ComponentActivity() {
                         FidCardsScreen(
                             navController = navController,
                             barCodeViewModel = barCodeViewModel,
-                            fidCardRoomViewModel = fidCardRoomViewModel,
+                            fidCardViewModel = fidCardViewModel,
                             productsViewModel = productsViewModel
                         )
                     }

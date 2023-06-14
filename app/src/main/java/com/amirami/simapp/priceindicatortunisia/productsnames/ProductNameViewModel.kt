@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,12 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.core.Utils
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddListProductNameResponse
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.AddProductNameResponse
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.repository.DeleteProductNameResponse
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.domain.use_case.UseCasesProductName
-import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.model.ProductName
-import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.repository.NameListRepository
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.AddListProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.DeleteProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.UseCasesProductName
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.ProductName
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.repository.NameListLocalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,24 +21,17 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductNameViewModel @Inject constructor(
     private val useCasesProductName: UseCasesProductName,
-    private val repo: NameListRepository
+    private val repo: NameListLocalRepository
 ) : ViewModel() {
 
 
 
-
-    var addProdNameRemoteResponse by mutableStateOf<AddProductNameResponse>(Response.NotInit)
-        private set
     var addListProdsNamesRemoteResponse by mutableStateOf<AddListProductNameResponse>(Response.NotInit)
         private set
 
     var deleteProdNameRemoteResponse by mutableStateOf<DeleteProductNameResponse>(Response.NotInit)
         private set
 
-  //  var productLocalNamesList by mutableStateOf(emptyList<ProductName>())
-    var productLocalNamesList = mutableStateListOf<ProductName>()
-        private set
-    var productLocalName by mutableStateOf(ProductName())
 
 
     var isLoading by mutableStateOf(false)
@@ -102,19 +93,9 @@ class ProductNameViewModel @Inject constructor(
     }
 
 
-    fun addRemoteProductName(prodName: String) = viewModelScope.launch {
-        Log.d("ioklnjhs","addRemoteProductName ")
-        addProdNameRemoteResponse   = Response.Loading
-        addProdNameRemoteResponse =  useCasesProductName.addProductName(prodName)
-    }
-
-    fun addRemoteListProductsNames(prodNameList : ArrayList<String>) = viewModelScope.launch {
-        addListProdsNamesRemoteResponse = Response.Loading
-        addListProdsNamesRemoteResponse =  useCasesProductName.addListProductsNames(prodNameList)
 
 
 
-    }
 
 
     fun addRemoteListProductsNamesBareCode(prodNameList : Map<String,String>) = viewModelScope.launch {
@@ -130,6 +111,15 @@ class ProductNameViewModel @Inject constructor(
         deleteProdNameRemoteResponse =   useCasesProductName.deleteProductName(prodName)
     }
 
+
+    /**
+     * * * * R O O M * * * *
+     */
+
+
+    var productLocalNamesList = mutableStateListOf<ProductName>()
+        private set
+    var productLocalName by mutableStateOf(ProductName())
     private fun getLocalProdNamesList() = viewModelScope.launch {
         repo.getProdNamesFromRoom().collect { nameList ->
 
