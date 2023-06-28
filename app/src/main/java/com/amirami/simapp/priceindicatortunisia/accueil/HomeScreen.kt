@@ -67,10 +67,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val productLocalNamesList = productNameViewModel.productLocalNamesList
     
-    LaunchedEffect(key1 = Unit){
-        productsViewModel.setProductNameWithBareCode(productLocalNamesList.associateBy({ it.id }, { it.name!! }))
 
-    }
     
     val sheetState = rememberModalBottomSheetState()
    LaunchedEffect(key1 = barCodeViewModel.fidCardBarCodeInfo.value){
@@ -264,6 +261,8 @@ fun HomeScreenContent(
                     Functions.errorToast(context,booksResponse.message)
                     if(booksResponse.message.contains("Code Barre"))
                         productsViewModel.onShowAddNewProductChange(true)
+
+                    productsViewModel.resetGetProductsResponse()
                 }
                 else -> {}
             }

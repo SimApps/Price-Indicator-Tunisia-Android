@@ -1,9 +1,14 @@
 package com.amirami.simapp.priceindicatortunisia.datastore.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amirami.simapp.priceindicatortunisia.core.DateUtils
 import com.amirami.simapp.priceindicatortunisia.datastore.preferences.abstraction.DataStoreRepository
 import com.amirami.simapp.priceindicatortunisia.datastore.utils.DARK_THEME
+import com.amirami.simapp.priceindicatortunisia.datastore.utils.FID_CARD_SYNC_DATE
 import com.amirami.simapp.priceindicatortunisia.datastore.utils.MAPNAME
 import com.amirami.simapp.priceindicatortunisia.utils.IoDispatcher
 
@@ -46,6 +51,24 @@ class DataViewModel @Inject constructor(
 
 
 
+    fun getLastDateFidCardSync(): String = runBlocking {
+        repository.getString(FID_CARD_SYNC_DATE)
+    }
+
+
+    var nbrDaysSincFidCardSync by mutableStateOf(0)
+        private set
+
+
+
+    fun getNbrDaySincFidCardSync(){
+        nbrDaysSincFidCardSync =   DateUtils.durationSincePast(dateInPast = getLastDateFidCardSync())
+    }
+    fun saveLastDateFidCardSync(value: String) {
+        viewModelScope.launch(dispatcher) {
+            repository.putString(FID_CARD_SYNC_DATE, value)
+        }
+    }
 
 
 }

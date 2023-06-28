@@ -2,6 +2,7 @@ package com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecase
 
 data class UseCasesFidCard (
     val getFidCard: GetFidCard,
+    val createUserFidCardDocument  : CreateUserFidCardDocument,
     val addListFidCard: AddListFidCard,
-    val deleteFidCard: DeleteFidCard
+    val deleteFidCardUserDocument: DeleteFidCardUserDocument
 )

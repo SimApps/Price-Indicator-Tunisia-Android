@@ -87,7 +87,7 @@ dependencies {
     // Override Material Design 3 library version with a pre-release version
     implementation("androidx.compose.material3:material3:1.2.0-alpha02")
     implementation("androidx.compose.ui:ui-util")
-    implementation("androidx.compose.material:material-icons-extended:1.5.0-beta01")
+    implementation("androidx.compose.material:material-icons-extended:1.5.0-beta02")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
@@ -98,7 +98,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.6.0")
 
 
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
@@ -253,6 +253,12 @@ dependencies {
 
     // GET LICENSE INFO
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
+
+
+
+    //date Time
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }
 repositories {
     mavenCentral()

@@ -1,10 +1,9 @@
 package com.amirami.simapp.priceindicatortunisia.products.room.data.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.products.room.core.Constants.Companion.SHOPING_LIST_TABLE
 import kotlinx.coroutines.flow.Flow
@@ -17,11 +16,11 @@ interface ProdShopListDAO {
     @Query("SELECT * FROM $SHOPING_LIST_TABLE WHERE id = :id")
     fun getItemShopList(id: Int): Flow<ProductModel>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     fun addProduct(productName: ProductModel)
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     fun addAllProduct(productName: List<ProductModel>)
 
     @Update

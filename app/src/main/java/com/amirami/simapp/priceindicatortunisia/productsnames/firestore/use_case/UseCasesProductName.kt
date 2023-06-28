@@ -2,6 +2,5 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_cas
 
 data class UseCasesProductName (
     val getProductsNamesBareCode: GetProductsNamesBareCode,
-    val addListProductsNamesBareCode: AddListProductsNamesBarCode,
-    val deleteProductName: DeleteProductName
+    val updateListProductsNamesBareCode: UpdateListProductsNamesBarCode
 )

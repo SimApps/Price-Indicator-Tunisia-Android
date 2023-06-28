@@ -13,7 +13,7 @@ class NameListLocalRepositoryImpl(
     override fun addProdNamesToRoom(productName: ProductName) = prodNamesDAO.addName(productName)
     override fun addAllNames(productName: List<ProductName>) = prodNamesDAO.addAllNames(productName)
 
-    override fun updateProdNameInRoom(name: String, updatedName: String) = prodNamesDAO.updateName(name = name, updatedName = updatedName)
+    override fun updateProdNameInRoom(id: String, updatedName: String) = prodNamesDAO.updateName(id = id, updatedName = updatedName)
 
     override fun deleteProdNameFromRoom(codeBare: String) = prodNamesDAO.deleteProdName(codeBare)
 

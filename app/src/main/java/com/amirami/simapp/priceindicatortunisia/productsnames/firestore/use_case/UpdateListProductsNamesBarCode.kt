@@ -2,8 +2,12 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_cas
 
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.ProductsNamesRemoteRepository
 
-class DeleteProductName(
+
+
+class UpdateListProductsNamesBarCode(
     private val repo: ProductsNamesRemoteRepository
 ) {
-    suspend operator fun invoke(name: String) = repo.deleteProductNameFromFirestore(name)
+    suspend operator fun invoke(
+        prodNameList : Map<String,String>
+    ) = repo.updateListProductsNamesToFirestore(prodNameList)
 }

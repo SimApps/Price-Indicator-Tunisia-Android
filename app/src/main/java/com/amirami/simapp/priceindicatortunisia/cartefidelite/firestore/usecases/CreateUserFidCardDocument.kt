@@ -2,14 +2,12 @@ package com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecase
 
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.repository.CartFidRepository
 
-class DeleteFidCard(
+
+
+class CreateUserFidCardDocument(
     private val repo: CartFidRepository
 ) {
     suspend operator fun invoke(
         docID:String,
-        bareCode: String
-    ) = repo.deleteFidCardFromFirestore(
-        docID = docID,
-        bareCode = bareCode
-    )
+    ) = repo.addUserFidCardDocument(docID)
 }

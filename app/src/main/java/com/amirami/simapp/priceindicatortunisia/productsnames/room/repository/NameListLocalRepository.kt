@@ -11,7 +11,7 @@ interface NameListLocalRepository {
     fun addProdNamesToRoom(productName: ProductName)
     fun addAllNames(productName: List<ProductName>)
 
-    fun updateProdNameInRoom(name: String, updatedName: String)
+    fun updateProdNameInRoom(id: String, updatedName: String)
 
     fun deleteProdNameFromRoom(codeBare: String)
 

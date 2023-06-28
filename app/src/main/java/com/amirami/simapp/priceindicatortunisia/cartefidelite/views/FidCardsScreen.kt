@@ -3,6 +3,7 @@
 package com.amirami.simapp.priceindicatortunisia.cartefidelite.views
 
 import android.Manifest
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,11 @@ import androidx.navigation.NavHostController
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.FidCardViewModel
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.room.domain.model.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.core.Constants.SEPARATOR
+import com.amirami.simapp.priceindicatortunisia.core.DateUtils
+import com.amirami.simapp.priceindicatortunisia.datastore.viewmodel.DataViewModel
+import com.amirami.simapp.priceindicatortunisia.domain.model.Response
+import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
@@ -54,19 +60,41 @@ import kotlinx.coroutines.launch
 fun FidCardsScreen(
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
+    googleAuthUiClient: GoogleAuthUiClient,
     productsViewModel : ProductsViewModel,
-    fidCardViewModel: FidCardViewModel
+    fidCardViewModel: FidCardViewModel,
+    dataViewModel: DataViewModel,
+    userId : String
 ) {
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
+    val listFidCard =  if(fidCardViewModel.fidCards.isNotEmpty())   fidCardViewModel.fidCards as ArrayList
+    else ArrayList()
+
+    LaunchedEffect(key1 = fidCardViewModel.updateListFidCardRemoteResponse){
+        when(val response =fidCardViewModel.updateListFidCardRemoteResponse) {
+            is Response.Loading -> Log.d("okpl","loading")
+            is Response.Success -> {
+                // fidCardViewModel.getRemoteFidCardBareCode(docID = userId)
+                Log.d("okpl","response.message")
+
+                dataViewModel.saveLastDateFidCardSync(DateUtils.getCurrentDateTime())
+                dataViewModel.getNbrDaySincFidCardSync()
+            }
+            is Response.Failure -> {
+                Log.d("okpl",response.message)
+            }
+            else -> {}
+        }
+    }
     /**
      * to delete when find better solution to show bottom sheet after scan SEE ALSO NAVIGATION
      */
    // if (barCodeViewModel.fidCardAction != Constants.FID_CARD_ACTION_RESETED) {
         LaunchedEffect(key1 = Unit) {
-
+            dataViewModel.getNbrDaySincFidCardSync()
             if(barCodeViewModel.fidCardBarCodeInfo!=FidCardEntity()){
 
                 barCodeViewModel.getFidCardByValue(barCodeViewModel.fidCardBarCodeInfo)
@@ -84,6 +112,13 @@ fun FidCardsScreen(
     },
     customAction = {
         fidCardViewModel.deleteFidCardByValue(barCodeViewModel.fidCardBarCodeInfo.value)
+
+
+        listFidCard.remove(barCodeViewModel.fidCardBarCodeInfo)
+        fidCardViewModel.updateRemoteListFidCard(
+            docID = userId,
+            listFidCard.associateBy({fidCard -> fidCard.value }, {fidCard -> fidCard.name +SEPARATOR+fidCard.barecodeformat +SEPARATOR+ fidCard.barecodetype })
+        )
     }
     )
 
@@ -105,7 +140,16 @@ if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.sho
             },
             fidCardBarCodeInfo =barCodeViewModel.fidCardBarCodeInfo,
             upsertFidCard = {
+
+                listFidCard.add(it)
+                fidCardViewModel.updateRemoteListFidCard(
+                    docID = userId,
+                    listFidCard.associateBy({fidCard -> fidCard.value }, {fidCard -> fidCard.name +SEPARATOR+fidCard.barecodeformat +SEPARATOR+ fidCard.barecodetype })
+                )
+
+
                 fidCardViewModel.upsertFidCard(it)
+
             },
             onfidCardInfo = {
                 barCodeViewModel.onfidCardInfo(it)
@@ -136,7 +180,11 @@ if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.sho
             padding = padding,
             navController = navController,
             barCodeViewModel = barCodeViewModel,
-            fidCardViewModel = fidCardViewModel
+            fidCardViewModel = fidCardViewModel,
+            userId  = userId,
+            googleAuthUiClient = googleAuthUiClient,
+            listFidCard = listFidCard,
+            dataViewModel = dataViewModel
         )
 
     }
@@ -148,9 +196,13 @@ if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.sho
 @Composable
 fun FidCardsMainScreen(
     padding: PaddingValues,
+    googleAuthUiClient: GoogleAuthUiClient,
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
-    fidCardViewModel: FidCardViewModel
+    fidCardViewModel: FidCardViewModel,
+    listFidCard :  ArrayList<FidCardEntity>,
+    dataViewModel: DataViewModel,
+    userId : String
 ) {
     val configuration = LocalConfiguration.current
 
@@ -162,7 +214,9 @@ fun FidCardsMainScreen(
 
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(padding),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -170,22 +224,80 @@ fun FidCardsMainScreen(
          Text(text = context.getString(R.string.Info_cartefid_activity))
             Spacer(modifier = Modifier.height(30.dp))
 
+        Permission(
+            permission = listOf(Manifest.permission.CAMERA),
+            permissionNotAvailableContent = { permissionState->
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Il Faut Accepter la permission d'utiliser la caméra")
+                    Spacer(modifier = Modifier.height(8.dp))
 
+                    Button(
+                        modifier = Modifier.padding(4.dp),
+                        onClick = {
+                            permissionState.launchMultiplePermissionRequest()
+                        }
+                    ) {
+                        Text("Accé caméra ")
+                    }
+
+
+                }
+            },
+            content = {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ButtonWithBorder(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClicks = {
+                            navController.navigate(ListScreens.BarCodeCameraPreview.Route)
+                        },
+
+                        text = context.getString(R.string.Ajoutezcartefidelite),
+
+                        )
+
+                    if(googleAuthUiClient.getSignedInUser() != null &&
+                        /*DateUtils.durationSincePast(dateInPast = dataViewModel.getLastDateFidCardSync())*/
+                        dataViewModel.nbrDaysSincFidCardSync >0)
+                        ButtonWithBorder(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClicks = {
+
+                                if(userId!="NA"){
+                                    fidCardViewModel.getRemoteFidCardBareCode(docID = userId)
+                                }
+
+                            },
+
+                            text = "Get "+ DateUtils.durationSincePast(dateInPast = dataViewModel.getLastDateFidCardSync()) +" "+dataViewModel.getLastDateFidCardSync(),
+
+                            )
+                }
+
+            }
+        )
+        Spacer(modifier = Modifier.height(30.dp))
 
         // Lottie(R.raw.empty)
         fidCardViewModel.fidCards.let {
                if (it.isNotEmpty()) {
                    LazyColumn(
-                       modifier = Modifier
-                           .height(300.dp),
+                       horizontalAlignment = Alignment.Start,
                        verticalArrangement = Arrangement.spacedBy(8.dp)
                    ) {
                        items(it.size) { position ->
 
                            FidCardsListItem(
-                               navController,
-                               barCodeViewModel,
-                               it[position]
+                               navController = navController,
+                               barCodeViewModel =   barCodeViewModel,
+                               barcod =   it[position],
+                               fidCardViewModel = fidCardViewModel,
+                               userId = userId
 
                            )
                        }
@@ -201,40 +313,11 @@ fun FidCardsMainScreen(
 
 
 
-            Spacer(modifier = Modifier.height(30.dp))
-        Permission(
-            permission = listOf(Manifest.permission.CAMERA),
-            permissionNotAvailableContent = { permissionState->
-                Column(Modifier) {
-                    Text("Il Faut Accepter la permission d'utiliser la caméra")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row {
-                        Button(
-                            modifier = Modifier.padding(4.dp),
-                            onClick = {
-                                permissionState.launchMultiplePermissionRequest()
-                            }
-                        ) {
-                            Text("Accé caméra ")
-                        }
-
-                    }
-                }
-            },
-            content = {
-                ButtonWithBorder(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClicks = {
-                        navController.navigate(ListScreens.BarCodeCameraPreview.Route)
-                    },
-
-                   text = context.getString(R.string.Ajoutezcartefidelite),
-
-                    )
-            })
 
 
-            Spacer(modifier = Modifier.height(55.dp))
+
+
+
 
 
     }
@@ -244,7 +327,9 @@ fun FidCardsMainScreen(
 fun FidCardsListItem(
     navController: NavHostController,
     barCodeViewModel: BarCodeViewModel,
-    barcod: FidCardEntity
+    barcod: FidCardEntity,
+    fidCardViewModel: FidCardViewModel,
+    userId : String
 ) {
 
 
@@ -282,6 +367,7 @@ fun FidCardsListItem(
                         onClick = {
                             barCodeViewModel.onfidCardInfo(barcod)
                             barCodeViewModel.onShowDeleteFidCardChanged(true)
+
 
                         }
                     )

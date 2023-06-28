@@ -4,13 +4,15 @@ import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import kotlinx.coroutines.flow.Flow
 
 
-typealias AddListFidCardResponse = Response<Boolean>
-typealias DeleteFidCardResponse = Response<Boolean>
+typealias UpdateListFidCardResponse = Response<Boolean>
+typealias AddUserDocumentResponse = Response<Boolean>
+typealias DeleteFidCardUserDocumentResponse = Response<Boolean>
 interface CartFidRepository {
     fun getFidCardsFromFirestore(docID:String): Flow<Response<Map<String, String>>>
 
 
-    suspend   fun addListFidCardToFirestore(docID:String,fidCardList : Map<String, String>): AddListFidCardResponse
+    suspend   fun updateListFidCardToFirestore(docID:String, fidCardList : Map<String, String>): UpdateListFidCardResponse
+    suspend   fun addUserFidCardDocument(docID:String): AddUserDocumentResponse
 
-    suspend fun deleteFidCardFromFirestore(docID:String, bareCode: String): DeleteFidCardResponse
+    suspend fun deleteFidCardUserDocument(docID:String): DeleteFidCardUserDocumentResponse
 }

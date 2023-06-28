@@ -3,7 +3,8 @@ package com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.di
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.repository.CartFidRepository
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.repository.CartFidRepositoryImpl
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.AddListFidCard
-import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.DeleteFidCard
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.CreateUserFidCardDocument
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.DeleteFidCardUserDocument
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.GetFidCard
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.firestore.usecases.UseCasesFidCard
 import com.amirami.simapp.priceindicatortunisia.core.Constants
@@ -41,6 +42,7 @@ object AppModuleFidCard {
     ) = UseCasesFidCard(
         getFidCard = GetFidCard(repo),
         addListFidCard = AddListFidCard(repo),
-        deleteFidCard = DeleteFidCard(repo),
+        deleteFidCardUserDocument = DeleteFidCardUserDocument(repo),
+        createUserFidCardDocument = CreateUserFidCardDocument(repo)
     )
 }

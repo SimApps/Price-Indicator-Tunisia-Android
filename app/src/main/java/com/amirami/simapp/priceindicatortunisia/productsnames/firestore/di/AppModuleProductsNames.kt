@@ -3,9 +3,8 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.di
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_COLLECTION
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.ProductsNamesRemoteRepository
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.ProductsNamesRemoteRepositoryImpl
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.AddListProductsNamesBarCode
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.DeleteProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.GetProductsNamesBareCode
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.UpdateListProductsNamesBarCode
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.UseCasesProductName
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,7 +38,6 @@ object AppModuleProductsNames {
         repo: ProductsNamesRemoteRepository
     ) = UseCasesProductName(
         getProductsNamesBareCode = GetProductsNamesBareCode(repo),
-        deleteProductName = DeleteProductName(repo),
-        addListProductsNamesBareCode = AddListProductsNamesBarCode(repo)
+        updateListProductsNamesBareCode = UpdateListProductsNamesBarCode(repo)
     )
 }

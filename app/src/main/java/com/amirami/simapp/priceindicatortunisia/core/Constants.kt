@@ -27,4 +27,7 @@ object Constants {
     const val PRODUITS_FRAIS = "Produits Frais"
 
     const val ID = "id"
+
+
+    const val SEPARATOR = "°*-*°"
 }

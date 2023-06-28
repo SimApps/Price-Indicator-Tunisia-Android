@@ -3,13 +3,11 @@ package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.reposit
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import kotlinx.coroutines.flow.Flow
 
-typealias AddListProductNameResponse = Response<Boolean>
-typealias DeleteProductNameResponse = Response<Boolean>
+typealias UpdateListProductNameResponse = Response<Boolean>
 interface ProductsNamesRemoteRepository {
     fun getProductsNamesBareCodeFromFirestore(): Flow<Response<Map<String, String>>>
 
 
-    suspend   fun addListProductsNamesToFirestore(prodNameList : Map<String, String>): AddListProductNameResponse
+    suspend   fun updateListProductsNamesToFirestore(prodNameList : Map<String, String>): UpdateListProductNameResponse
 
-    suspend fun deleteProductNameFromFirestore(bareCode: String): DeleteProductNameResponse
 }

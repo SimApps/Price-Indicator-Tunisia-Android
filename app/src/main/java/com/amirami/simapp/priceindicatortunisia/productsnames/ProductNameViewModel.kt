@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amirami.simapp.priceindicatortunisia.core.Utils
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.AddListProductNameResponse
-import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.DeleteProductNameResponse
 import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.UseCasesProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.ProductName
 import com.amirami.simapp.priceindicatortunisia.productsnames.room.repository.NameListLocalRepository
@@ -23,15 +21,6 @@ class ProductNameViewModel @Inject constructor(
     private val useCasesProductName: UseCasesProductName,
     private val repo: NameListLocalRepository
 ) : ViewModel() {
-
-
-
-    var addListProdsNamesRemoteResponse by mutableStateOf<AddListProductNameResponse>(Response.NotInit)
-        private set
-
-    var deleteProdNameRemoteResponse by mutableStateOf<DeleteProductNameResponse>(Response.NotInit)
-        private set
-
 
 
     var isLoading by mutableStateOf(false)
@@ -98,18 +87,8 @@ class ProductNameViewModel @Inject constructor(
 
 
 
-    fun addRemoteListProductsNamesBareCode(prodNameList : Map<String,String>) = viewModelScope.launch {
-        addListProdsNamesRemoteResponse = Response.Loading
-        addListProdsNamesRemoteResponse =  useCasesProductName.addListProductsNamesBareCode(prodNameList)
 
 
-
-    }
-
-    fun deleteRemoteProdName(prodName: String) = viewModelScope.launch {
-        deleteProdNameRemoteResponse = Response.Loading
-        deleteProdNameRemoteResponse =   useCasesProductName.deleteProductName(prodName)
-    }
 
 
     /**
@@ -142,19 +121,21 @@ class ProductNameViewModel @Inject constructor(
         }
     }
 
-    private fun addLocalProdNames(productName: ProductName) = viewModelScope.launch(Dispatchers.IO) {
+     fun addLocalProdNames(productName: ProductName) = viewModelScope.launch(Dispatchers.IO) {
         repo.addProdNamesToRoom(productName)
     }
 
     fun addAllProdNames(productName: List<ProductName>) = viewModelScope.launch(Dispatchers.IO) {
         repo.addAllNames(productName)
     }
-    fun updatLocaleProdName(name: String, updatedName: String) = viewModelScope.launch(Dispatchers.IO) {
-        repo.updateProdNameInRoom(name = name, updatedName = updatedName)
+    fun updatLocaleProdName(id: String, updatedName: String) = viewModelScope.launch(Dispatchers.IO) {
+        repo.updateProdNameInRoom(id = id, updatedName = updatedName)
     }
 
     fun deleteLocalProdName(codeBar: String) = viewModelScope.launch(Dispatchers.IO) {
         repo.deleteProdNameFromRoom(codeBar)
+
+
     }
 
     private fun deleteAllLocalProdName() = viewModelScope.launch(Dispatchers.IO) {

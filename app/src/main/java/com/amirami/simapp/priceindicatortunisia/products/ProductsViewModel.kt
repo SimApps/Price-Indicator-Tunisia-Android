@@ -14,6 +14,8 @@ import com.amirami.simapp.priceindicatortunisia.products.firestore.repository.Ge
 import com.amirami.simapp.priceindicatortunisia.products.firestore.usecases.UseCasesProduct
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.products.room.domain.repository.ShopListRepository
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository.UpdateListProductNameResponse
+import com.amirami.simapp.priceindicatortunisia.productsnames.firestore.use_case.UseCasesProductName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
+    private val useCasesProductName: UseCasesProductName,
     private val useCasesProduct: UseCasesProduct,
     private val shopListRepository: ShopListRepository
 ) : ViewModel() {
@@ -32,12 +35,10 @@ class ProductsViewModel @Inject constructor(
         getProductsResponse = NotInit
     }
 
-    var addProductResponse by mutableStateOf<FirestoreResponseState<Boolean>>(FirestoreResponseState())
 
     var addProdResponse by mutableStateOf<AddProductResponse>(NotInit)
         private set
-    var productNameWithBarCode by mutableStateOf<Map<String, String>>(emptyMap())
-        private set
+
 
     var showAddNewProduct by mutableStateOf(false)
         private set
@@ -46,9 +47,16 @@ class ProductsViewModel @Inject constructor(
       showAddNewProduct = value
     }
 
-fun setProductNameWithBareCode(value : Map<String, String>){
-    productNameWithBarCode = value
-}
+
+    var showDeleteProduct by mutableStateOf(false)
+        private set
+
+    fun onShowDeleteProductChange(value : Boolean){
+        showDeleteProduct = value
+    }
+
+    var updateListProdsNamesRemoteResponse by mutableStateOf<UpdateListProductNameResponse>(Response.NotInit)
+        private set
     var deleteProdResponse by mutableStateOf<DeleteProductResponse>(NotInit)
         private set
     var isLoading by mutableStateOf(false)
@@ -65,7 +73,12 @@ fun setProductNameWithBareCode(value : Map<String, String>){
 
     init {
        getShopListProducts()
-        //  getAllProds()
+      // getAllProds()
+        /**
+         * call this
+         *             //        productNameViewModel.addRemoteListProductsNamesBareCode(productsViewModel.shopLists.associateBy({ it.id }, { it.name!! }))
+         *
+         */
     }
     var actionTypesListView by mutableStateOf<String>("")
     var prodType by mutableStateOf(ProductModel())
@@ -76,11 +89,8 @@ fun setProductNameWithBareCode(value : Map<String, String>){
 
 
     var selectedProductStates by mutableStateOf(ProductModel())
-    var initialtSelectedProductStates by mutableStateOf(ProductModel())
 
-    fun setInitialtProductStates(product: ProductModel){
-        initialtSelectedProductStates = product
-    }
+
 
     fun onSelectedProductChanged(product: ProductModel) {
         selectedProductStates = product
@@ -92,6 +102,9 @@ fun setProductNameWithBareCode(value : Map<String, String>){
         useCasesProduct.getProduct(searchtype, searchtext).collectLatest { response ->
            // Log.d("ioklnjhs",from)
             getProductsResponse = response
+
+
+
           /*    when (response) {
                 is NotInit -> {
                     Log.d("ioklnjhs","init ss")
@@ -138,11 +151,14 @@ fun setProductNameWithBareCode(value : Map<String, String>){
                       isLoading = true
                   }
                   is Response.Success -> {
-                      Log.d("ioklnjhs","success ss" + response.data)
+                      Log.d("ioklnjhs","success ss" + response.data.size)
                       isLoading = false
                       errorValue = ""
 
-                      AddAllProdList(response.data)
+                   //   AddAllProdList(response.data)
+
+                         updateRemoteListProductsNamesBareCode(response.data.associateBy({ it.id }, { it.name }))
+
                   }
                   is Response.Failure -> {
                       Log.d("ioklnjhs","failure ss")
@@ -153,7 +169,10 @@ fun setProductNameWithBareCode(value : Map<String, String>){
               }
         }
     }
-
+    fun updateRemoteListProductsNamesBareCode(prodNameList : Map<String,String>) = viewModelScope.launch {
+        updateListProdsNamesRemoteResponse = Response.Loading
+        updateListProdsNamesRemoteResponse =  useCasesProductName.updateListProductsNamesBareCode(prodNameList)
+    }
   /*  fun addProduct(product: ProductModel, id: String) = viewModelScope.launch {
         useCasesProduct.addProduct(product, author).collect { response ->
             addProdResponse = response
@@ -173,10 +192,10 @@ fun setProductNameWithBareCode(value : Map<String, String>){
     fun deleteProdRemote(id: String) = viewModelScope.launch {
         deleteProdResponse = Response.Loading
         deleteProdResponse =  useCasesProduct.deleteProduct(id)
-        removeProductName(bareCode = id)
+       // removeProductName(bareCode = id)
     }
 
-fun removeProductName(bareCode : String){
+/*fun removeProductName(bareCode : String){
     val updatedMap = productNameWithBarCode.toMutableMap()
 
     updatedMap.remove(bareCode)
@@ -190,6 +209,12 @@ fun removeProductName(bareCode : String){
         productNameWithBarCode = updatedMap
 
     }
+    fun setProductNameWithBareCode(value : Map<String, String>){
+        productNameWithBarCode = value
+    }
+    var productNameWithBarCodeb by mutableStateOf<Map<String, String>>(emptyMap())
+        private set
+    */
     fun getShopListProducts() = viewModelScope.launch {
         shopListRepository.getShopListFromRoom().collect { shoplist ->
             shopLists = shoplist

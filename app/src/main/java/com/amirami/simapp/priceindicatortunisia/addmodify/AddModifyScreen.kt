@@ -56,13 +56,14 @@ import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.productsnames.ProductNameViewModel
+import com.amirami.simapp.priceindicatortunisia.productsnames.room.domain.ProductName
 import com.amirami.simapp.priceindicatortunisia.ui.CustomModifiers.customWidth
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ClickableEditTextField
+import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomAlertDialogue
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.CustomDropdownMenu
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.EditTextField
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.ProgressBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.barcode.BarCodeViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogScreen
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.prodtypes.ProductTypesDialogViewModel
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.dialogs.productinfodialog.ProductDetailDialogViewModel
@@ -71,6 +72,7 @@ import com.amirami.simapp.priceindicatortunisia.ui.componenet.searchview.SearchV
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.capitalizeWords
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.getuserid
+import com.amirami.simapp.priceindicatortunisia.utils.Functions.replacesiez
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,10 +93,13 @@ fun AddModifyScreen(
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState()
+    val currentProduct = productsViewModel.selectedProductStates//addModifyViewModel.currentProduct
+
+
+    val productName= currentProduct.name.capitalizeWords()
+
 
 val productLocalNamesList = productNameViewModel.productLocalNamesList
-    val currentProduct = productsViewModel.selectedProductStates//addModifyViewModel.currentProduct
-    val initialProdToCompareWith  = productsViewModel.initialtSelectedProductStates
     if (productTypesDialogViewModel.prodTypesDialogVisibilityStates) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -133,6 +138,91 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
         }
     }
 
+
+    when(val addBookResponse = productsViewModel.deleteProdResponse) {
+        is Response.NotInit -> {
+            Text(text = "NOT INIT DELETE")
+        }
+        is Response.Loading -> {
+            ProgressBar()
+            Text(text = "DELETE LOAD")
+        }
+        is Response.Success -> {
+            Log.d("tyhuji",productLocalNamesList.size.toString())
+            productNameViewModel.deleteLocalProdName(currentProduct.id)
+
+
+            LaunchedEffect(key1 = productLocalNamesList.size){
+                Log.d("tyhuji","n " +productLocalNamesList.size.toString())
+                productsViewModel.updateRemoteListProductsNamesBareCode(productLocalNamesList.associateBy({ it.id }, { it.name!! }))
+
+            }
+
+
+
+            Text(text = "DELETE Succ")
+        }
+        is Response.Failure -> {
+            Text(text = addBookResponse.message)
+        }
+    }
+
+    when(val addBookResponse = productsViewModel.addProdResponse) {
+        is Response.NotInit -> {
+            Text(text = "NOT INIT")
+        }
+        is Response.Loading -> {
+            ProgressBar()
+            Text(text = "Add Modify prod")
+        }
+        is Response.Success -> {
+
+            productNameViewModel.addLocalProdNames(
+                ProductName(
+                    id = currentProduct.id,
+                    name = productName
+                )
+            )
+
+
+
+                LaunchedEffect(key1 = productLocalNamesList){
+                    productsViewModel.updateRemoteListProductsNamesBareCode(productLocalNamesList.associateBy({ it.id }, { it.name!! }))
+                }
+
+
+            Text(text = "Add Modify Succ")
+        }
+        is Response.Failure -> {
+            Text(text = addBookResponse.message)
+        }
+    }
+
+
+    when(val booksResponse = productsViewModel.getProductsResponse) {
+        is Response.NotInit ->{
+
+        }
+        is Response.Loading -> ProgressBar()
+        is Response.Success ->{
+            LaunchedEffect(key1 = booksResponse.data.first().id){
+                productsViewModel.onSelectedProductChanged(booksResponse.data.first())
+            }
+
+
+        }
+
+        is Response.Failure -> {
+            Functions.errorToast(context,booksResponse.message)
+            if(booksResponse.message.contains("Code Barre"))
+                productsViewModel.onShowAddNewProductChange(true)
+
+            productsViewModel.resetGetProductsResponse()
+        }
+        else -> {}
+    }
+
+
     //LaunchedEffect(key1 = productsViewModel.selectedProductStates){
     //    onSelectedProductChanged(productsViewModel.selectedProductStates)
 
@@ -150,18 +240,7 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
                 )
             }
         },
-        bottomBar = {
-            BottomNavigationBar(
-                navController = navController,
-                onItemClick = {
-                    productsViewModel.resetErreurValue()
-                    barCodeViewModel.onfidCardInfo(FidCardEntity())
-                    navController.navigate(it.route)
-                },
 
-                productsViewModel = productsViewModel
-            )
-        },
         floatingActionButton = {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -169,7 +248,8 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
             ) {
                 SmallFloatingActionButton(
                     onClick = {
-                        productsViewModel.deleteProdRemote(currentProduct.id)
+                        productsViewModel.onShowDeleteProductChange(true)
+
                     }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -238,8 +318,6 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
 
                         currentProduct.userid =getuserid()
 
-
-                        Log.d("ioklnjhs",(initialProdToCompareWith != currentProduct).toString())
                         //  if(productsViewModel.selectedProductStates.id == prod.id && productsViewModel.selectedProductStates != prod)
                         productsViewModel.addProductRemote(product = currentProduct)
                     }) {
@@ -253,28 +331,37 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
         }
 
     ) { padding ->
+        CustomAlertDialogue(
+            title = context.getString(R.string.Voulez_vous_suprimer_ce_produit),
+            msg = searchViewModel.searchValue.capitalizeWords(),
+            openDialog  = productsViewModel.showDeleteProduct,
+            setDialogueVisibility = {
 
-        when(val booksResponse = productsViewModel.getProductsResponse) {
-            is Response.NotInit ->{
-
+                productsViewModel.onShowDeleteProductChange(false)
+            },
+            customAction = {
+                productsViewModel.deleteProdRemote(currentProduct.id)
             }
-            is Response.Loading -> ProgressBar()
-            is Response.Success ->{
-                LaunchedEffect(key1 = booksResponse.data.first().id){
-                    productsViewModel.onSelectedProductChanged(booksResponse.data.first())
-                    productsViewModel.setInitialtProductStates(booksResponse.data.first())
-                }
+        )
 
-
+        CustomAlertDialogue(
+            title = context.getString(R.string.Voulez_vous_ajouter_produit),
+            msg = searchViewModel.searchValue.capitalizeWords(),
+            openDialog  = productsViewModel.showAddNewProduct,
+            setDialogueVisibility = {
+                productsViewModel.resetGetProductsResponse()
+                productsViewModel.onShowAddNewProductChange(false)
+            },
+            customAction = {
+                productsViewModel.resetGetProductsResponse()
+                productsViewModel.onSelectedProductChanged(ProductModel(id = searchViewModel.searchValue))
+             //   navController.navigate(ListScreens.AddModify.Route)
             }
-
-            is Response.Failure -> {
-                Functions.errorToast(context,booksResponse.message)
+        )
 
 
-            }
-            else -> {}
-        }
+
+
         AddModifyScreenContent(
             padding = padding,
             navController = navController,
@@ -287,7 +374,6 @@ val productLocalNamesList = productNameViewModel.productLocalNamesList
             productTypesDialogViewModel = productTypesDialogViewModel,
             productsViewModel = productsViewModel,
             currentProduct = currentProduct,
-            initialProdToCompareWith = initialProdToCompareWith
         )
 
     }
@@ -308,12 +394,10 @@ fun AddModifyScreenContent(
     productDetailDialogViewModel: ProductDetailDialogViewModel,
     productTypesDialogViewModel: ProductTypesDialogViewModel,
     currentProduct: ProductModel,
-    initialProdToCompareWith : ProductModel
 ) {
     val context = LocalContext.current
 
-    val preveiewsProdame = initialProdToCompareWith.name.capitalizeWords()
-    val productName= currentProduct.name.capitalizeWords()
+
 
     
     Column(
@@ -331,66 +415,6 @@ fun AddModifyScreenContent(
             Spacer(modifier = Modifier.padding(top = 15.dp))
 
 
-
-        when(val addBookResponse = productsViewModel.deleteProdResponse) {
-            is Response.NotInit -> {
-                Text(text = "NOT INIT DELETE")
-            }
-            is Response.Loading -> {
-                ProgressBar()
-                Text(text = "DELETE LOAD")
-            }
-            is Response.Success -> {
-
-
-
-
-                    LaunchedEffect(key1 = productsViewModel.productNameWithBarCode){
-                        productNameViewModel.deleteRemoteProdName(initialProdToCompareWith.id)
-                    }
-
-                 productNameViewModel.deleteLocalProdName(initialProdToCompareWith.id)
-
-                Text(text = "DELETE Succ")
-            }
-            is Response.Failure -> {
-                Text(text = addBookResponse.message)
-            }
-        }
-            when(val addBookResponse = productsViewModel.addProdResponse) {
-                is Response.NotInit -> {
-                    Text(text = "NOT INIT")
-                }
-                is Response.Loading -> {
-                    ProgressBar()
-                    Text(text = "Add Modify prod")
-                }
-                is Response.Success -> {
-                 if (productName!= preveiewsProdame) {
-
-                    // productNameViewModel.deleteRemoteProdName(preveiewsProdame)
-
-                    productNameViewModel.updatLocaleProdName(
-                        name = preveiewsProdame,
-                        updatedName = productName
-                    )
-
-                     productsViewModel.updateNameWithBareCode(
-                         bareCode = currentProduct.id,
-                         name = currentProduct.name
-                     )
-
-                     LaunchedEffect(key1 = productsViewModel.productNameWithBarCode){
-                        productNameViewModel.addRemoteListProductsNamesBareCode(productsViewModel.productNameWithBarCode)
-                     }
-                    }
-
-                    Text(text = "Add Modify Succ")
-                }
-                is Response.Failure -> {
-                    Text(text = addBookResponse.message)
-                }
-            }
 
 
 
@@ -602,7 +626,7 @@ fun ScreenContent(
     ) {
         EditTextField(
             modifier = Modifier.customWidth(LocalConfiguration.current, 0.5f),
-            text = currentProduct.sieze,
+            text = replacesiez(currentProduct.sieze),
             errorvalue = null,
             label = stringResource(R.string.Volumepoidproduit),
             onValueChange = {
@@ -616,7 +640,7 @@ fun ScreenContent(
 
         Spacer(modifier = Modifier.padding(end = 9.dp))
 
-        CustomDropdownMenu(
+     if(replacesiez(currentProduct.sieze).isNotEmpty())   CustomDropdownMenu(
             modifier = Modifier.customWidth(LocalConfiguration.current, 0.45f),
             text =  if (addModifyViewModel.unitselected != "") addModifyViewModel.unitselected
             else Functions.removeAllDigitExeptX(currentProduct.sieze),
@@ -635,6 +659,8 @@ fun ScreenContent(
                             Text(text = item)
                         }, onClick = {
                             addModifyViewModel.onUnitselectedChange(item)
+
+                            onSelectedProductChanged(currentProduct.copy(sieze = currentProduct.sieze + item))
                             addModifyViewModel.onUnitExpandedChange(false)
                         })
                     }

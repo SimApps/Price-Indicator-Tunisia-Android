@@ -1,17 +1,14 @@
 package com.amirami.simapp.priceindicatortunisia.productsnames.firestore.repository
 
 import com.amirami.simapp.priceindicatortunisia.core.Constants
-import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_ARRAYS
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_BARE_CODE_ARRAYS
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_BARE_CODE_DOCUMENT
-import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUCTS_LIST_NAMES_DOCUMENT
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Failure
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Loading
 import com.amirami.simapp.priceindicatortunisia.domain.model.Response.Success
 import com.amirami.simapp.priceindicatortunisia.utils.Constants.Companion.ERREUR_CONNECTION
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -50,18 +47,13 @@ class ProductsNamesRemoteRepositoryImpl @Inject constructor(
 
 
 
-    override suspend fun addListProductsNamesToFirestore(prodNameList: Map<String, String>): AddListProductNameResponse = try{
+    override suspend fun updateListProductsNamesToFirestore(prodNameList: Map<String, String>): UpdateListProductNameResponse = try{
         collectionRef.document(PRODUCTS_LIST_NAMES_BARE_CODE_DOCUMENT).update(PRODUCTS_LIST_NAMES_BARE_CODE_ARRAYS, prodNameList).await()
         Success(true)
     }catch (e: Exception) {
-        Failure(e.message?:"Erreur Add List Product Name Barecode")
+        Failure(e.message?:"Erreur Update List Product Name Barecode")
     }
 
-    override suspend fun deleteProductNameFromFirestore(bareCode: String): DeleteProductNameResponse = try {
-        collectionRef.document(PRODUCTS_LIST_NAMES_DOCUMENT).update(PRODUCTS_LIST_NAMES_ARRAYS, FieldValue.arrayRemove(bareCode)).await()
-        Success(true)
-    } catch (e: Exception) {
-        Failure(e.message?:"Erreur Delete Product Name")
-    }
+
 
 }

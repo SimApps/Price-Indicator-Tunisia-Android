@@ -142,9 +142,12 @@ class MainActivity : ComponentActivity() {
                     composable(ListScreens.CarteFidelite.Route) {
                         FidCardsScreen(
                             navController = navController,
+                            googleAuthUiClient = googleAuthUiClient,
                             barCodeViewModel = barCodeViewModel,
                             fidCardViewModel = fidCardViewModel,
-                            productsViewModel = productsViewModel
+                            productsViewModel = productsViewModel,
+                            userId = googleAuthUiClient.getSignedInUser()?.userId?:"N/A",
+                            dataViewModel = dataViewModel
                         )
                     }
 
@@ -221,17 +224,23 @@ class MainActivity : ComponentActivity() {
                             barCodeViewModel = barCodeViewModel,
                             productsViewModel = productsViewModel,
                             ondeleteAccount = {
-                              //  lifecycleScope.launch {
+                                val userId = googleAuthUiClient.getSignedInUser()?.userId?:"NA"
+                                if(userId!="NA") fidCardViewModel.deleteRemoteFidCardUserDocument(docID = userId)
+
+                                //  lifecycleScope.launch {
                                    // val deleteAccountIntentSender = googleAuthUiClient.deleteAccount()
                                 lifecycleScope.launch {
                                     googleAuthUiClient.signOut()
                                 }
-                                   if(googleAuthUiClient.deleteAccount().isSuccessful)
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "Acount deleted",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                   if(googleAuthUiClient.deleteAccount().isSuccessful){
+
+                                       Toast.makeText(
+                                           applicationContext,
+                                           "Acount deleted",
+                                           Toast.LENGTH_LONG
+                                       ).show()
+                                   }
+
                                         else
                                         Toast.makeText(
                                             applicationContext,
@@ -243,7 +252,8 @@ class MainActivity : ComponentActivity() {
 
 
                              //   }
-                            }
+                            },
+                            fidCardViewModel = fidCardViewModel
                         )
                     }
 

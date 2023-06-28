@@ -148,49 +148,50 @@ fun ShoppingScreen(
             )
         },
         bottomBar = {
-            AnimatedVisibility(
-                visible = productsViewModel.shopLists.isNotEmpty(),
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                BottomAppBar(
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
-                            }) {
-                            Column(
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = if (shoppingViewModel.calculateDiscount) Icons.Filled.Percent
-                                    else Icons.Filled.Money,
-                                    contentDescription = "Localized description"
-                                )
+            Column {
+                AnimatedVisibility(
+                    visible = productsViewModel.shopLists.isNotEmpty(),
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically()
+                ) {
+                    BottomAppBar(
+                        actions = {
+                            IconButton(
+                                onClick = {
+                                    shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
+                                }) {
+                                Column(
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(
+                                        imageVector = if (shoppingViewModel.calculateDiscount) Icons.Filled.Percent
+                                        else Icons.Filled.Money,
+                                        contentDescription = "Localized description"
+                                    )
 
 
+                                }
                             }
+
+
+                        },
+                        floatingActionButton = {
+
+                            FloatingActionButton(
+                                onClick = {
+                                    productsViewModel.DeleteAllProdFromShopList()
+                                },
+                                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                            ) {
+                                Icon(Icons.Filled.DeleteForever, "Localized description")
+                            }
+
+
                         }
-
-
-                    },
-                    floatingActionButton = {
-
-                        FloatingActionButton(
-                            onClick = {
-                                productsViewModel.DeleteAllProdFromShopList()
-                            },
-                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                        ) {
-                            Icon(Icons.Filled.DeleteForever, "Localized description")
-                        }
-
-
-                    }
-                )
-            }
+                    )
+                }
 
                 BottomNavigationBar(
                     navController = navController,
@@ -201,6 +202,8 @@ fun ShoppingScreen(
 
                     productsViewModel = productsViewModel
                 )
+            }
+
 
         },
 

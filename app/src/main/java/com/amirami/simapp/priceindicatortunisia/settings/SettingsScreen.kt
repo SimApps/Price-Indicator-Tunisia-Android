@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.amirami.simapp.priceindicatortunisia.R
+import com.amirami.simapp.priceindicatortunisia.cartefidelite.FidCardViewModel
 import com.amirami.simapp.priceindicatortunisia.cartefidelite.room.domain.model.FidCardEntity
 import com.amirami.simapp.priceindicatortunisia.google_sign.GoogleAuthUiClient
 import com.amirami.simapp.priceindicatortunisia.google_sign.SignInState
@@ -69,7 +70,8 @@ fun SettingsScreen(
     onSignOut: () -> Unit,
     ondeleteAccount: () -> Unit,
     resetState: () -> Unit,
-    settingViewModel : SettingViewModel
+    settingViewModel : SettingViewModel,
+    fidCardViewModel: FidCardViewModel,
 ) {
     val context = LocalContext.current
     LaunchedEffect(key1 = state.signInError) {
@@ -89,9 +91,35 @@ fun SettingsScreen(
                 Toast.LENGTH_LONG
             ).show()*/
 
+            val userid = userData?.userId?:"NA"
+
+
+            if(userid!="NA"){
+                fidCardViewModel.addRemoteUserDocumentFidCard(docID = userid)
+
+                fidCardViewModel.getRemoteFidCardBareCode(docID = userid)
+            }
             resetState()
         }
     }
+
+
+  /*  when(fidCardViewModel.addFidCardUserDocumentResponse) {
+        is Response.Loading -> ProgressBar()
+        is Response.Success -> {
+            val userid = userData?.userId?:"NA"
+
+            if(userid!="NA")
+           fidCardViewModel.getRemoteFidCardBareCode(docID = userid)
+
+
+            fidCardViewModel.resetAddFidCardUserDocumentResponse()
+        }
+        is Response.Failure -> {
+
+        }
+        else -> {}
+    }*/
 
 if(settingViewModel.showCustomDialog)    CustomDialogue(
       dialogueInfo = settingViewModel.dialogueInfo,
