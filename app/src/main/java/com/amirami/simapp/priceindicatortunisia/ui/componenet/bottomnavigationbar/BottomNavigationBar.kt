@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.amirami.simapp.priceindicatortunisia.BottomNavItem
+import com.amirami.simapp.priceindicatortunisia.utils.BottomNavItem
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

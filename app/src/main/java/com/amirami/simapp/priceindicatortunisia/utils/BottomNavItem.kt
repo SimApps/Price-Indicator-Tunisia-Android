@@ -1,7 +1,5 @@
-package com.amirami.simapp.priceindicatortunisia
+package com.amirami.simapp.priceindicatortunisia.utils
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
