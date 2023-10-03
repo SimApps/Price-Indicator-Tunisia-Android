@@ -1,8 +1,10 @@
-package com.amirami.simapp.priceindicatortunisia.fidcard
+package com.amirami.simapp.priceindicatortunisia.fidcard.local
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amirami.simapp.priceindicatortunisia.fidcard.Barecode
+import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomBaseRepository
 import com.amirami.simapp.priceindicatortunisia.utils.ConvertFidCardList
 import com.amirami.simapp.priceindicatortunisia.utils.Coroutines
 import dagger.hilt.android.lifecycle.HiltViewModel

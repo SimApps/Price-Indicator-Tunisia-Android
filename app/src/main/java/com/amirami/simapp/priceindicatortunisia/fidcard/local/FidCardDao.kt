@@ -1,7 +1,8 @@
-package com.amirami.simapp.priceindicatortunisia.fidcard
+package com.amirami.simapp.priceindicatortunisia.fidcard.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardEntity
 
 @Dao
 interface FidCardDao {

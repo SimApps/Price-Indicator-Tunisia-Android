@@ -29,7 +29,7 @@ data class FidCardEntity(
 
 ){
 
-    constructor(id : Long,name : String, value : String, barecodetype: String) : this() {
+/*    constructor(id : Long,name : String, value : String, barecodetype: String) : this() {
         this.id = id
         this.name = name
         this.value = value
@@ -39,7 +39,7 @@ data class FidCardEntity(
         this.name = name
         this.value = value
         this.barecodetype = barecodetype
-    }
+    }*/
 
     override fun toString(): String {
         return "MessageThreadListEntity(Id=$value, Name=$name)"

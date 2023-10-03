@@ -1,6 +1,8 @@
-package com.amirami.simapp.priceindicatortunisia.fidcard
+package com.amirami.simapp.priceindicatortunisia.fidcard.local
 
 import androidx.lifecycle.LiveData
+import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardEntity
+import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomBaseRepository
 import javax.inject.Inject
 
 

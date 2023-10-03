@@ -3,8 +3,8 @@ package com.amirami.simapp.priceindicatortunisia.di
 import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDao
-import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDatabase
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardDao
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardDatabase
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDAO
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDatabase
 import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListDAO

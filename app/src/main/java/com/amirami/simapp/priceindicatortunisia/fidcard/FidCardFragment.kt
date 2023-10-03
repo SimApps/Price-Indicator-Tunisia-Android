@@ -14,6 +14,7 @@ import com.amirami.simapp.priceindicatortunisia.utils.Functions.unwrap
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductInfoViewModel
 import com.amirami.simapp.priceindicatortunisia.databinding.FragmentFidCardBinding
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.dynamicToast
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.setSafeOnClickListener
 import com.amirami.simapp.priceindicatortunisia.utils.Functions.warningToast

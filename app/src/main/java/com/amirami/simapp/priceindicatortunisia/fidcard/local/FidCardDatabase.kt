@@ -1,7 +1,8 @@
-package com.amirami.simapp.priceindicatortunisia.fidcard
+package com.amirami.simapp.priceindicatortunisia.fidcard.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardEntity
 
 @Database(
     entities = [FidCardEntity::class],

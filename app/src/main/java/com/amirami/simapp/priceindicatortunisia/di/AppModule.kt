@@ -2,8 +2,8 @@ package com.amirami.simapp.priceindicatortunisia.di
 
 import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import com.amirami.simapp.priceindicatortunisia.repository.*
-import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardDao
-import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoom
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardDao
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardRoom
 import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomBaseRepository
 import com.amirami.simapp.priceindicatortunisia.productnames.ProdNamesDAO
 import com.amirami.simapp.priceindicatortunisia.shopingfragment.ProdShopListDAO

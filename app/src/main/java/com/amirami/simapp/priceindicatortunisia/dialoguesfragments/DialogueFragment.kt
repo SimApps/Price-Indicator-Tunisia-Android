@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import com.amirami.simapp.priceindicatortunisia.R
-import com.amirami.simapp.priceindicatortunisia.fidcard.FidCardRoomViewModel
+import com.amirami.simapp.priceindicatortunisia.fidcard.local.FidCardRoomViewModel
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductInfoViewModel
 import com.amirami.simapp.priceindicatortunisia.viewmodel.ProductsViewModel
 import com.amirami.simapp.priceindicatortunisia.shopingfragment.ShopListRoomViewModel
