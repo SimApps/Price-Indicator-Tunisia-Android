@@ -119,7 +119,8 @@ fun MainImageTiket(
                     }
                 )
             } else {
-                Box() {
+                Box(modifier = Modifier
+                    .padding(padding)) {
                     CameraXScreen(
                         onImageFile = { file ->
                             cameraViewModel.onimageUri(file.toUri())

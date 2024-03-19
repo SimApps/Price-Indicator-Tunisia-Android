@@ -1,10 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -15,6 +10,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -23,8 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.amirami.simapp.priceindicatortunisia.utils.BottomNavItem
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
+import com.amirami.simapp.priceindicatortunisia.utils.BottomNavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,14 +73,13 @@ fun BottomNavigationBar(
                     NavigationBarItem(
                         icon = {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            AnimatedVisibility(
-                                visible = item.badgeCount > 0,
-                                enter = fadeIn() + slideInVertically(),
-                                exit = fadeOut() + slideOutVertically()
-                            ) {
                                 BadgedBox(
                                     badge = {
-                                        Text(text = item.badgeCount.toString())
+                                       if(item.badgeCount > 0)
+                                        Text(text = item.badgeCount.toString(),
+                                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                                            fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
+                                            color = MaterialTheme.colorScheme.error)
                                     },
                                 ) {
                                     Icon(
@@ -92,17 +87,8 @@ fun BottomNavigationBar(
                                         contentDescription = item.name,
                                     )
                                 }
-                            }
-                            AnimatedVisibility(
-                                visible = item.badgeCount <= 0,
-                                enter = fadeIn() + slideInVertically(),
-                                exit = fadeOut() + slideOutVertically()
-                            ){
-                                Icon(
-                                    imageVector =  item.icon,
-                                    contentDescription = item.name,
-                                )
-                            }
+
+
 
                         }
                         },

@@ -47,7 +47,7 @@ fun BarCodeCameraPreviewScreen(
 
 
 
-    Box(modifier = Modifier.padding(12.dp)) {
+    Box(modifier = Modifier.fillMaxSize()) {
         // Call FlashLightComposable
         if (barCodeViewModel.flashState) {
             BareCodeCameraView(

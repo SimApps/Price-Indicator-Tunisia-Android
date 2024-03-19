@@ -46,7 +46,7 @@ fun CameraXScreen(
     barCodeViewModel: BarCodeViewModel
 ) {
     val context = LocalContext.current
-    Box(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+    Box(modifier = Modifier.fillMaxSize()) {
         val lifecycleOwner = LocalLifecycleOwner.current
         val coroutineScope = rememberCoroutineScope()
         var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }
