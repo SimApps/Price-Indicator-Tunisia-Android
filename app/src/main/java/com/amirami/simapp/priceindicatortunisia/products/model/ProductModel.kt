@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.Exclude
-import java.util.ArrayList
 
 @Entity(tableName = "shoplist_table")
 data class ProductModel(
@@ -24,7 +23,7 @@ data class ProductModel(
     var marquesarabe: String = "",
     @get:Exclude
     @ColumnInfo(name = "quantity")
-    var quantity: Double = 0.0,
+    var quantity: String = "",
     @ColumnInfo(name = "description")
     var description: String = "",
     @ColumnInfo(name = "descriptionarabe")

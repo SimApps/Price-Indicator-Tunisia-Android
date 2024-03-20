@@ -7,10 +7,10 @@ package com.amirami.simapp.priceindicatortunisia.courses
 
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,18 +29,18 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Minimize
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Percent
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -49,7 +48,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,10 +59,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.InternalTextApi
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,7 +78,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.addmodify.AddModifyViewModel
 import com.amirami.simapp.priceindicatortunisia.core.Constants.PRODUITS_FRAIS
-import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.convertStringToPriceFormat
+import com.amirami.simapp.priceindicatortunisia.core.StringFormatting
 import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.stringToDouble
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
@@ -92,6 +95,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingScreen(
     navController: NavHostController,
@@ -104,11 +108,13 @@ fun ShoppingScreen(
 
     val scope = rememberCoroutineScope()
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
      val prodList =   productsViewModel.shopLists
+
+    val showPriceDetail = shoppingViewModel.showPriceDetail
     LaunchedEffect(key1 = productsViewModel.shopLists, key2 = shoppingViewModel.calculateDiscount) {
 
 
@@ -145,53 +151,20 @@ fun ShoppingScreen(
         topBar = {
             TopBar(
                 navController = navController,
+                actions = {
+
+                     Icon(
+                        imageVector = Icons.Filled.DeleteForever,
+                        contentDescription = "Localized description",
+                        modifier = Modifier.clickable {
+                            productsViewModel.DeleteAllProdFromShopList()
+                        })
+                }
             )
         },
         bottomBar = {
-            Column {
-                AnimatedVisibility(
-                    visible = productsViewModel.shopLists.isNotEmpty(),
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
-                ) {
-                    BottomAppBar(
-                        actions = {
-                            IconButton(
-                                onClick = {
-                                    shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
-                                }) {
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        imageVector = if (shoppingViewModel.calculateDiscount) Icons.Filled.Percent
-                                        else Icons.Filled.Money,
-                                        contentDescription = "Localized description"
-                                    )
-
-
-                                }
-                            }
-
-
-                        },
-                        floatingActionButton = {
-
-                            FloatingActionButton(
-                                onClick = {
-                                    productsViewModel.DeleteAllProdFromShopList()
-                                },
-                                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                            ) {
-                                Icon(Icons.Filled.DeleteForever, "Localized description")
-                            }
-
-
-                        }
-                    )
-                }
+        
+             
 
                 BottomNavigationBar(
                     navController = navController,
@@ -202,19 +175,144 @@ fun ShoppingScreen(
 
                     productsViewModel = productsViewModel
                 )
-            }
+            
 
 
         },
 
         snackbarHost = {
-            DefaultSnackbar(
-                snackbarHostState,
-                modifier = Modifier
-            )
+            DefaultSnackbar(snackbarHostState = snackbarHostState)
+        },
+        floatingActionButton = {
+            val density = LocalDensity.current
+
+            AnimatedVisibility(
+                // modifier = modifier,
+                //TODO
+                /**
+                 * Add control auth to add article
+                 */
+                /**
+                 * Add control auth to add article
+                 */
+                visible = prodList.isNotEmpty(),
+                enter = slideInVertically {
+                    with(density) { 40.dp.roundToPx() }
+                } + fadeIn(),
+                exit = fadeOut(
+                    animationSpec = keyframes {
+                        this.durationMillis = 120
+                    }
+                )
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+
+                    FloatingActionButton(
+                        onClick = {
+                            shoppingViewModel.onShowPriceDetailChange(!showPriceDetail)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Inventory,
+                            contentDescription = "stringResource(id = R.string.add_Article_button)"
+                        )
+                    }
+
+
+                }
+            }
         }
 
     ) { padding ->
+
+        if(showPriceDetail) {
+            ModalBottomSheet(
+                sheetState = sheetState,
+                onDismissRequest = {
+                    scope.launch {
+                        sheetState.hide()
+                    }
+                    shoppingViewModel.onShowPriceDetailChange(false)
+                },
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .padding(3.dp, 6.dp, 3.dp, 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    item {
+                        IconButton(
+                            onClick = {
+                                shoppingViewModel.onCalculateDiscountChange(!shoppingViewModel.calculateDiscount)
+                            }) {
+                            Icon(
+                                imageVector = if (shoppingViewModel.calculateDiscount) Icons.Filled.Percent
+                                else Icons.Filled.Money,
+                                contentDescription = "Localized description"
+                            )
+                        }
+                    }
+                    shoppingViewModel.prices.sortByDescending { price -> stringToDouble(price.priceBill) }
+                    items(shoppingViewModel.prices.size) { position ->
+
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    SpanStyle(
+                                        textDecoration = TextDecoration.Underline,
+                                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                                        fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
+                                        fontStyle = MaterialTheme.typography.titleMedium.fontStyle
+                                    )
+                                ) {
+                                    append(shoppingViewModel.prices[position].magasin + ": ")
+                                }
+
+
+                                append(StringFormatting.convertStringToPriceFormat(shoppingViewModel.prices[position].priceBill))
+
+
+                                if(shoppingViewModel.prices[position].nbrMissingPrice>0) {
+                                    withStyle(
+                                        SpanStyle(
+                                            color = MaterialTheme.colorScheme.error
+                                            //  fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                                        )
+                                    ) {
+                                        append(" (-" + shoppingViewModel.prices[position].nbrMissingPrice + " prix)")
+                                    }
+                                }
+
+
+                                if(shoppingViewModel.prices[position].bonusfid>0) {
+                                    withStyle(
+                                        SpanStyle(
+                                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                                            fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
+                                            fontStyle = MaterialTheme.typography.titleMedium.fontStyle
+                                        )
+                                    ) {
+                                        append("bonus fid:")
+                                    }
+                                    append(shoppingViewModel.prices[position].bonusfid.toString())
+
+                                }
+
+                            }
+                        )
+
+                    }
+                }
+
+            }
+        }
+
 
         Column(
             modifier = Modifier
@@ -223,24 +321,12 @@ fun ShoppingScreen(
             verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(3.dp, 6.dp, 3.dp, 6.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                shoppingViewModel.prices.sortByDescending { price -> stringToDouble(price.priceBill) }
-                items(shoppingViewModel.prices.size) { position ->
 
-                    Text(
-                        text = shoppingViewModel.prices[position].magasin + " : " + convertStringToPriceFormat(
-                            shoppingViewModel.prices[position].priceBill
-                        ) + " (-" + shoppingViewModel.prices[position].nbrMissingPrice + " prix)" + " " + shoppingViewModel.prices[position].bonusfid
-                    )
 
-                }
-            }
+
+
+
+
 
         if(prodList.isEmpty())    LottieComposable(
                 size =  250.dp,
@@ -282,7 +368,7 @@ fun ProductShopList(
 
             ProductShopTiket(
                 snackbarHostState = snackbarHostState,
-                productList[position],
+                prodsResponse = productList[position],
                 productsViewModel = productsViewModel,
                 productDetailDialogViewModel = productDetailDialogViewModel,
                 shoppingViewModel = shoppingViewModel,
@@ -312,12 +398,8 @@ fun ProductShopTiket(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-
                 productDetailDialogViewModel.onprodDetailDialogVisibilityStatesChanged(!productDetailDialogViewModel.prodDetailDialogVisibilityStates)
-
-
                 productsViewModel.onSelectedProductChanged(product = prodsResponse)
-
             },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -364,11 +446,9 @@ fun ProductShopTiket(
             )
 
             Row(
-                modifier = Modifier
-                    .wrapContentWidth(),
-
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.End
 
             ) {
 
@@ -377,7 +457,7 @@ fun ProductShopTiket(
                         .customWidth(LocalConfiguration.current, 0.10f)
                         .clickable {
                             if (prodsResponse.typesub == PRODUITS_FRAIS) {
-                                if (prodsResponse.quantity - 0.1 <= 0.001) {
+                                if (stringToDouble(prodsResponse.quantity) - 0.1 <= 0.001) {
                                     productsViewModel.DeleteProdFromShopList(prodsResponse.id)
                                     setSnackBarData(
                                         coroutineScope = coroutineScope,
@@ -389,11 +469,11 @@ fun ProductShopTiket(
                                 }
                                 //   else productsViewModel.UpdateProdQuantity(String.format("%.3f", BigDecimal.valueOf(prodsResponse.quantity) - BigDecimal.valueOf(0.1)).toDouble(), prodsResponse.id)
                                 else productsViewModel.UpdateProdQuantity(
-                                    prodsResponse.quantity - 0.1,
-                                    prodsResponse.id
+                                    quantity = (stringToDouble(prodsResponse.quantity) - 0.1).toString(),
+                                    id = prodsResponse.id
                                 )
                             } else {
-                                if (prodsResponse.quantity - 1 < 1) {
+                                if (stringToDouble(prodsResponse.quantity) - 1 < 1) {
                                     setSnackBarData(
                                         coroutineScope = coroutineScope,
                                         snackbarHostState = snackbarHostState,
@@ -402,8 +482,8 @@ fun ProductShopTiket(
                                         productsViewModel = productsViewModel
                                     ) //  errorToast(context = context, "delete")
                                 } else productsViewModel.UpdateProdQuantity(
-                                    prodsResponse.quantity - 1,
-                                    prodsResponse.id
+                                    quantity = (stringToDouble(prodsResponse.quantity) - 1).toString(),
+                                    id = prodsResponse.id
                                 )
                             }
                         },
@@ -414,29 +494,48 @@ fun ProductShopTiket(
                 Spacer(modifier = Modifier.padding(start = 9.dp))
                 val keyboardController = LocalSoftwareKeyboardController.current
 
-                /*  AnimatedText(
-                      modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
-                  label = context.getString(
-                      R.string.quantuty_en,
-                      removeAllDigitExeptX(prodsResponse.sieze)
-                  ),
-                  count = prodsResponse.quantity,
-                  onValueChange = {
-                      productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
-                  },
-                      )*/
+
                 OutlinedTextField(
-                    value = prodsResponse.quantity.toString(),
+                    enabled = false,
+                    value = prodsResponse.quantity,
                     onValueChange = {
-                        productsViewModel.UpdateProdQuantity(stringToDouble(it), prodsResponse.id)
+
+                   productsViewModel.UpdateProdQuantity(it, prodsResponse.id)
+
+                        /* if (prodsResponse.typesub == PRODUITS_FRAIS) {
+                            if (stringToDouble(it) - 0.1 <= 0.001) {
+                                productsViewModel.DeleteProdFromShopList(prodsResponse.id)
+                                setSnackBarData(
+                                    coroutineScope = coroutineScope,
+                                    snackbarHostState = snackbarHostState,
+                                    prodsResponse = prodsResponse,
+                                    context = context,
+                                    productsViewModel = productsViewModel
+                                )
+                            }
+                            else productsViewModel.UpdateProdQuantity(it, prodsResponse.id)
+                        }
+                        else {
+                            if (stringToDouble(it) - 1 < 1) {
+                                setSnackBarData(
+                                    coroutineScope = coroutineScope,
+                                    snackbarHostState = snackbarHostState,
+                                    prodsResponse = prodsResponse,
+                                    context = context,
+                                    productsViewModel = productsViewModel
+                                )
+                            }
+
+                            else productsViewModel.UpdateProdQuantity(it, prodsResponse.id)
+                        }*/
+
                     },
-                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.50f),
+                    modifier = Modifier.customWidth(LocalConfiguration.current, 0.30f),
                     label = {
                         Text(
-                            context.getString(
-                                R.string.quantuty_en,
-                                removeAllDigitExeptX(prodsResponse.sieze)
-                            )
+                         text = context.getString(R.string.quantuty_en, removeAllDigitExeptX(prodsResponse.sieze)),
+                             style = MaterialTheme.typography.labelSmall
+
                         )
                     },
                     keyboardOptions = KeyboardOptions(
@@ -454,25 +553,24 @@ fun ProductShopTiket(
                         .customWidth(LocalConfiguration.current, 0.10f)
                         .clickable {
                             productsViewModel.UpdateProdQuantity(
-                                prodsResponse.quantity + 1,
-                                prodsResponse.id
+                                quantity = (stringToDouble(prodsResponse.quantity) + 1).toString(),
+                                id = prodsResponse.id
                             )
 
                             if (prodsResponse.typesub == PRODUITS_FRAIS) {
                                 productsViewModel.UpdateProdQuantity(
-                                    String
-                                        .format(
-                                            "%.3f",
-                                            BigDecimal.valueOf(prodsResponse.quantity) + BigDecimal.valueOf(
-                                                0.1
-                                            )
+                                    quantity = String.format(
+                                        "%.3f",
+                                        BigDecimal.valueOf(stringToDouble(prodsResponse.quantity)) + BigDecimal.valueOf(
+                                            0.1
                                         )
-                                        .toDouble(), prodsResponse.id
+                                    ),
+                                    id = prodsResponse.id
                                 )
                             } else {
                                 productsViewModel.UpdateProdQuantity(
-                                    prodsResponse.quantity + 1,
-                                    prodsResponse.id
+                                    quantity = (stringToDouble(prodsResponse.quantity) + 1).toString(),
+                                    id = prodsResponse.id
                                 )
                             }
                         },
@@ -493,9 +591,11 @@ fun ProductShopTiket(
 @Composable
 fun DefaultSnackbar(
     snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier
 ) {
     SnackbarHost(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(Alignment.Bottom),
         hostState = snackbarHostState,
         snackbar = { data ->
             Snackbar(
@@ -507,7 +607,7 @@ fun DefaultSnackbar(
                 },
                 action = {
 
-                    TextButton(onClick = { data.performAction() }) {
+                    OutlinedButton(onClick = { data.performAction() }) {
                         Text(
                             text = data.visuals.actionLabel ?: "",
                         )
@@ -516,10 +616,6 @@ fun DefaultSnackbar(
                 }
             )
         },
-        modifier = modifier
-            .padding(0.dp, 0.dp, 0.dp, 50.dp)
-            .fillMaxWidth()
-            .wrapContentHeight(Alignment.Bottom)
     )
 }
 

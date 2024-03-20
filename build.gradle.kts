@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.google.gms:google-services:4.4.0") // Google Services plugin
+        classpath("com.google.gms:google-services:4.4.1") // Google Services plugin
 
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
         // NOTE: Do not place your application dependencies here; they belong
@@ -18,15 +18,15 @@ buildscript {
         classpath("com.google.firebase:perf-plugin:1.4.2")  // Performance Monitoring plugin
 
 //Dager hilt
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.48")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.51")
 
-        classpath("org.jacoco:org.jacoco.core:0.8.8")
+        classpath("org.jacoco:org.jacoco.core:0.8.11")
 
 
 
-        classpath ("com.android.tools.build:gradle:8.3.0")
+        classpath ("com.android.tools.build:gradle:8.1.1")
       //  classpath ("org.jetbrains.kotlin:kotlin-serialization:1.8.21")
-        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
+        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
 
     }
     allprojects {
@@ -44,7 +44,7 @@ buildscript {
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.google.devtools.ksp") version "1.8.21-1.0.11" apply false
+    id("com.google.devtools.ksp") version "1.9.23-1.0.19" apply false
 
 }
 

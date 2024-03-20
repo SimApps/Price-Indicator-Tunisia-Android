@@ -8,30 +8,35 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoMode
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -57,6 +62,7 @@ import com.amirami.simapp.priceindicatortunisia.ui.theme.Theme
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     userData: UserData?,
@@ -201,54 +207,7 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
 
 
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AssistChip(
-                    onClick = { settingViewModel.setThemeMode(Theme.SYSTEM_THEME.theme) },
-                    label = { Text("System") },
 
-                    leadingIcon = {
-                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.SYSTEM_THEME.theme) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "System",
-                                Modifier.size(AssistChipDefaults.IconSize)
-                            )
-                        }
-                    }
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                AssistChip(
-                    onClick = { settingViewModel.setThemeMode(Theme.DARK.theme) },
-                    label = { Text("Dark") },
-                    leadingIcon = {
-                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.DARK.theme) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription ="Dark",
-                                Modifier.size(AssistChipDefaults.IconSize)
-                            )
-                        }
-                    }
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                AssistChip(
-                    onClick = { settingViewModel.setThemeMode(Theme.LIGHT.theme) },
-                    label = { Text("Light") },
-                    leadingIcon = {
-                        AnimatedVisibility(visible = settingViewModel.darkTheme == Theme.LIGHT.theme) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "Light",
-                                Modifier.size(AssistChipDefaults.IconSize)
-                            )
-                        }
-                    }
-                )
-            }
 
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -339,7 +298,47 @@ if(settingViewModel.showCustomDialog)    CustomDialogue(
                     context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
                 }
             )
+            Spacer(modifier = Modifier.weight(1F))
+            SingleChoiceSegmentedButtonRow(
+               modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp)
+            ) {
+                val itemList = listOf(
+                    ThemeMode(
+                        themeMode = Theme.SYSTEM_THEME.theme,
+                        imageVector = Icons.Filled.AutoMode
+                    ),
+                    ThemeMode(
+                        themeMode = Theme.DARK.theme,
+                        imageVector = Icons.Filled.DarkMode
+                    ),
+                    ThemeMode(
+                        themeMode = Theme.LIGHT.theme,
+                        imageVector = Icons.Filled.LightMode
+                    )
+                )
+                itemList.forEachIndexed { index, item ->
+                    SegmentedButton(
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = itemList.size),
+                        onClick = {  settingViewModel.setThemeMode(item.themeMode) },
+                        selected = settingViewModel.darkTheme == item.themeMode
+                    ) {
 
+                        Icon(
+                            imageVector = item.imageVector,
+                            contentDescription = item.themeMode,
+                            //   modifier = Modifier.size(AssistChipDefaults.IconSize),
+                            tint = if (settingViewModel.darkTheme == item.themeMode) MaterialTheme.colorScheme.error
+                            else MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                }
+
+
+            }
+
+
+            Spacer(modifier = Modifier.height(30.dp))
         }
     }
 
@@ -405,3 +404,10 @@ private fun more_apps(context : Context) {
         )
     }
 }
+
+data class ThemeMode(
+
+    var themeMode: String = "",
+    var imageVector: ImageVector = Icons.Filled.Done
+
+)

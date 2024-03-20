@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.core.Magazin
+import com.amirami.simapp.priceindicatortunisia.core.StringFormatting.stringToDouble
 import com.amirami.simapp.priceindicatortunisia.products.model.ProductModel
 import com.amirami.simapp.priceindicatortunisia.utils.Functions
 import java.math.BigDecimal
@@ -16,6 +17,13 @@ import javax.inject.Inject
 
 class ShoppingViewModel @Inject constructor() : ViewModel() {
 
+
+    var showPriceDetail by mutableStateOf(false)
+        private set
+
+    fun onShowPriceDetailChange(value: Boolean) {
+        showPriceDetail = value
+    }
 
     var calculateDiscount by mutableStateOf(false)
         private set
@@ -233,11 +241,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     }
 
                     else -> {
-                        finalPrice += pricenotdefinedBill(product.monoprixprice).toDouble() * product.quantity
+                        finalPrice += pricenotdefinedBill(product.monoprixprice).toDouble() * stringToDouble(product.quantity)
                     }
                 }
             } else {
-                finalPrice += pricenotdefinedBill(product.monoprixprice).toDouble() * product.quantity
+                finalPrice += pricenotdefinedBill(product.monoprixprice).toDouble() * stringToDouble(product.quantity)
             }
         }
 
@@ -311,11 +319,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     }
 
                     else /*product.ProductMGRemarqueDB==""*/ -> {
-                        finalPrice += pricenotdefinedBill(product.mgprice).toDouble() * product.quantity
+                        finalPrice += pricenotdefinedBill(product.mgprice).toDouble() * stringToDouble(product.quantity)
                     }
                 }
             } else {
-                finalPrice += pricenotdefinedBill(product.mgprice).toDouble() * product.quantity
+                finalPrice += pricenotdefinedBill(product.mgprice).toDouble() * stringToDouble(product.quantity)
             }
         }
 
@@ -362,7 +370,7 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     product.carrefourremarq.contains(context.getString(R.string.pourcentage)) -> {
                         finalPrice += dicsountPourcentage(
                             Functions.getNumberFromString(product.carrefourremarq).toInt(),
-                            product.quantity.toString(),
+                            product.quantity,
                             product.carrefourprice
                         )
                     }
@@ -370,7 +378,7 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     product.carrefourremarq.contains(context.getString(R.string.aveccartefid)) -> {
                         finalPrice += priceWithFidCard(
                             Functions.getNumberFromString(product.carrefourremarq).toInt(),
-                            product.quantity.toString()
+                            product.quantity
                         )
                     }
 
@@ -390,11 +398,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     }
 
                     else /* product.ProductCarrefourRemarqueDB=="" */ -> {
-                        finalPrice += pricenotdefinedBill(product.carrefourprice).toDouble() * product.quantity
+                        finalPrice += pricenotdefinedBill(product.carrefourprice).toDouble() * stringToDouble(product.quantity)
                     }
                 }
             } else {
-                finalPrice += pricenotdefinedBill(product.carrefourprice).toDouble() * product.quantity
+                finalPrice += pricenotdefinedBill(product.carrefourprice).toDouble() * stringToDouble(product.quantity)
             }
         }
 
@@ -469,11 +477,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     }
 
                     else /* product.ProductAzzizaRemarqueDB=="" */ -> {
-                        finalPrice += pricenotdefinedBill(product.azzizaprice).toDouble() * product.quantity
+                        finalPrice += pricenotdefinedBill(product.azzizaprice).toDouble() * stringToDouble(product.quantity)
                     }
                 }
             } else {
-                finalPrice += pricenotdefinedBill(product.azzizaprice).toDouble() * product.quantity
+                finalPrice += pricenotdefinedBill(product.azzizaprice).toDouble() * stringToDouble(product.quantity)
             }
 
         }
@@ -552,11 +560,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
                     }
 
                     else /*product.ProductGeantRemarqueDB==""*/ -> {
-                        finalPrice += pricenotdefinedBill(product.geantprice).toDouble() * product.quantity
+                        finalPrice += pricenotdefinedBill(product.geantprice).toDouble() * stringToDouble(product.quantity)
                     }
                 }
             } else {
-                finalPrice += pricenotdefinedBill(product.geantprice).toDouble() * product.quantity
+                finalPrice += pricenotdefinedBill(product.geantprice).toDouble() * stringToDouble(product.quantity)
             }
         }
 
@@ -634,11 +642,11 @@ class ShoppingViewModel @Inject constructor() : ViewModel() {
         products.indices.forEach { i ->
             val product = products[i]
 
-            monoprixBonusfid += pricenotdefinedBill(product.monoprixbonusfid).toDouble() * product.quantity
-            mgBonusfid += pricenotdefinedBill(product.mgbonusfid).toDouble() * product.quantity
-            carrefourBonusfid += pricenotdefinedBill(product.carrefourbonusfid).toDouble() * product.quantity
-            azzizaBonusfid += pricenotdefinedBill(product.azzizabonusfid).toDouble() * product.quantity
-            geantBonusfid += pricenotdefinedBill(product.geantbonusfid).toDouble() * product.quantity
+            monoprixBonusfid += pricenotdefinedBill(product.monoprixbonusfid).toDouble() * stringToDouble(product.quantity)
+            mgBonusfid += pricenotdefinedBill(product.mgbonusfid).toDouble() * stringToDouble(product.quantity)
+            carrefourBonusfid += pricenotdefinedBill(product.carrefourbonusfid).toDouble() * stringToDouble(product.quantity)
+            azzizaBonusfid += pricenotdefinedBill(product.azzizabonusfid).toDouble() * stringToDouble(product.quantity)
+            geantBonusfid += pricenotdefinedBill(product.geantbonusfid).toDouble() * stringToDouble(product.quantity)
 
         }
 

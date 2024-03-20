@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,7 +36,6 @@ import coil.compose.AsyncImage
 import com.amirami.simapp.priceindicatortunisia.R
 import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 import com.amirami.simapp.priceindicatortunisia.products.ProductsViewModel
-import com.amirami.simapp.priceindicatortunisia.ui.componenet.ButtonWithBorder
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.LottieComposable
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar.BottomNavigationBar
 import com.amirami.simapp.priceindicatortunisia.ui.componenet.cameraview.CameraViewModel
@@ -76,7 +76,6 @@ fun TiketScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // .background(Color.White)
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
@@ -88,7 +87,6 @@ fun TiketScreen(
             )
             Spacer(modifier = Modifier.height(30.dp))
 
-            //     OutlinedEditText(text = tiketViewModel.text,labl = R.string.Commentaires,tiketViewModel.ontext(it))
             OutlinedEditText(tiketViewModel)
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -133,23 +131,28 @@ fun TiketScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        ButtonWithBorder(
+                        OutlinedButton(
                             modifier = Modifier.wrapContentWidth(),
-                            onClicks = {
+                            onClick = {
                                 navController.navigate(ListScreens.MainImageTiket.Route)
                             },
-                            if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) context.getString(R.string.prendreautrephotos)
-                            else context.getString(R.string.prendrephotos)
+                            content = {
+                                Text(text =  if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) context.getString(R.string.prendreautrephotos)
+                                else context.getString(R.string.prendrephotos))
+                            }
+
 
                         )
 
                         if (cameraViewModel.imageUri != EMPTY_IMAGE_URI) {
-                            ButtonWithBorder(
+                            OutlinedButton(
                                 modifier = Modifier.wrapContentWidth(),
-                                onClicks = {
+                                onClick = {
                                     shareImageandText(context, cameraViewModel, tiketViewModel)
                                 },
-                                context.getString(R.string.Envoyer)
+                                content = {
+                                    Text(text = context.getString(R.string.Envoyer))
+                                }
                             )
                         }
                     }
@@ -170,7 +173,7 @@ fun OutlinedEditText(tiketViewModel: TiketViewModel) {
     OutlinedTextField(
         value = tiketViewModel.text,
         onValueChange = { tiketViewModel.ontext(it) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp),
         label = { Text(context.getString(R.string.Commentaires)) }
     )
 }

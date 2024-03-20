@@ -151,8 +151,8 @@ fun ProductTiket(
                 .weight(1f)
                 // .size(35.dp)
                 .clickable {
-                    if (prodsResponse.typesub == Constants.PRODUITS_FRAIS) prodsResponse.quantity = 0.1
-                    else prodsResponse.quantity = 1.0
+                    if (prodsResponse.typesub == Constants.PRODUITS_FRAIS) prodsResponse.quantity = "0.1"
+                    else prodsResponse.quantity = "1.0"
                     productsViewModel.AddProdToShopList(prodsResponse)
                 }
         )

@@ -13,7 +13,7 @@ interface ShopListRepository {
 
     fun updateShopListInRoom(productName: ProductModel)
 
-    fun updateProdQuantityInRoom(quantity: Double?, id: String?)
+    fun updateProdQuantityInRoom(quantity: String?, id: String?)
 
     fun deleteProdShopListFromRoom(productid: String)
 

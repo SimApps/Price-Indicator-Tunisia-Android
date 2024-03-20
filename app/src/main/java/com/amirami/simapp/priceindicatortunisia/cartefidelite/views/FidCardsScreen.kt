@@ -19,9 +19,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -122,7 +123,7 @@ fun FidCardsScreen(
     }
     )
 
-if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.showAddFidCard)
+if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.showAddFidCard) {
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = {
@@ -156,6 +157,9 @@ if(barCodeViewModel.fidCardBarCodeInfo!= FidCardEntity() && barCodeViewModel.sho
             }
         )
     }
+}
+
+
     Scaffold(
         topBar = {
             TopBar(
@@ -231,7 +235,7 @@ fun FidCardsMainScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Il Faut Accepter la permission d'utiliser la caméra")
+                    Text("Veuillez autoriser l'utilisation de la caméra")
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Button(
@@ -240,7 +244,7 @@ fun FidCardsMainScreen(
                             permissionState.launchMultiplePermissionRequest()
                         }
                     ) {
-                        Text("Accé caméra ")
+                        Text("Autoriser l'accès à la caméra ")
                     }
 
 
@@ -251,13 +255,15 @@ fun FidCardsMainScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ButtonWithBorder(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClicks = {
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp),
+                        onClick = {
                             navController.navigate(ListScreens.BarCodeCameraPreview.Route)
                         },
 
-                        text = context.getString(R.string.Ajoutezcartefidelite),
+                        content = {
+                            Text(text = context.getString(R.string.Ajoutezcartefidelite))
+                        },
 
                         )
 
@@ -333,7 +339,7 @@ fun FidCardsListItem(
 ) {
 
 
-    Card() {
+    OutlinedCard(modifier = Modifier.padding(start = 9.dp, end = 9.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -383,7 +389,7 @@ fun FidCardsListItem(
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(1.dp)
+                    .padding(end = 12.dp)
                     .clickable(
                         enabled = true,
                         onClickLabel = "Edit Fid card",

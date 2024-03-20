@@ -3,9 +3,11 @@ package com.amirami.simapp.priceindicatortunisia.ui.componenet.topbar
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,45 +20,46 @@ import com.amirami.simapp.priceindicatortunisia.navigation.ListScreens
 
 @Composable
 fun TopBar(
-    navController: NavHostController) {
+    navController: NavHostController,
+    actions: @Composable() (RowScope.() -> Unit) = {}) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val title = navBackStackEntry?.destination?.route ?: "Title Here"
 
     when (navBackStackEntry?.destination?.route) {
         ListScreens.Accueil.Route -> {
-            topAppBar(title, false)
+            TopAppBar(title, false, actions = actions)
 
             //   topBarViewModel.ontopBarStateChanged(false)
         }
         ListScreens.Courses.Route -> {
-            topAppBar(title, true) //  topBarViewModel.ontopBarStateChanged(true)
+            TopAppBar(title, true, actions = actions) //  topBarViewModel.ontopBarStateChanged(true)
         }
         ListScreens.CarteFidelite.Route -> {
-            topAppBar(title, true) //  topBarViewModel.ontopBarStateChanged(true)
+            TopAppBar(title, true) //  topBarViewModel.ontopBarStateChanged(true)
         }
         ListScreens.Tiket.Route -> {
-            topAppBar(title, true) // topBarViewModel.ontopBarStateChanged(true)
+            TopAppBar(title, true) // topBarViewModel.ontopBarStateChanged(true)
         }
         ListScreens.Settings.Route -> {
-            topAppBar(title, true) //     topBarViewModel.ontopBarStateChanged(true)
+            TopAppBar(title, true) //     topBarViewModel.ontopBarStateChanged(true)
         }
 
         ListScreens.CameraX.Route -> {
-            topAppBar(title, false) //    topBarViewModel.ontopBarStateChanged(false)
+            TopAppBar(title, false) //    topBarViewModel.ontopBarStateChanged(false)
         }
         ListScreens.BarCodeCameraPreview.Route -> {
-            topAppBar(title, false) //   topBarViewModel.ontopBarStateChanged(false)
+            TopAppBar(title, false) //   topBarViewModel.ontopBarStateChanged(false)
         }
         ListScreens.MainImageTiket.Route -> {
-            topAppBar(title, false) //    topBarViewModel.ontopBarStateChanged(false)
+            TopAppBar(title, false) //    topBarViewModel.ontopBarStateChanged(false)
         }
 
         ListScreens.GeneratedBarcodeImage.Route -> {
-            topAppBar(title, false) //  topBarViewModel.ontopBarStateChanged(false)
+            TopAppBar(title, false) //  topBarViewModel.ontopBarStateChanged(false)
         }
 
         ListScreens.PriceRemarques.Route -> {
-            topAppBar(title, false) //  topBarViewModel.ontopBarStateChanged(false)
+            TopAppBar(title, false) //  topBarViewModel.ontopBarStateChanged(false)
         }
     }
 
@@ -69,7 +72,10 @@ fun TopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topAppBar(title: String, vis: Boolean) {
+fun TopAppBar(
+    title: String,
+    vis: Boolean,
+    actions: @Composable() (RowScope.() -> Unit) = {}) {
     AnimatedVisibility(
         modifier = Modifier
             .fillMaxWidth(),
@@ -85,8 +91,11 @@ fun topAppBar(title: String, vis: Boolean) {
                         text = title,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
-                    //    color = MaterialTheme.colorScheme.onPrimary
+                       color = MaterialTheme.colorScheme.outline
                     )
+                },
+                actions = {
+                    actions()
                 }
 
             )

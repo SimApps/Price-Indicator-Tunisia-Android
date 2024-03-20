@@ -1,6 +1,5 @@
 package com.amirami.simapp.priceindicatortunisia.ui.componenet.bottomnavigationbar
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CreditCard
@@ -15,7 +14,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,7 +24,6 @@ import com.amirami.simapp.priceindicatortunisia.utils.BottomNavItem
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-    modifier: Modifier = Modifier,
     onItemClick: (BottomNavItem) -> Unit,
     productsViewModel: ProductsViewModel
 ) {
@@ -58,7 +55,7 @@ fun BottomNavigationBar(
         ),
 
         BottomNavItem(
-            name = "Parametres",
+            name = "Paramètres",
             route = "Parametres",
             icon = Icons.Default.Settings,
         ),
@@ -72,14 +69,15 @@ fun BottomNavigationBar(
 
                     NavigationBarItem(
                         icon = {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                          //  Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 BadgedBox(
                                     badge = {
                                        if(item.badgeCount > 0)
                                         Text(text = item.badgeCount.toString(),
-                                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                                            fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
-                                            color = MaterialTheme.colorScheme.error)
+                                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                                            fontWeight = MaterialTheme.typography.titleSmall.fontWeight,
+                                            color = MaterialTheme.colorScheme.error
+                                        )
                                     },
                                 ) {
                                     Icon(
@@ -90,9 +88,11 @@ fun BottomNavigationBar(
 
 
 
-                        }
+                     //   }
                         },
-                        label = { Text(item.name) },
+                        label = {
+                            Text(text = item.name, style = MaterialTheme.typography.labelSmall)
+                                },
                         selected = selected,
                         onClick = { onItemClick(item)}
                     )

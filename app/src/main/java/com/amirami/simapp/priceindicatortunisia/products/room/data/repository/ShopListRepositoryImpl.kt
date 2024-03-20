@@ -18,7 +18,7 @@ class ShopListRepositoryImpl(
 
     override fun updateShopListInRoom(productName: ProductModel) = prodShopListDAO.updateShopList(productName)
 
-    override fun updateProdQuantityInRoom(quantity: Double?, id: String?) = prodShopListDAO.updateQuantity(quantity, id)
+    override fun updateProdQuantityInRoom(quantity: String?, id: String?) = prodShopListDAO.updateQuantity(quantity, id)
 
     override fun deleteProdShopListFromRoom(productid: String) = prodShopListDAO.deleteShopingProduct(productid)
 

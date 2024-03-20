@@ -27,7 +27,7 @@ interface ProdShopListDAO {
     fun updateShopList(productName: ProductModel)
 
     @Query("UPDATE $SHOPING_LIST_TABLE SET quantity=:quantity WHERE id = :id")
-    fun updateQuantity(quantity: Double?, id: String?)
+    fun updateQuantity(quantity: String?, id: String?)
 
     @Query("DELETE FROM $SHOPING_LIST_TABLE WHERE id = :productid")
     fun deleteShopingProduct(productid: String)
