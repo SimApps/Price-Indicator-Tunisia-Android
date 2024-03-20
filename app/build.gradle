@@ -66,7 +66,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
@@ -81,22 +81,22 @@ dependencies {
 
 
     //Coil
-    implementation 'io.coil-kt:coil:2.4.0'
+    implementation 'io.coil-kt:coil:2.6.0'
 
     //bar code reader
    // implementation 'com.github.bobekos:SimpleBarcodeScanner:1.0.23'
 
     //bare code reader and maker
     implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
-    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.google.zxing:core:3.5.3'
 
     //firebase firestore
-    implementation 'com.google.firebase:firebase-firestore:24.8.1'
+    implementation 'com.google.firebase:firebase-firestore:24.10.3'
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
 
 
 //admob
-    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+    implementation 'com.google.android.gms:play-services-ads:23.0.0'
     //custom toast
     implementation 'com.pranavpandey.android:dynamic-toasts:4.2.1'
 
@@ -104,7 +104,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:31.1.0')
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
 
     implementation 'com.google.firebase:firebase-perf-ktx'
 
@@ -131,27 +131,27 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 
     // ViewModel
-    implementation 'androidx.fragment:fragment-ktx:1.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
 
     //Play Services
-    implementation "com.google.android.gms:play-services-auth:20.7.0"
+    implementation 'com.google.android.gms:play-services-auth:21.0.0'
 
     //firebase auth
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2' //remove it and fix the rest
 
 //dager hilt
-    implementation 'com.google.dagger:hilt-android:2.48'
-    kapt 'com.google.dagger:hilt-compiler:2.48'
-    kapt 'com.google.dagger:hilt-android-compiler:2.48'
-    kapt "androidx.hilt:hilt-compiler:1.0.0"
+    implementation 'com.google.dagger:hilt-android:2.51'
+    kapt 'com.google.dagger:hilt-compiler:2.51'
+    kapt 'com.google.dagger:hilt-android-compiler:2.51'
+    kapt 'androidx.hilt:hilt-compiler:1.2.0'
 
 
 // Data store ;;;; like shared pref
@@ -160,17 +160,17 @@ dependencies {
 
 
     //kotlin caroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0'
 
     // For instrumentation tests
     // androidTestImplementation  'com.google.dagger:hilt-android-testing:2.40.1'
     //  kaptAndroidTest 'com.google.dagger:hilt-compiler:2.40.1'
 
     // - - Room Persistence Library
-    def room_version = "2.5.2"
+    def room_version = '2.6.1'
 
     implementation "androidx.room:room-runtime:$room_version"
-    ksp "androidx.room:room-compiler:2.5.2"
+    ksp 'androidx.room:room-compiler:2.6.1'
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
 
@@ -179,7 +179,7 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
 
-    implementation 'com.airbnb.android:lottie:6.1.0'
+    implementation 'com.airbnb.android:lottie:6.4.0'
 
 
 }
